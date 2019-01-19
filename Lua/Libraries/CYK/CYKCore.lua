@@ -1320,45 +1320,6 @@ return function ()
             end
         end
 
-        -- DEBUG KEYS
-        if Input.GetKey("R") == 1 then
-            State("ACTIONSELECT", 2)
-        elseif Input.GetKey("F") == 1 then
-            State("ENEMYSELECT", 1, "FIGHT")
-        elseif Input.GetKey("G") == 1 then
-            State("ENEMYSELECT", 2, "SPELL", 1)
-        elseif Input.GetKey("H") == 1 then
-            State("ENEMYSELECT", 1, "SPARE")
-        elseif Input.GetKey("J") == 1 then
-            State("ENEMYSELECT", 1, "ITEM", 4)
-        elseif Input.GetKey("K") == 1 then
-            State("ENEMYSELECT", 1, "ACT")
-        elseif Input.GetKey("T") == 1 then
-            State("ITEMMENU", 2)
-        elseif Input.GetKey("Y") == 1 then
-            State("ACTMENU", 1)
-        elseif Input.GetKey("U") == 1 then
-            State("ATTACKING", { { 1, 1 } })
-        elseif Input.GetKey("I") == 1 then
-            State("PLAYERTURN")
-        elseif Input.GetKey("O") == 1 then
-            State("ENEMYDIALOGUE")
-        elseif Input.GetKey("P") == 1 then
-            State("DEFENDING")
-        elseif Input.GetKey("M") == 1 then
-            State("NONE")
-        elseif Input.GetKey("N") == 1 then
-            DEBUG(GetCurrentState())
-        elseif Input.GetKey("B") == 1 then
-            DEBUG(SuperCall(Wave[1], "GetCurrentState"))
-        elseif Input.GetKey("Q") == 1 then
-            self.allPlayers[1].SetActive(not self.allPlayers[1].isactive)
-        elseif Input.GetKey("E") == 1 then
-            self.allPlayers[2].SetActive(not self.allPlayers[2].isactive)
-        elseif Input.GetKey("W") == 1 then
-            self.allPlayers[3].SetActive(not self.allPlayers[3].isactive)
-        end
-
         -- Frame count update
         self.frame = self.frame + 1
     end
