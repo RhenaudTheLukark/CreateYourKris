@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<!--
+since you're here anyway: there's a small easter egg on the text commands page but it's probably not worth finding, sorry
+you may notice this page's code is garbage: i'm not a web designer! ;-;
+it's w3c valid, at least
+-->
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="favicon.ico">
+
+    <title>CYK Documentation - The Script Object</title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="../css/themesidebar.css" rel="stylesheet">
+    <link href="../css/shThemeRDark.css" rel="stylesheet">
+
+    <!-- Syntax highlighting -->
+    <script type="text/javascript" src="../js/shCore.js"></script>
+    <script type="text/javascript" src="../js/shBrushLua.js"></script>
+    <script type="text/javascript">SyntaxHighlighter.all();</script>
+</head>
+<body>
+<img src="../img/bg2.png" alt="Undertale background" class="backimg">
+<div class="container arena black">
+    <div class="col-md-2">
+        <!--navigation-->
+        <nav class="nav-sidebar">
+            <ul class="nav tabs">
+                <li class="li-header">Basics</li>
+                    <li><a href="../documentation.html">Welcome</a></li>
+                    <li><a href="howtoread.html">How to read this documentation</a></li>
+                    <hr style="margin-top:-2.5px;margin-bottom:2.5px;">
+                    <li><a href="controls.html">Controls</a></li>
+                    <li><a href="basic.html">Basic setup</a></li>
+                    <li><a href="variables.html">Special Variables</a></li>
+                    <li><a href="terms.html">Terminology</a></li>
+                <li class="li-header">API</li>
+                    <li><a href="api-text.html">Text commands</a></li>
+                    <li><a href="api-events.html">Game events</a></li>
+                    <hr style="margin-top:-2.5px;margin-bottom:2.5px;">
+                    <li class="li-indent">Functions &amp; Objects:</li>
+                        <li class="li-indent"><a href="api-functions-main.html">Misc. Functions</a></li>
+                        <li class="li-indent"><a href="api-functions-player.html">The Player Object</a></li>
+                        <li class="li-indent"><a href="api-functions-entity.html"><span class="CYK"></span> The Entity Object</a></li>
+                        <li class="li-indent active" style="margin-left:5px;">> The Script Object <</li>
+                        <li class="li-indent"><a href="api-functions-audio.html">The Audio Object</a></li>
+                        <li class="li-indent"><a href="api-functions-newaudio.html"><span class="CYF"></span> The NewAudio Object</a></li>
+                        <li class="li-indent"><a href="api-functions-input.html">The Input Object</a></li>
+                        <li class="li-indent"><a href="api-functions-time.html">The Time Object</a></li>
+                        <li class="li-indent"><a href="api-functions-misc.html"><span class="CYF"></span>The Misc Object</a></li>
+                        <li class="li-indent"><a href="api-functions-waves.html">Wave Scripts</a></li>
+                        <li class="li-indent"><a href="cyf-inventory.html"><span class="CYF"></span> The Inventory Object</a></li>
+                        <li class="li-indent"><a href="cyf-text.html"><span class="CYF"></span> The Text Object</a></li>
+                    <hr style="margin-top:-2.5px;margin-bottom:2.5px;">
+                    <li><a href="api-projectile.html">Projectile management</a></li>
+                    <li><a href="api-animation.html">Sprites &amp; Animation</a></li>
+                    <li><a href="cyf-ppcollision.html"><span class="CYF"></span> The Pixel-Perfect Collision System</a></li>
+                    <li><a href="api-keys.html"><span class="CYF"></span> Key List</a></li>
+                <li class="li-header">Resources</li>
+                    <li><a href="../media/dialogoptions.png">Dialog bubble names</a></li>
+            </ul>
+        </nav>
+    </div>
+    <!--tabs'n'shit-->
+    <div class="tab-content col-md-10">
+        <div class="tab-pane active text-style" id="api-functions-script">
+            <p>
+                <br><span class="function">The Script object (and the Encounter object) [varies]</span>
+                Script objects are a bit of a special case. They're used to refer to other scripts that were loaded by
+                the engine itself.
+                <br><br>
+                <span class="CYF"></span>In the encounter script, the <span class="term">Wave</span> table is filled
+                with Script objects when entering the state <span class="term">DEFENDING</span>.
+                <br><br>
+                The variable <span class="term">Encounter</span> is also a script object that refers to the current encounter,
+                and is <b>accessible from anywhere except from the Encounter itself</b>. <i>Do not enter the name of your
+                encounter file</i>, it will always just be <span class="term">Encounter</span>.
+                <br><br>
+                <h4><span class="CYK"></span> IMPORTANT!</h4>
+                In CYK, entity scripts (Monsters and Players) are regular tables stored in the Encounter script.<br>
+                Access them like <span class="term">players[1].ID</span> or <span class="term">enemies[1].SetActive(false)</span>.
+                <br><br>
+                <h4>In Entity files:</h4>
+                * To access the Encounter script from an entity script, you still type <span class="term">Encounter</span>,
+                except that this time, it's a table and not a script object.
+                <br><br>
+                Instead of <span class="term">Encounter.Call(func, ...)</span>, use <span class="term">Encounter.func(...)</span>.<br>
+                Instead of <span class="term">Encounter.SetVar("variable", 10)</span>, use <span class="term">Encounter.variable = 10</span>.
+            </p>
+
+            <hr>
+            <p>
+                <span class="function"><span class="term">script.GetVar(<span class="string"></span> variable_name)</span>
+                </span>
+				Gets <span class="term">variable_name</span> from the script.
+            </p><br>
+
+            <p>
+                <span class="function"><span class="term">script[<span class="string"></span> variable_name]</span></span>
+				Same as the above.
+            </p><br>
+
+            <p>
+                <span class="function"><span class="term">script.SetVar(<span class="string"></span> variable_name, value)
+                </span></span>
+				Sets <span class="term">variable_name</span> in the script.
+            </p><br>
+
+            <p>
+                <span class="function"><span class="term">script[<span class="string"></span> variable_name] = value</span>
+                </span>
+				Same as the above.
+            </p><br>
+
+            <p>
+                <span class="function"><span class="term">script.Call(<span class="string"></span> function_name)</span>
+                </span>
+				Runs <span class="term">function_name</span> from within the target script.
+            </p><br>
+
+            <p>
+                <span class="function"><span class="term">script.Call(<span class="string"></span> function_name, argument)
+                </span></span>
+				Runs <span class="term">function_name</span> from within the target script with one argument.
+            </p><br>
+
+            <p>
+                <span class="function"><span class="term">script.Call(<span class="string"></span> function_name,
+                <span class="luatable">any types</span> arguments)</span></span>
+				Runs <span class="term">function_name</span> from within the target script with <font color="#fff">all
+                arguments in <span class="term">arguments</span> as the arguments</font>.
+                <br><br>
+                So, for example, you can call an encounter function <span class="term">TakeTwoArguments</span> with two
+                arguments by using:
+                <div class="code-container">
+                <pre class="brush: lua;">
+                Encounter.Call("TakeTwoArguments", {"argument 1!", "argument 2!"})
+                </pre>
+                </div>
+                and the two arguments given can be any variable types!
+            </p>
+
+            <hr>
+            <p>
+                <h4>Examples</h4>
+                Here are some quick examples:<br><br>
+                <div class="code-container">
+                <pre class="brush: lua;">
+                -- here is a simple way to change the encounter's "wavetimer" from another script, for instance,
+                -- a monster script if a player ACTs right, or just from a Wave that needs to last a certain time
+                Encounter.SetVar("wavetimer", 10)
+                -- alternatively:
+                Encounter["wavetimer"] = 10
+                </pre>
+                </div>
+                <br>
+                <div class="code-container">
+                <pre class="brush: lua;">
+                -- let's say we're in a WAVE file, and we want to turn a Sprite in the ENCOUNTER file to dust
+                -- we can do it in at least two different ways:
+                local spriteToDust = Encounter.GetVar("torso")
+                spriteToDust.Dust(true, true) -- see Sprites & Animation.
+                -- alternatively:
+                Encounter["torso"].Dust(true, true)
+                </pre>
+                </div>
+            </p>
+        </div>
+
+		<div class="tab-pane text-style" id="mercy">
+            <h2 style="text-decoration: none; line-height:50px;">
+                * YOU WON!<br>
+                * You earned 0 EXP and 0 gold.<br>
+                * also the nav menu is broken now
+            </h2><br>
+        </div>
+	</div>
+</div>
+
+<div class="container">
+    <div class="col-xs-3"><img class="centerbt black" alt="Undertale fake button" src="../img/fightbt_0.png" height="42">
+    </div>
+    <div class="col-xs-3"><img class="centerbt black" alt="Undertale fake button" src="../img/actbt_0.png" height="42">
+    </div>
+    <div class="col-xs-3"><img class="centerbt black" alt="Undertale fake button" src="../img/itembt_0.png" height="42">
+    </div>
+    <div class="col-xs-3"><a href="#mercy" data-toggle="tab"><img class="centerbt black" alt="Undertale fake button"
+                                                                  src="../img/mercybt_0.png" height="42"></a>
+    </div>
+</div>
+<br>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../js/show_hide_comments.js"></script>
+
+<script type="text/javascript" src="../js/FontToggleButton.js"></script>
+</body>
+</html>

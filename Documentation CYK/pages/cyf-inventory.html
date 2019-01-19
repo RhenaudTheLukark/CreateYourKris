@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<!--
+since you're here anyway: there's a small easter egg on the text commands page but it's probably not worth finding, sorry
+you may notice this page's code is garbage: i'm not a web designer! ;-;
+it's w3c valid, at least
+-->
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="favicon.ico">
+
+    <title>CYK Documentation - The Inventory Object</title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="../css/themesidebar.css" rel="stylesheet">
+    <link href="../css/shThemeRDark.css" rel="stylesheet">
+
+    <!-- Syntax highlighting -->
+    <script type="text/javascript" src="../js/shCore.js"></script>
+    <script type="text/javascript" src="../js/shBrushLua.js"></script>
+    <script type="text/javascript">SyntaxHighlighter.all();</script>
+</head>
+<body>
+<img src="../img/bg2.png" alt="Undertale background" class="backimg">
+<div class="container arena black">
+    <div class="col-md-2">
+        <!--navigation-->
+        <nav class="nav-sidebar">
+            <ul class="nav tabs">
+                <li class="li-header">Basics</li>
+                    <li><a href="../documentation.html">Welcome</a></li>
+                    <li><a href="howtoread.html">How to read this documentation</a></li>
+                    <hr style="margin-top:-2.5px;margin-bottom:2.5px;">
+                    <li><a href="controls.html">Controls</a></li>
+                    <li><a href="basic.html">Basic setup</a></li>
+                    <li><a href="variables.html">Special Variables</a></li>
+                    <li><a href="terms.html">Terminology</a></li>
+                <li class="li-header">API</li>
+                    <li><a href="api-text.html">Text commands</a></li>
+                    <li><a href="api-events.html">Game events</a></li>
+                    <hr style="margin-top:-2.5px;margin-bottom:2.5px;">
+                    <li class="li-indent">Functions &amp; Objects:</li>
+                        <li class="li-indent"><a href="api-functions-main.html">Misc. Functions</a></li>
+                        <li class="li-indent"><a href="api-functions-player.html">The Player Object</a></li>
+                        <li class="li-indent"><a href="api-functions-entity.html"><span class="CYK"></span> The Entity Object</a></li>
+                        <li class="li-indent"><a href="api-functions-script.html">The Script Object</a></li>
+                        <li class="li-indent"><a href="api-functions-audio.html">The Audio Object</a></li>
+                        <li class="li-indent"><a href="api-functions-newaudio.html"><span class="CYF"></span> The NewAudio Object</a></li>
+                        <li class="li-indent"><a href="api-functions-input.html">The Input Object</a></li>
+						<li class="li-indent"><a href="api-functions-time.html">The Time Object</a></li>
+                        <li class="li-indent"><a href="api-functions-misc.html"><span class="CYF"></span>The Misc Object</a></li>
+                        <li class="li-indent"><a href="api-functions-waves.html">Wave Scripts</a></li>
+                        <li class="li-indent active">> <span class="CYF"></span> The Inventory Object <</li>
+                        <li class="li-indent"><a href="cyf-text.html"><span class="CYF"></span> The Text Object</a></li>
+                    <hr style="margin-top:-2.5px;margin-bottom:2.5px;">
+                    <li><a href="api-projectile.html">Projectile management</a></li>
+                    <li><a href="api-animation.html">Sprites &amp; Animation</a></li>
+                    <li><a href="cyf-ppcollision.html"><span class="CYF"></span> The Pixel-Perfect Collision System</a></li>
+                    <li><a href="api-keys.html"><span class="CYF"></span> Key List</a></li>
+                <li class="li-header">Resources</li>
+                    <li><a href="../media/dialogoptions.png">Dialog bubble names</a></li>
+            </ul>
+        </nav>
+    </div>
+    <!--tabs'n'shit-->
+    <div class="tab-content col-md-10">
+        <div class="tab-pane active text-style" id="cyf-inventory">
+            <h2><span class="CYF"></span> Create Your Frisk: The Inventory System</h2><br><br>
+            <p>
+                It was hard to customize items and such in Unitale, right? Plus, items wouldn't go away when you used them,
+                because they are the only ones that will ever love you. But now, nobody loves you at all, items
+                can be deleted and the Inventory System has been simplified! Here are the functions that are created to
+                help you with this hellish mechanism that added items.
+                <br><br>Some of these functions can only be used in <span class="term">HandleItem</span>. Examples are
+                included at the bottom of this page.
+            </p><br>
+
+            <span class="function">The Inventory Object [E/M/P/W]</span>
+            <hr>
+
+            <p>
+                <span class="function"><span class="boolean"></span> Inventory.AddItem(<span class="string"></span> name, <span class="number"></span> index)</span>
+                Attempts to add the item <span class="term">name</span> to the player's inventory.
+                <ul>
+                    <li>
+                        <span class="term" style="margin-left:20px">name</span> = The name of the item to add. Must have been set with <span class="term">Inventory.AddCustomItems</span>.
+                    </li>
+                    <li>
+                        <span class="term" style="margin-left:20px">index</span> = The position to place the item in, starting from 1.
+                        <br><span style="margin-left:90px"></span>Will "push away" items if placed in the same position as one.
+                        <br><span style="margin-left:90px"></span>If > the number of items in the inventory or nil, the item will just be added to the end.
+                    </li>
+                </ul>
+                Can not make a player's inventory exceed 8 items.<br><br>
+                Returns <span class="term">true</span> if the item was successfully added, <span class="term">false</span> otherwise.
+            </p><br>
+
+            <p>
+                <span class="function">Inventory.RemoveItem(<span class="number"></span> index)</span>
+                Removes the item in position <span class="term">index</span> from the player's inventory.
+                <br><span class="term" style="margin-left:20px">index</span> = Index to remove the item from. The first item is position 1.
+            </p><br>
+
+            <p>
+                <br><span class="function"><span class="string"></span> Inventory.GetItem(<span class="number"></span> index)</span>
+                Returns the name of the item in the inventory at the given index.
+                <br><span class="term" style="margin-left:20px">index</span> = Index of the chosen item. The first item is number 1.
+            </p><br>
+
+            <p>
+                <br><span class="function"><span class="number"></span> Inventory.GetType(<span class="number"></span> index)</span>
+                Returns the type of the item in the inventory at the given index.
+                <br><span class="term" style="margin-left:20px">index</span> = Index of the chosen item. The first item is number 1.<br>
+
+                <br><span style="margin-left:20px">Types:</span><br>
+                <span class="term" style="margin-left:40px">0</span> = Consumable. Will be deleted upon use.<br>
+                <span class="term" style="margin-left:40px">1</span> = Special. This item will not be deleted upon use.
+            </p><br>
+
+            <p>
+                <span class="function">Inventory.SetItem(<span class="number"></span> index, <span class="string"></span> name)</span>
+                Sets the inventory item at <span class="term">index</span> to the item <span class="term">Name</span>.
+                <br><span class="term" style="margin-left:20px">index</span> = Index to put the item in. The first item is position 1.
+                <br><span class="term" style="margin-left:20px">name</span> = Name of the item to put in the inventory.
+            </p><br>
+
+            <p>
+                <span class="function"><span class="CYK"></span> Inventory.AddCustomItem(<span class="string"></span> name, <span
+                class="string"></span> description, <span class="number"></span> type, <span class="string"></span> targetType)</span>
+                If you want to add custom items, this has to be used before <span class="term">SetInventory</span>.
+                This adds an item named <span class="term">name</span> to the inventory which is of type <span class="term">type</span>.
+                You can add a short description to it using <span class="term">description</span>, and <span class="term">targetType</span>
+                tells the engine which entities this item should target.
+                <br><br>Usage: <span class="term">Inventory.AddCustomItems("item1", "Useful item!", 1, "Player")</span>
+                <br><span class="term" style="margin-left:20px">name</span> = The name of your custom item.
+                <br><span class="term" style="margin-left:20px">description</span> = Short description of your custom item.
+                Empty strings are valid.
+                <br><span class="term" style="margin-left:20px">type</span> = The item type of your custom item.
+
+                <br><span style="margin-left:20px">Types:</span><br>
+                <span class="term" style="margin-left:40px">0</span> = Consumable. Will be deleted upon use.<br>
+                <span class="term" style="margin-left:40px">1</span> = Special. This item will not be deleted upon use.
+
+                <br><span class="term" style="margin-left:20px">targetType</span> = Type of entities the item will target.
+
+                <br><span style="margin-left:20px">Target types:</span><br>
+                <span class="term" style="margin-left:40px">"Player"</span> = Targets one active Player.<br>
+                <span class="term" style="margin-left:40px">"Enemy"</span> = Targets one active enemy.<br>
+                <span class="term" style="margin-left:40px">"AllPlayer"</span> = Targets all active Players.<br>
+                <span class="term" style="margin-left:40px">"AllEnemy"</span> = Targets all active enemies.
+            </p><br>
+
+            <p>
+                <span class="function">Inventory.SetInventory(<span class="luatable"><span class="string"></span></span> names)</span>
+                Sets the player's inventory. To use custom items, this must be used after <span class="term">AddCustomItems</span>.
+                <br>This function is used like this: <span class="term">Inventory.SetInventory({"item1", "item2"})</span>;
+                <br><span class="term" style="margin-left:20px">names</span> = The names of the items.
+            </p><br>
+
+            <p>
+                <span class="function"><span class="number"></span> Inventory.ItemCount</span>
+                Returns the number of items the player has in their inventory. Read-only.
+            </p>
+
+            <br><h4>Examples:</h4>
+            <br>Example of a healing item:
+            <br><div class="code-container"><pre class="brush: lua">function EncounterStarting()
+    Inventory.AddCustomItem("Starfait", "Refreshing!", 0, "Player")
+    Inventory.SetInventory({"Starfait"})
+end
+
+function HandleItem(user, targets, itemID, itemData)
+    if itemID == "Starfait" then
+        targets[1].Heal(14)
+        BattleDialog({targets[1].name .. " eats the Starfait.[w:10]\nThey recovered 14 HP!"})
+    end
+end
+            </pre></div>
+            <br>Example of an item targeting all Players:
+            <br><div class="code-container"><pre class="brush: lua">function EncounterStarting()
+    Inventory.AddCustomItem("Nut", "Heals 20HP to Team.", 0, "AllPlayer")
+    Inventory.SetInventory({"Nut"})
+end
+
+function HandleItem(user, targets, itemID, itemData)
+    if itemID == "Nut" then
+        for i = 1, #targets do
+            targets[i].Heal(20)
+        end
+        BattleDialog({"The team splits the Nut apart and eat a part each.[w:10]\nEveryone regain 20HP!"})
+    end
+end
+            </pre></div>
+            <br>Example of a persistent item:
+            <br><div class="code-container"><pre class="brush: lua">function EncounterStarting()
+    Inventory.AddCustomItem("Test", "Test Item", 1, "AllPlayer")
+    Inventory.SetInventory({"Test"})
+end
+
+function HandleItem(user, targets, itemID, itemData)
+    if itemID == "Test" then
+        BattleDialog({"This item won't be\rdeleted!"})
+    end
+end
+            </pre></div>
+            <br>Many items:
+            <br><div class="code-container"><pre class="brush: lua">function EncounterStarting()
+    Inventory.AddCustomItem("Test", "Test Item", 0, "AllPlayer")
+    Inventory.AddCustomItem("Test2", "Another Test Item", 1, "AllPlayer")
+    Inventory.AddCustomItem("Bandage", "Used Before\nHeals 20 HP", 0, "Player")
+    Inventory.AddCustomItem("Nut", "Heals 20 HP to Team.", 0, "AllPlayer")
+    Inventory.AddCustomItem("Rock", "Throwable Weapon\nDeals 5 DMG", 0, "Enemy")
+    Inventory.AddCustomItem("Manual", "Very Useful and Cute", 1, "AllEnemy")
+
+    Inventory.SetInventory({ "Test", "Test2", "Manual", "Bandage", "Nut", "Rock", "Bandage" })
+end
+
+function HandleItem(user, targets, itemID, itemData)
+    if itemID == "Test" then
+        BattleDialog({"This is a test of a normal item.[w:10] It should disappear from your bag.[w:10] The test succeeded!"})
+    elseif itemID == "Test2" then
+        BattleDialog({"This is a test of a persistent item.[w:10] If it succeeded, the item must still be in the inventory!"})
+    elseif itemID == "Bandage" then
+        targets[1].Heal(20)
+        BattleDialog({ targets[1].name .. " reapplied the bandage.[w:10]\nThey regain 20 HP!" })
+    elseif itemID == "Nut" then
+        for i = 1, #targets do
+            targets[i].Heal(20)
+        end
+        BattleDialog({"The team splits the Nut apart and eat a part each.[w:10]\nEveryone regain 20 HP!"})
+    elseif itemID == "Rock" then
+        targets[1].Hurt(5, user)
+        BattleDialog({ user.name .. " throws the Rock at " .. targets[1].name .. ".[w:10]\nIt collides![w:10] " .. targets[1].name .. " loses 5 HP!"})
+    elseif itemID == "Manual" then
+        local text = { user.name .. " reads the Manual." }
+        for i = 1, #targets do
+            -- You can call enemy (or Players) Entity files functions like so:
+            --targets[i].UseItem(itemID)
+        end
+        BattleDialog(text)
+    end
+end
+            </pre></div>
+        </div>
+
+		<div class="tab-pane text-style" id="mercy">
+            <h2 style="text-decoration: none; line-height:50px;">
+                * YOU WON!<br>
+                * You earned 0 EXP and 0 gold.<br>
+                * also the nav menu is broken now
+            </h2><br>
+        </div>
+	</div>
+</div>
+
+<div class="container">
+    <div class="col-xs-3"><img class="centerbt black" alt="Undertale fake button" src="../img/fightbt_0.png" height="42">
+    </div>
+    <div class="col-xs-3"><img class="centerbt black" alt="Undertale fake button" src="../img/actbt_0.png" height="42">
+    </div>
+    <div class="col-xs-3"><img class="centerbt black" alt="Undertale fake button" src="../img/itembt_0.png" height="42">
+    </div>
+    <div class="col-xs-3"><a href="#mercy" data-toggle="tab"><img class="centerbt black" alt="Undertale fake button"
+                                                                  src="../img/mercybt_0.png" height="42"></a>
+    </div>
+</div>
+<br>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../js/show_hide_comments.js"></script>
+
+<script type="text/javascript" src="../js/FontToggleButton.js"></script>
+</body>
+</html>

@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<!--
+since you're here anyway: there's a small easter egg on the text commands page but it's probably not worth finding, sorry
+you may notice this page's code is garbage: i'm not a web designer! ;-;
+it's w3c valid, at least
+-->
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="favicon.ico">
+
+    <title>CYK Documentation - Special Variables</title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="../css/themesidebar.css" rel="stylesheet">
+    <link href="../css/shThemeRDark.css" rel="stylesheet">
+
+    <!-- Syntax highlighting -->
+    <script type="text/javascript" src="../js/shCore.js"></script>
+    <script type="text/javascript" src="../js/shBrushLua.js"></script>
+    <script type="text/javascript">SyntaxHighlighter.all();</script>
+</head>
+<body>
+<img src="../img/bg2.png" alt="Undertale background" class="backimg">
+<div class="container arena black">
+    <div class="col-md-2">
+        <!--navigation-->
+        <nav class="nav-sidebar">
+            <ul class="nav tabs">
+                <li class="li-header">Basics</li>
+                    <li><a href="../documentation.html">Welcome</a></li>
+                    <li><a href="howtoread.html">How to read this documentation</a></li>
+                    <hr style="margin-top:-2.5px;margin-bottom:2.5px;">
+                    <li><a href="controls.html">Controls</a></li>
+                    <li><a href="basic.html">Basic setup</a></li>
+                    <li class="active" style="margin-left:5px;">> Special Variables <</li>
+                    <li><a href="terms.html">Terminology</a></li>
+                <li class="li-header">API</li>
+                    <li><a href="api-text.html">Text commands</a></li>
+                    <li><a href="api-events.html">Game events</a></li>
+                    <hr style="margin-top:-2.5px;margin-bottom:2.5px;">
+                    <li class="li-indent">Functions &amp; Objects:</li>
+                        <li class="li-indent"><a href="api-functions-main.html">Misc. Functions</a></li>
+                        <li class="li-indent"><a href="api-functions-player.html">The Player Object</a></li>
+                        <li class="li-indent"><a href="api-functions-entity.html"><span class="CYK"></span> The Entity Object</a></li>
+                        <li class="li-indent"><a href="api-functions-script.html">The Script Object</a></li>
+                        <li class="li-indent"><a href="api-functions-audio.html">The Audio Object</a></li>
+                        <li class="li-indent"><a href="api-functions-newaudio.html"><span class="CYF"></span> The NewAudio Object</a></li>
+                        <li class="li-indent"><a href="api-functions-input.html">The Input Object</a></li>
+                        <li class="li-indent"><a href="api-functions-time.html">The Time Object</a></li>
+                        <li class="li-indent"><a href="api-functions-misc.html"><span class="CYF"></span>The Misc Object</a></li>
+                        <li class="li-indent"><a href="api-functions-waves.html">Wave Scripts</a></li>
+                        <li class="li-indent"><a href="cyf-inventory.html"><span class="CYF"></span> The Inventory Object</a></li>
+                        <li class="li-indent"><a href="cyf-text.html"><span class="CYF"></span> The Text Object</a></li>
+                    <hr style="margin-top:-2.5px;margin-bottom:2.5px;">
+                    <li><a href="api-projectile.html">Projectile management</a></li>
+                    <li><a href="api-animation.html">Sprites &amp; Animation</a></li>
+                    <li><a href="cyf-ppcollision.html"><span class="CYF"></span> The Pixel-Perfect Collision System</a></li>
+                    <li><a href="api-keys.html"><span class="CYF"></span> Key List</a></li>
+                <li class="li-header">Resources</li>
+                    <li><a href="../media/dialogoptions.png">Dialog bubble names</a></li>
+            </ul>
+        </nav>
+    </div>
+    <!--tabs'n'shit-->
+    <div class="tab-content col-md-10">
+        <div class="tab-pane active text-style" id="variables">
+            <h3>Special variables</h3><br><br>
+            <p>It's time to set up the basics of an encounter! The fastest way to
+                get started is to copy the default mod and play with the values in it, then either copying
+                over existing code, or writing your own. This section serves to explain the variables you'll see.
+			</p>
+            <hr>
+            <h4>All-script variables</h4>
+
+            <p>
+                <br><span class="function"><span class="CYF"> </span><span class="boolean"></span> isCYF [E/M/P/W]</span>
+                A value - true by default - that indicates that if you're on CYF. nil if not on CYF. Test it with
+                <span class="term">if not isCYF then</span> or <span class="term">if isCYF then</span>.
+			</p>
+
+            <p>
+                <br><span class="function"><span class="CYF"></span><span class="boolean"></span> safe [E/M/P/W]</span>
+                True if CYF's safe mode is enabled, false otherwise.
+			</p>
+
+            <p>
+                <br><span class="function"><span class="CYF"></span><span class="boolean"></span> windows [E/M/P/W]</span>
+                Returns true if the user is on Windows, false otherwise.
+			</p>
+
+            <p>
+                <br><span class="function"><span class="CYF"></span><span class="string"></span> CYFversion [E/M/P/W]</span>
+                Returns a different string based on the version of CYF you are using.<br>
+                <ul>
+                    <li><span class="term">Versions before v0.6</span>: Previous version's number.<br>
+                    For example, in CYF v0.5.5, this will be "0.5.4".</li>
+                    <br>
+                    <li><span class="term">Versions between v0.6 and v0.6.1.2</span>: always "1.0".</li>
+                    <br>
+                    <li><span class="term">Versions after v0.6.1.2</span>: Current version's number.<br>
+                    For example, in CYF v0.6.2, this will be "0.6.2".</li>
+                </ul>
+
+                <h5>TIP: Lua has a very useful built-in string comparing function.</h5>
+                You can very easily check for <span class="term">if CYFversion &lt; "0.6.2.2" then</span>, <span class="term">if CYFversion &gt;= "0.6.1.2" then</span> and other combinations.
+			</p>
+
+            <hr>
+            <h4>Encounter script variables</h4>
+            <div class="code-container">
+<pre class="brush: lua;">music = "yourmusicname_without_extension"
+encountertext = "Vegetoids came out of\rthe earth!"
+nextwaves = { "bullettest_wavy", "bullettest_homing" }
+wavetimer = 4.0
+arenasize = { 155, 130 }
+
+players = { "Kris", "Susie", "Ralsei" }
+
+playerpositions = {
+    { 60, 350 },
+    { -2, 256 },
+    { 60, 174 }
+}
+
+enemies = { "vegetoid", "vegetoid" }
+
+enemypositions = {
+    { 480, 340 },
+    { 520, 260 }
+}
+
+</pre>
+            </div>
+            <span class="CYK"></span> You can find a sample in <span class="term">YOURMOD/Lua/Encounters/CYK.lua</span>.
+            <p>
+                <br><span class="function"><span class="string"></span> <span class="term">music</span></span>
+                Name of your encounter's starting music, without the file extension.
+                If this variable isn't present, it'll play Deltarune's default battle theme. If you don't want any music, call
+                <span class="term">Audio.Stop()</span> in the <span class="term">EncounterStarting()</span> function.
+                For more information see <span class="ref">API - Game events</span>.
+			</p>
+
+            <p>
+                <br><span class="function"><span class="string"></span> <span class="term">encountertext</span></span>
+                Set the initial text of your encounter here.
+                After that, you can modify it at any time in preparation for the next turn. <span class="term">encountertext</span> gets
+                read out at the start of every new turn (i.e. you going back to the FIGHT/ACT/ITEM/MERCY selection).
+			</p>
+
+            <p>
+				<br><span class="function"><span class="luatable"><span class="string"></span></span> <span class="term">nextwaves</span>
+                </span>
+                A list of all simultaneous attack waves you want when the monsters start their attacks. You can modify this at any time,
+                and it'll get read out before the enemies start their attack. For most boss-type encounters, you'll likely only want one
+                wave simultaneously - but you can get creative here.
+			</p>
+
+            <p>
+				<br><span class="function"><span class="number"></span> <span class="term">wavetimer</span></span> How long it takes for
+                the defending step to end. If this isn't set anywhere, it'll be the default <i>4.0 seconds</i>.
+			</p>
+
+            <p>
+				<br><span class="function"><span class="luatable"><span class="number"></span></span> <span class="term">arenasize</span>
+                </span>
+                The inner size of the box the player's constrained to. <span class="term">{155, 130}</span> is the default size for a lot
+                of basic Undertale encounters. Papyrus' battle, for instance, has this at <span class="term">{245, 130}</span> most of the
+                time. You may modify this at any time - it'll only get read out before the enemies start their attack.
+                <br><br>
+                Note: lowest possible setting is <span class="term">{16, 16}</span></span> as this is the size of the player's soul. Anything
+                lower will be set to 16 anyway.
+			</p>
+
+            <p>
+				<br><span class="function"><span class="CYK"></span> <span class="luatable"><span class="number"></span></span>
+                <span class="term">arenapos</span></span>
+                The starting position of the bottom of the box the player's constrained to. <span class="term">{320, 200}</span> is the
+                default position for CYK's encounters.
+                You may modify this at any time - it'll only get read out before the enemies start their attack.
+			</p>
+
+            <p>
+				<br><span class="function"><span class="CYK"></span> <span class="luatable"><span class="number"></span></span>
+                <span class="term">arenacolor</span></span>
+                The color of the box the player's constrained to. <span class="term">{0, 1, 0}</span> is the default color used for CYK's
+                encounters.<br>
+                This value is only used at the start of a wave, if you want to set the color of the Arena in a wave, you'll have to do
+                so by setting the <span class="term">color</span> value of the sprite <span class="term">Arena.outer</span>.
+			</p>
+
+            <p>
+				<br><span class="function"><span class="CYK"></span> <span class="number"></span> <span class="term">arenarotation</span>
+                </span>
+                The rotation of the box the player's constrained to. <span class="term">0</span> is the default value used for CYK's
+                encounters.<br>
+                This value is only used at the start of a wave, if you want to set the rotation of the Arena's borders in a wave, you'll have
+                to do so by setting the value of <span class="term">Arena.rotation</span>.
+			</p>
+
+            <p>
+				<br><span class="function"><span class="CYK"></span> <span class="luatable"><span class="string"></span></span> <span class="term">players</span>
+                </span>
+                Defines the names of your Player scripts that will be used in your encounter. In the example, <span class="term">Kris.lua
+                </span>, <span class="term">Susie.lua</span> and <span class="term">Ralsei.lua</span> will be used from the Players folder.
+                <br><br>
+                After initialization, the names will be replaced by Entity objects you can use to control your
+                Player scripts.<br>
+                Refer to <span class="ref">Entity Objects</span> for more information.
+			</p>
+
+            <p>
+				<br><span class="function"><span class="CYK"></span> <span class="luatable"><span class="luatable"><span class="number"></span>, <span class="number">
+                </span></span></span> <span class="term">playerpositions</span></span>
+                Defines where the bottom left corner of the Players' sprites are on the screen.
+                <br><br>
+                <span class="term">{0, 0}</span> means the
+                bottom left corner of the Player's sprite is at the bottom left corner of the screen.<br>
+                <span class="term">{100, 100}</span>
+                means the bottom left corner of the Player's sprite is 100 pixels to the right and 100 pixels above the bottom left corner.
+                <br><br>
+                You will always need as many Player positions as Players in your encounter. In the example above we have 3 Player positions
+                set to show you how you can define more than one.
+			</p>
+
+            <p>
+				<br><span class="function"><span class="luatable"><span class="string"></span></span> <span class="term">enemies</span>
+                </span>
+                Defines the names of your enemy scripts that will be used in your encounter. In the example, <span class="term">
+                vegetoid.lua</span> will be used from the Monsters folder.
+                <br><br>
+                <span class="CYK"></span> After initialization, the names will be replaced by Entity objects you can use to control your
+                monster scripts.<br>
+                Refer to <span class="ref">Entity Objects</span> for more information.
+			</p>
+
+            <p>
+				<br><span class="function"><span class="luatable"><span class="luatable"><span class="number"></span>,
+                <span class="number"></span></span></span> <span class="term">enemypositions</span></span>
+                Defines where the bottom left corner of the enemies' sprites are on the screen.
+                <br><br>
+                <span class="term">{0, 0}</span> means the
+                bottom left corner of the enemy's sprite is at the bottom left corner of the screen.<br>
+                <span class="term">{100, 100}</span>
+                means the bottom left corner of the enemy's sprite is 100 pixels to the right and 100 pixels above the bottom left corner.
+                <br><br>
+                You will always need as many enemy positions as enemies in your encounter. In the example above we have 2 enemy positions
+                set to show you how you can define more than one.
+			</p>
+
+            <p>
+				<br><span class="function"><span class="CYF"></span> <span class="boolean"></span> <span class="term">autolinebreak</span>
+                </span>
+                False by default. If this value is set to true, the auto linebreak system will automatically add line breaks
+                (<span class="term">\r</span>) to the text. No need to use <span class="term">\r</span> or <span class="term">\n</span>
+                anymore!
+			</p>
+
+            <p>
+				<br><span class="function"><span class="CYF"></span> <span class="boolean"></span> <span class="term">playerskipdocommand
+                </span></span>
+                False by default. If this value is set to true, the text commands will be called even if the player skips the text, except
+                for <span class="term">[w]</span> and <span class="term">[letters]</span> commands and commands with the tag
+                "<span class="term">skipover</span>".
+			</p>
+
+            <p>
+				<br><span class="function"><span class="CYF"></span> <span class="luatable"><span class="string"></span></span>
+                <span class="term">deathtext</span></span>
+                Text displayed when the player dies, in the Game Over screen. By default, it'll use the normal death text.
+			</p>
+
+            <p>
+				<br><span class="function"><span class="CYF"></span> <span class="string"></span> <span class="term">deathmusic</span>
+                </span>
+                Sets the death music.
+			</p>
+
+            <p>
+				<br><span class="function"><span class="CYF"></span> <span class="luatable"><span class="userdata">script</span></span>
+                <span class="term">Wave</span></span>
+                A table returning the current wave scripts used. Returns a table with a length of 0 if not in the state DEFENDING.
+			</p>
+
+            <p>
+				<br><span class="function"><span class="CYK"></span> <span class="boolean"></span> <span class="term">
+                preloadAnimations</span></span>
+                False by default.
+                <br><br>
+                If this value is set to true, all player and monster animations will be pre-loaded when the battle starts.<br>
+                This will make the mod take longer to start, but it will be smoother while playing.
+			</p>
+
+            <p>
+				<br><span class="function"><span class="CYK"></span> <span class="number"></span> <span class="term">CYKDebugLevel</span>
+                </span>
+                This value regulates the amount of warnings and debug messages CYK prints out in CYF's console. Feel free to use this
+                variable to create your own debug messages if needed.
+                <br><br>
+                It can have several values:
+                <ul>
+                    <li><span class="term">0 or less</span></span> No warnings are displayed. <span style="font-weight: bold; color:#ff0000">
+                        CYKDebugLevel should have this value when releasing a mod with it.</span></li>
+                    <li><span class="term">1</span></span> Only important warnings are displayed: missing variables or functions at startup,
+                        and unintended behaviors.</li>
+                    <li><span class="term">2</span></span> Lesser warnings are displayed: functions or behaviors with no effects, item or
+                        spell data duplication.</li>
+                    <li><span class="term">3 or more</span></span> All warnings and all of CYK's debug messages are shown. It is not
+                        recommended to use this as your debugger will be filled with text.</li>
+                </ul>
+			</p>
+
+            <p>
+				<br><span class="function"><span class="CYK"></span> <span class="luatable"><span class="string"></span></span>
+                <span class="term">fontCharUsedForPlayer</span></span>
+                This table's goal is to register the characters bound to a Player's UI face sprite in the font <span class="term">
+                uidialog</span>.
+                <br><br>
+                It allows the engine to display a Player's UI face sprite when it is needed in an act command.
+                <br><br>
+                For example: if the command "X-Anything" of an enemy requires the Player "Susie", then the name of the act
+                command will contain the UI face sprite of the Player "Susie", if this table contains a value for its Susie variable.
+                <br><br>
+                In order to add your the face sprite of your own Player, you must add it in the font "uidialog", and choose an unused
+                character to bind to your Player's UI sprite.
+                <br><br>
+                If the use of this table is still unclear, feel free to check the examples provided with CYK or ask for some help in
+                Discord or Reddit.
+			</p>
+
+            <p>
+				<br><span class="function"><span class="CYK"></span> <span class="boolean"></span> <span class="term">background</span>
+                </span>
+                True by default. If this boolean is set to false, Deltarune's usual background won't be shown in the Encounter.
+                <br><br>
+                Useful if you want to add your own background. Only used at the beginning of the encounter, you cannot disable or enable the
+                background during an encounter.
+			</p>
+
+            <p>
+				<br><span class="function"><span class="CYK"></span> <span class="boolean"></span> <span class="term">backgroundfade</span>
+                </span>
+                True by default. If this boolean is set to false, there won't be a fading effect on the background when in a wave.
+                <br><br>
+                Useful to keep on at all times, unless you plan to handle your own fading effect. Only used at the beginning of the encounter,
+                you cannot disable or enable the fade effect during an encounter.
+			</p>
+
+            <hr>
+            <h4><span class="CYK"></span> Entity scripts</h4>
+            <p>
+                There are two different types of Entity objects, and they both share values. We will first see the values they share, then
+                we will see which differences they have.
+			</p>
+            <br>
+            <h5>Example of a Player script</h5>
+            <div class="code-container">
+<pre class="brush: lua;">hp = 90
+atk = 10
+def = 2
+mag = 0
+
+powers = { "Guts" }
+abilities = { "Act" }
+playerColor = { 0, 1, 1 }
+atkBarColor = { 0, 0, .5 }
+damageColor = { 0, 162/255, 232/255 }
+
+animations = {
+    Defend =        { { 0, 1, 2, 3, 4, 5 },                 1 / 15, { loop = "ONESHOT", heartShift = { -30, -30 }, targetShift = { -14, -22 } }, true },
+    Down =          { { 0 },                                1,      { loop = "ONESHOT", heartShift = { -40, -50 } },                             true },
+    EndBattle =     { { 0, 1, 2, 3, 4, 5, 6, 7, 8 },        2 / 15, { loop = "ONESHOT" }                                                              },
+    Fight =         { { 0, 1, 2, 3, 4, 5, 6 },              1 / 15, { loop = "ONESHOT", posShift = { 0, -12 } }                                       },
+    Hurt =          { { 0 },                                1,      { next = "Idle", heartShift = { -30, -30 } },                                true },
+    Intro =         { { 0, 1, 2, 3, 4, 5, 6, 7, 8 },        1 / 15, { next = "Idle" },                                                                },
+    Idle =          { { 0, 1, 2, 3, 4, 5 },                 2 / 15, { heartShift = { -30, -30 }, targetShift = { -14, -22 } }                         },
+    Item =          { { 0, 1, 2, 3, 4, 5 },                 1 / 15, { next = "Idle" }                                                                 },
+    PrepareAct =    { { 0, 1 },                             2 / 15, { },                                                                         true },
+    PrepareFight =  { { 0 },                                1,      { },                                                                         true },
+    PrepareItem =   { { 0 },                                1,      { },                                                                         true },
+    PrepareSpare =  { { 0, 1 },                             2 / 15, { },                                                                         true },
+    Spare =         { { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }, 1 / 15, { next = "Idle" }                                                                 },
+    SliceAnim =     { { 0, 1, 2 },                          2 / 15, { loop = "ONESHOTEMPTY" }                                                         },
+}</pre>
+            </div>
+            <br>
+            <h5>Example of an enemy script</h5>
+            <div class="code-container">
+<pre class="brush: lua;">comments = { "Smells like the work of an enemy stand.", "Poseur is posing like his life depends on it.", "Poseur's limbs shouldn't be moving in this way." }
+commands = { "Check", "Act 1", "Act 2", "Act 3", "Act 4", "Act 5", "Act 6" }
+randomdialogue = {
+    { "Check it out.",            "Please"                     },
+    { "Check it out again.",      "",         "For real now"   },
+    { "I'll show you something.", "Trust me."                  },
+    { "Keep looking!",            "Harder!",  "I SAID HARDER!" },
+      "It's working."
+}
+
+hp = 1
+atk = 24
+def = 2
+mag = 9001
+dialogbubble = "DRBubble"
+targetType = "all"
+check = "Check message goes here."
+canspare = false
+tired = false
+
+multicommands = { Act_2 = { "Susie" }, Act_3 = { "Ralsei" }, Act_4 = { "Ieslar" }, Act_5 = { "Susie", "Ralsei" } }
+animations = {
+    Hurt      = { { 0 },                                           1     , { next = "Idle" }, true },
+    Idle      = { { 0, 1, 2, 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 1 / 15, { }              , true },
+    Spareable = { { 0, 1, 2, 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 1 / 15, { }              , true },
+}</pre>
+            </div>
+
+            <h4>Entity object basic variables</h4>
+
+            <p>
+                <br><span class="function"><span class="string"></span> <span class="term">name</span></span>
+                Entity name. Fairly self-explanatory; shows up in the menus. Can also be changed at any time.
+                <br><br>
+                If used on a Player, its name shown in the Player UI won't be modified accordingly. To update it, you must use the
+                function <span class="term">Player.UpdateUI()</span>. See the <span class="ref">Entity Object</span> page.
+                <br><br>
+                * Do not modify this for monster scripts.
+			</p>
+
+            <p>
+				<br><span class="function"><span class="number"></span> <span class="term">hp</span></span>
+                Your entity's max HP, initially. After the fight has started, this value will always accurately reflect your entity's
+                current HP. You can then modify this value to change your entity's current HP.
+			</p>
+
+            <p>
+				<br><span class="function"><span class="CYF"></span> <span class="number"></span> <span class="term">maxhp</span></span>
+                Your entity's max HP. After the fight has started this value will be always the same, unless you change it. It is mainly
+                used for lifebars and such. You better not set it as 0 or as a negative number, though.
+			</p>
+
+            <p>
+				<br><span class="function"><span class="number"></span> <span class="term">atk</span></span>
+                Your entity's ATK.
+			</p>
+
+            <p>
+				<br><span class="function"><span class="number"></span> <span class="term">def</span></span>
+                Your entity's DEF.
+			</p>
+
+            <p>
+				<br><span class="function"><span class="number"></span> <span class="term">mag</span></span>
+                Your entity's MAG.
+			</p>
+
+            <p>
+				<br><span class="function"><span class="CYK"></span> <span class="userdata">sprite</span> <span class="term">sprite</span>
+                </span>
+                Sprite handler of the entity. You can change an entity's animation by calling the function
+                <span class="term">SetCYKAnimation()</span>.
+			</p>
+
+            <p>
+				<br><span class="function"><span class="userdata">sprite</span> <span class="term">monstersprite
+                </span></span>
+                Points to <span class="term">Entity.sprite</span>. Handy shortcut, allowing CYK's syntax to stay close to CYF's.
+			</p>
+
+            <p>
+                <br><span class="function"><span class="CYK"></span> <span class="luatable"><span class="userdata">animations</span></span> <span class="term">
+                animations</span></span>
+                This table is complex.
+                <br><br>
+                Basically, it holds all the data related to this entity's animations. Do not be afraid, it is actually very easy to use.
+                <br><br>
+                Each animation is a named table. The name of the table corresponds to the folder the animation is contained in.
+                <br><br>
+                For example, if we were to define the <span class="term">Player</span> <span class="term">Kris</span>'s
+                <span class="term">Idle</span> animation, then we'd have to create a table named "Idle" inside the
+                <span class="term">animations</span> table, and all the sprites that'd be used in this animation would
+                have to be in the folder <span class="term">YOURMOD/Sprites/CreateYourKris/Players/Kris/Idle</span>.
+                <br><br>
+                Now that your sprites are set up, we can start creating the animation itself.<br><br>
+                Here are the different elements an animation table needs:
+                <ol>
+                    <li><span class="luatable"><span class="string"></span> <span class="userdata">OR</span> <span class="number"></span>
+                        </span>
+                        The first element of an animation table must be a table containing all the names of the sprites you want to use for
+                        your animation, kind of like how you'd normally use <span class="term">sprite.SetAnimation()</span>, except you only
+                        have to enter the sprite's name.
+                        <br><br>
+                        In the example files, all the "sprite names" are numbers because the sprites used are named
+                        <span class="term">0.png</span>, <span class="term">1.png</span> and so on, but you can use strings, like
+                        <span class="term">sushi</span> if you want to use a sprite named <span class="term">sushi.png</span>.</li><br>
+                    <li><span class="number"></span> The second element is exactly like <span class="term">sprite.SetAnimation()</span>'s
+                        second argument: it is the time in seconds between each frame. If this value is 1,
+                    it takes 1 second to move to the next sprite.</li><br>
+                    <li><span class="luatablesolo"></span> The third element is important, as it is a table that gathers all the data necessary
+                        for CYK to run the animation properly.
+                        <br><br>
+                        This table can contain numerous named values, here is the list:
+                        <ul>
+                            <br><li><span class="string"></span> <span class="term">loop</span></span>
+                                Loop mode of the animation. Has the same values as <span class="term">sprite.loopmode</span>.
+                                (<span class="term">"LOOP"</span>, <span class="term">"ONESHOT"</span> and <span class="term">"ONESHOTEMPTY"
+                                </span>)
+                                <br><br>
+                                Will be forced to <span class="term">ONESHOT</span> if <span class="term">next</span> is set.</li>
+                            <br><li><span class="string"></span> <span class="term">next</span></span>
+                                Next animation to start after the end of this one. Overrides <span class="term">loop</span> and sets it to
+                                <span class="term">ONESHOT</span>.</li>
+                            <br><li><span class="luatable"><span class="number"></span></span> <span class="term">posShift</span></span>
+                                Contains two number values. Moves the entity's sprite by the first number value horizontally and by the second
+                                number vertically, for this animation.</li>
+                            <br><li><span class="luatable"><span class="number"></span></span> <span class="term">heartShift</span></span>
+                                Only affects Players. Contains two number values. Moves the spawn point of the soul sprite by the first number
+                                value horizontally and by the second number vertically, for this animation.
+                                <br><br>
+                                The soul's spawn point is centered if this value is not set or is <span class="term">{0, 0}</span>.</li>
+                            <br><li><span class="luatable"><span class="number"></span></span> <span class="term">targetShift</span></span>
+                                Only affects Players. Contains two number values. Moves the spawn point of the "TARGET" sprite when targeted
+                                in the next, wave during the state ENEMYDIALOGUE, by the first number value horizontally
+                                and by the second number vertically, for this animation.
+                                <br><br>
+                                The "TARGET" sprite is centered if this value is not set or is <span class="term">{0, 0}</span>.</li><br>
+                        </ul></li>
+                    <li><span class="boolean"></span> Optional, false by default.
+                        <br><br>
+                        In Deltarune, whenever you select an enemy to target or use an ACT command on, they will
+                        normally "glow" white slowly.<br>
+                        Also, whenever a player is not target during a wave, their sprite will "fade out" to black.
+                        <br><br>
+                        In order to do this effect in CYK, an <b>all-white version of each sprite</b> in an animation
+                        is required.
+                        <br><br>
+                        By setting this variable to true, you're signalling that <b>you have set up all-white versions
+                        of every sprite in this animation</b>.
+                        <br><br>
+                        In order to set this up, you have to:
+                        <ol>
+                            <br><li>Copy all the sprites used in your animation, and rename them to <span class="term">namef.png</span>, where
+                            <span class="term">name</span> is the original name of the image. For example, if you copied the sprite <span class="term">"frame0.png"</span>, the new sprite has to be
+                                named <span class="term">"frame0f.png"</span>.</li>
+                            <br><li>Open each image and set the colors of all non-transparent pixels of the sprite to white.</li><br>
+                        </ol>
+                        Here is a quick list of animations used by the engine that'll require such additional animation. If you need more
+                        information about those animations, check the entity function <span class="term">SetCYKAnimation()</span>
+                        in the <span class="ref">Misc. Functions</span> page:
+                        <br><br>
+                        <ul>
+                            <li><span class="term">Defend</span></li>
+                            <li><span class="term">Down</span></li>
+                            <li><span class="term">Hurt</span></li>
+                            <li><span class="term">Idle</span></li>
+                            <li><span class="term">PrepareAct</span></li>
+                            <li><span class="term">PrepareFight</span></li>
+                            <li><span class="term">PrepareMagic</span></li>
+                            <li><span class="term">PrepareItem</span></li>
+                            <li><span class="term">PrepareSpare</span></li>
+                        </ul>
+                    </li>
+                </ol>
+			</p>
+
+            <br>
+            <h4>Player object variables</h4>
+            <br>
+
+            <p>
+                <br><span class="function"><span class="luatable"><span class="string"></span></span> <span class="term">powers</span></span> A list of powers of this Player.
+                Currently has no purpose at all. Feel free to add your own purpose to it!
+			</p>
+
+            <p>
+				<br><span class="function"><span class="luatable"><span class="string"></span></span> <span class="term">abilities</span></span>
+                A list of spells this Player can use in the MAGIC menu.
+                <br><br>
+                If the Player has an ability named <span class="term">"Act"</span> exactly, then the MAGIC menu won't be accessible for them, having
+                access to the ACT menu instead.
+			</p>
+
+            <p>
+				<br><span class="function"><span class="luatable"><span class="number"></span></span> <span class="term">playerColor</span></span>
+                Main color of this Player's UI. Used for the Player's HP bar and status UI.
+                <br><br>
+                This is normally only applied at the start of the battle.
+                <br><br>
+                To change the UI's color, you must set this, then use the function <span class="term">Player.UpdateUI()</span>.
+                See the <span class="ref">Entity Object</span> page.
+			</p>
+
+            <p>
+				<br><span class="function"><span class="luatable"><span class="number"></span></span> <span class="term">atkBarColor</span></span>
+                Color used for the attack bar of this Player in the state ATTACKING.
+			</p>
+
+            <p>
+				<br><span class="function"><span class="luatable"><span class="number"></span></span> <span class="term">damageColor</span></span>
+                Color used for the damage text spawning next to an enemy when this Player damages it.
+			</p>
+
+            <br>
+            <h4>Enemy object variables</h4>
+            <br>
+
+            <p><span class="function"><span class="luatable"><span class="string"></span></span> <span class="term">comments</span></span> A list of random comments
+                attached to this monster. You can retrieve one at random using the <span class="term">RandomEncounterText()</span> function in your
+                Encounter script. See <span class="ref">API - Functions &amp; Objects</span> for details.
+			</p>
+
+            <p>
+				<br><span class="function"><span class="luatable"><span class="string"></span></span> <span class="term">commands</span></span>
+                A list of ACT commands that can be used on this monster. Listed in the ACT menu and used in <span class="term">HandleCustomCommand()</span>.
+                See <span class="ref">API - Game events</span> for details.
+                <br><br>
+                <span class="term">"Check"</span> shows the monster's <span class="term">name</span> followed by its
+                <span class="term">ATK</span> and <span class="term">DEF</span>, and then the <span class="term">check</span>
+                variable.
+                <br><br>
+                <span class="CYK"></span> Note that, contrary to CYF, the behaviour for <span class="term">Check</span>
+                is not built-in, and you have to add it manually to this table in order to show it.
+                <span class="term">Check</span>'s behavior should be replicated in all the basic enemy scripts given with CYK.
+			</p>
+
+            <p>
+				<br><span class="function"><span class="luatable"><span class="luatable"><span class="string"></span></span>
+                <span class="userdata">OR</span> <span class="string"></span></span> <span class="term">randomdialogue</span></span>
+                A list of random dialogue the monster can say. One of these is selected at random if <span class="term">currentdialogue</span> is
+                <span class="term">nil</span> (i.e. has no value).
+                <br><br>
+                <span class="CYK"></span> This table can contain tables of strings for multiple lines, single strings for single lines,
+                or a mix of both.
+			</p>
+
+            <p>
+				<br><span class="function"><span class="luatable"><span class="string"></span></span> <span class="term">currentdialogue</span>
+                </span>
+                The dialogue this monster will say next. This overrides the random dialogue and is meant for special actions (e.g. you hit Vegetoid's
+                green carrots after selecting Dinner from the ACT menu). This variable gets <i>cleared every time after it's read out in the monster
+                dialogue phase</i>. This is done so you don't have to take care of managing it manually.
+			</p>
+
+            <p>
+				<br><span class="function"><span class="string"></span> <span class="term">dialogbubble</span></span>
+                What dialogue bubble will be used for the monster's dialogue. You can change this at any time, but this <i>must</i> be initially set
+                to something. For a list of all possible options, check the <a href="../media/dialogoptions.png">dialog bubble names</a> chart;
+                it's also in the sidebar. Positioning of the bubbles is done automatically.
+			</p>
+
+            <p>
+				<br><span class="function"><span class="CYK"></span> <span class="string"></span> <span class="userdata">OR</span>
+                <span class="number"></span> <span class="term">targetType</span></span>
+                How many or which Players will be hit, if a bullet fired by this enemy in a wave collides with the soul. Can be changed at any
+                time, even in waves.
+                <br><br>
+                Possible values:
+                <ul>
+                    <li><span class="string"></span> <span class="term">"single"</span>:
+                        Will only target a random Player, chosen when the state ENEMYDIALOGUE is entered or when a wave is started, whichever comes
+                        first.</li>
+                    <li><span class="string"></span> <span class="term">"all"</span>:
+                        Targets all Players at the same time, splitting the total damage over all the Players.</li>
+                    <li><span class="number"></span> <span class="term">Player's ID</span>:
+                        Between 1 and the number of total Players in the encounter, even disabled ones.
+                </ul>
+
+			</p>
+
+            <p>
+				<br><span class="function"><span class="string"></span> <span class="term">check</span></span>
+                When checking with the <span class="term">Check</span> option, this is what's listed under the monster's name, ATK and DEF.
+                <br><br>
+                <span class="CYK"></span> Note: you'll have to add the <span class="term">Check</span> command directly into this enemy's
+                <span class="term">commands</span> table, as <span class="term">cancheck</span> does nothing in CYK.
+			</p>
+
+            <p>
+				<br><span class="function"><span class="boolean"></span> <span class="term">canspare</span></span>
+                False by default. If you change this to true, your monster's name will turn yellow and it will be spareable.
+			</p>
+
+            <p>
+				<br><span class="function"><span class="CYK"></span> <span class="boolean"></span> <span class="term">tired</span></span>
+                False by default. If you change this to true, your monster's name will turn blue and it can be spared by casting Ralsei's
+                <span class="term">"PURIFY"</span> spell, if you haven't modified the code related to this spell.
+			</p>
+
+            <p>
+				<br><span class="function"><span class="CYK"></span> <span class="luatable"><span class="luatable">
+                <span class="string"></span></span></span> <span class="term">multicommands</span></span>
+                This table contains the names of act commands requiring other Players. If a required Player is not in the team, the act
+                command will be hidden, and if the required Player is unavailable, the act command will be greyed out.
+                <br><br>
+                Note that spaces can't be added to tables directly, so to solve this problem, replace all the
+                spaces in your commands' names with underscores (<span class="term">_</span>) in order to add them to the table.
+                <br><br>
+                Here are some examples:
+                <div class="code-container">
+<pre class="brush: lua;">
+multicommands = {
+    Act_2 = { "Susie" },
+    Act_3 = { "Ralsei" }
+    Do_Something = { "Susie", "Ralsei" }
+}
+
+-- These display as "Act 2", "Act 3" and "Do Something"
+</pre>
+            </div>
+			</p>
+
+            <hr>
+            <h4>Wave script variables</h4>
+
+            <p>
+                Wave scripts don't have any variables that are read out from the start, but you can define your own. An instance of a wave script is
+                made when you start defending, and is destroyed when the defending step ends. As such, you can't store variables in a wave script for
+                reusing later. Use the Encounter script to keep track of things.
+			</p>
+        </div>
+
+        <div class="tab-pane text-style" id="mercy">
+            <h2 style="text-decoration: none; line-height:50px;">
+                * YOU WON!<br>
+                * You earned 0 EXP and 0 gold.<br>
+                * also the nav menu is broken now
+            </h2><br>
+        </div>
+
+    </div>
+</div>
+
+<div class="container">
+    <div class="col-xs-3"><img class="centerbt black" alt="Undertale fake button" src="../img/fightbt_0.png" height="42">
+    </div>
+    <div class="col-xs-3"><img class="centerbt black" alt="Undertale fake button" src="../img/actbt_0.png" height="42">
+    </div>
+    <div class="col-xs-3"><img class="centerbt black" alt="Undertale fake button" src="../img/itembt_0.png" height="42">
+    </div>
+    <div class="col-xs-3"><a href="#mercy" data-toggle="tab"><img class="centerbt black" alt="Undertale fake button"
+                                                                  src="../img/mercybt_0.png" height="42"></a>
+    </div>
+</div>
+<br>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../js/show_hide_comments.js"></script>
+
+<script type="text/javascript" src="../js/FontToggleButton.js"></script>
+</body>
+</html>

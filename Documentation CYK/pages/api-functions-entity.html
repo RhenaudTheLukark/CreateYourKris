@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<!--
+since you're here anyway: there's a small easter egg on the text commands page but it's probably not worth finding, sorry
+you may notice this page's code is garbage: i'm not a web designer! ;-;
+it's w3c valid, at least
+-->
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="favicon.ico">
+
+    <title>CYK Documentation - The Entity Object</title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="../css/themesidebar.css" rel="stylesheet">
+    <link href="../css/shThemeRDark.css" rel="stylesheet">
+
+    <!-- Syntax highlighting -->
+    <script type="text/javascript" src="../js/shCore.js"></script>
+    <script type="text/javascript" src="../js/shBrushLua.js"></script>
+    <script type="text/javascript">SyntaxHighlighter.all();</script>
+</head>
+<body>
+<img src="../img/bg2.png" alt="Undertale background" class="backimg">
+<div class="container arena black">
+    <div class="col-md-2">
+        <!--navigation-->
+        <nav class="nav-sidebar">
+            <ul class="nav tabs">
+                <li class="li-header">Basics</li>
+                    <li><a href="../documentation.html">Welcome</a></li>
+                    <li><a href="howtoread.html">How to read this documentation</a></li>
+                    <hr style="margin-top:-2.5px;margin-bottom:2.5px;">
+                    <li><a href="controls.html">Controls</a></li>
+                    <li><a href="basic.html">Basic setup</a></li>
+                    <li><a href="variables.html">Special Variables</a></li>
+                    <li><a href="terms.html">Terminology</a></li>
+                <li class="li-header">API</li>
+                    <li><a href="api-text.html">Text commands</a></li>
+                    <li><a href="api-events.html">Game events</a></li>
+                    <hr style="margin-top:-2.5px;margin-bottom:2.5px;">
+                    <li class="li-indent">Functions &amp; Objects:</li>
+                        <li class="li-indent"><a href="api-functions-main.html">Misc. Functions</a></li>
+                        <li class="li-indent"><a href="api-functions-player.html">The Player Object </a></li>
+                        <li class="li-indent active" style="margin-left:5px;">><span class="CYK"></span> The Entity Object <</li>
+                        <li class="li-indent"><a href="api-functions-script.html">The Script Object</a></li>
+                        <li class="li-indent"><a href="api-functions-audio.html">The Audio Object</a></li>
+                        <li class="li-indent"><a href="api-functions-newaudio.html"><span class="CYF"></span> The NewAudio Object</a></li>
+                        <li class="li-indent"><a href="api-functions-input.html">The Input Object</a></li>
+                        <li class="li-indent"><a href="api-functions-time.html">The Time Object</a></li>
+                        <li class="li-indent"><a href="api-functions-misc.html"><span class="CYF"></span>The Misc Object</a></li>
+                        <li class="li-indent"><a href="api-functions-waves.html">Wave Scripts</a></li>
+                        <li class="li-indent"><a href="cyf-inventory.html"><span class="CYF"></span> The Inventory Object</a></li>
+                        <li class="li-indent"><a href="cyf-text.html"><span class="CYF"></span> The Text Object</a></li>
+                    <hr style="margin-top:-2.5px;margin-bottom:2.5px;">
+                    <li><a href="api-projectile.html">Projectile management</a></li>
+                    <li><a href="api-animation.html">Sprites &amp; Animation</a></li>
+                    <li><a href="cyf-ppcollision.html"><span class="CYF"></span> The Pixel-Perfect Collision System</a></li>
+                    <li><a href="api-keys.html"><span class="CYF"></span> Key List</a></li>
+                <li class="li-header">Resources</li>
+                    <li><a href="../media/dialogoptions.png">Dialog bubble names</a></li>
+            </ul>
+        </nav>
+    </div>
+    <!--tabs'n'shit-->
+    <div class="tab-content col-md-10">
+        <div class="tab-pane active text-style" id="api-functions-player">
+            <br><p>
+                <h4><span class="CYK"></span> The Entity Object</span></h4>
+                Entities are objects replacing CYF's usual Monster scripts. They can be used much like them, except some things have been added,
+                and others have been changed.
+                <br><br>
+                Entity objects can also be used for Players, as Create Your Kris allows you to manage your own Player team.
+                <br><br>
+                We will now see what variables Player objects and enemy objects have in common, then we'll glance at the differences between the
+                two types of Entity objects.
+                <br><br>
+                <h4 style="line-height:30px;">Note: You can find other variables and functions usable in these scripts in <span class="ref">Special Variables</span>.</h4>
+            </p>
+
+            <hr>
+            <h4>Variables and functions used by Players and enemies.</h4><br>
+
+            <p>
+                <span class="function"><span class="string"></span> <span class="term">Entity.name</span></span>
+				Name of the entity. Is automatically created using the script's name.
+                <br><br>
+                If used on a Player, its name shown in the Player UI won't be modified accordingly. To update it, you must use the
+                function <span class="term">Entity.UpdateUI()</span> (see <span class="ref">Player-specific variables and functions</span>).
+                <br><br>
+                * Should not be modified for monster scripts.
+            </p><br>
+
+            <p>
+                <span class="function"><span class="boolean"></span> <span class="term">Entity.isactive</span></span>
+				Is the entity currently active?
+                <br><br>
+                * Shouldn't be changed manually, use <span class="term">Entity.SetActive()</span> instead.
+            </p><br>
+
+            <p>
+                <span class="function"><span class="number"></span> <span class="term">Entity.posX</span></span>
+				X position of the entity used by CYK to run animations on the entity, such as the shaking animation
+                when this entity is being damaged.
+                <br><br>
+                * Shouldn't be changed manually, use <span class="term">Entity.Move()</span>, <span class="term">
+                Entity.MoveTo()</span> or <span class="term">Entity.MoveToAbs()</span> instead.
+            </p><br>
+
+            <p>
+                <span class="function"><span class="number"></span> <span class="term">Entity.posY</span></span>
+				Y position of the entity used by CYK to run animations on the entity, such as the shaking animation
+                when this entity is being damaged.
+                <br><br>
+                * Shouldn't be changed manually, use <span class="term">Entity.Move()</span>, <span class="term">
+                Entity.MoveTo()</span> or <span class="term">Entity.MoveToAbs()</span> instead.
+            </p><br>
+
+            <p>
+                <span class="function"><span class="userdata">sprite</span> <span class="term">Entity.sprite</span></span>
+				Main sprite of the entity. Shouldn't be replaced.<br>
+                This sprite object contains other variables useful for CYK:<br><br>
+                <ul>
+                    <li><span class="userdata">sprite</span> <span class="term">Entity.sprite["f"]</span> - Sprite used to display several effects on the main sprite. When needed, it must
+                        display the same animation as <span class="term">Entity.sprite</span>, except all the sprites of this animation must be white.
+                        <br><br>
+                        * Shouldn't be modified.</li><br>
+                    <li><span class="string"></span> <span class="term">Entity.sprite["anim"]</span> - Contains the name of the folder where this entity's animations can be found.
+                        <br><br>
+                        * Represents this entity's name at startup, and shouldn't be changed.</li><br>
+                    <li><span class="string"></span> <span class="term">Entity.sprite["currAnim"]</span> - Name of the last animation started for this entity.
+                        <br><br>
+                        * Shouldn't be modified.</li><br>
+                    <li><span class="number"></span> <span class="term">Entity.sprite["lastAnimTime"]</span> - Timestamp in seconds when this entity's animation was last changed.
+                        <br><br>
+                        * Shouldn't be modified.</li><br>
+                    <li><span class="number"></span> <span class="term">Entity.sprite["xShift"]</span> - Horizontal offset of the entity's sprite while this entity's animation is playing. Set by <span class="term">animations</span>.
+                        <br><br>
+                        * Shouldn't be modified.</li><br>
+                    <li><span class="number"></span> <span class="term">Entity.sprite["yShift"]</span> - Vertical offset of the entity's sprite while this entity's animation is playing. Set by <span class="term">animations</span>.
+                        <br><br>
+                        * Shouldn't be modified.</li><br>
+                    <li><span class="boolean"></span> <span class="term">Entity.sprite["isF"]</span> - Tells the engine if this sprite is an effect sprite.<br>
+                        True for sprites such as <span class="term">"frame0f"</span> and nil on all other sprites.
+                        <br><br>
+                        * Shouldn't be modified.</li><br>
+                    <!--
+                    <li><span class="boolean"></span> <span class="term">Entity.sprite["hurtMovePlus"]</span> - Internal variable used to know if the sprite should be moved left or right
+                        while an entity is playing its Hurt animation. Shouldn't be modified.</li><br>
+                    <li><span class="number"></span> <span class="term">Entity.sprite["lastXMove"]</span> - Internal variable used to know the last horizontal movement applied to this
+                        sprite if the screen is shaking. Shouldn't be modified.</li><br>
+                    <li><span class="number"></span> <span class="term">Entity.sprite["lastYMove"]</span> - Internal variable used to know the last vertical movement applied to this
+                        sprite if the screen is shaking. Shouldn't be modified.</li>
+                    -->
+                </ul>
+            </p><br>
+
+            <p>
+                <span class="function"><span class="userdata">sprite</span> <span class="term">Entity.monstersprite</span></span>
+				Shortcut to <span class="term">Entity.sprite</span>, used to match CYF's variable names.
+            </p><br>
+
+            <p>
+                <span class="function"><span class="number"></span> <span class="term">Entity.ID</span></span>
+				Index of this entity in its matching entity pool: if this entity is a Player, it'll be its index in the
+                table <span class="term">players</span>, and if it is an enemy, it'll be its index in the table <span class="term">enemies</span>.
+                <br><br>
+                * Shouldn't be modified, unless you know what you are doing.
+            </p><br>
+
+            <!--
+            <p>
+                <span class="function"><span class="luatable"><span class="userdata">tables (complex)</span></span> <span class="term">Entity.HPChangeTexts</span></span>
+				Pool of damage texts, containing all the damage
+                texts associated to an entity. Really shouldn't be modified, as it is totally handled by CYK.
+            </p><br>
+            -->
+
+            <p>
+                <span class="function"><span class="entity"></span> <span class="term">Entity.target</span></span>
+				The entity this entity's action will affect.
+                <br><br>
+                * Shouldn't be modified unless you know what you are doing.
+            </p><br>
+
+            <!--
+            <p>
+                <span class="function"><span class="number"></span> <span class="term">Entity.damageUIOffsetX</span></span>
+				Horizontal offset of any damage text spawning for this Player.<br>
+                Can be modified directly or using <span class="term">Entity.SetDamageUIOffset()</span>.
+            </p><br>
+
+            <p>
+                <span class="function"><span class="number"></span> <span class="term">Entity.damageUIOffsetY</span></span>
+				Vertical offset of any damage text spawning for this Player.<br>
+                Can be modified directly or using <span class="term">Entity.SetDamageUIOffset()</span>.
+            </p>
+            -->
+
+            <hr>
+            <h4>Player-specific variables and functions</h4><br>
+
+            <p>
+                <span class="function"><span class="term">Entity.UpdateUI()</span></span>
+                This function will update the displayed UI for the player.
+                <br><br>
+                If you change <span class="term">Entity.name</span> or <span class="term">Entity.playerColor</span>,
+                call this function to update the UI accordingly.
+            </p><br>
+
+            <p>
+                <span class="function"><span class="string"></span> <span class="term">Entity.action</span></span>
+				Name of the action this Player is doing for this turn.<br>
+                Here is a list of the different values it can have:
+                <ul>
+                    <li><span class="term">""</span> (empty string) - The Player didn't choose an action, or already attacked an enemy.</li>
+                    <li><span class="term">"Fight"</span> - The Player chose to attack an enemy.</li>
+                    <li><span class="term">"Act"</span> - The Player chose to act. This includes entities with "Act" as an ability, and entities used in multi-acts.</li>
+                    <li><span class="term">"Magic"</span> - The Player chose to cast a spell. Only does something if the Player doesn't have "Act" as one of its abilities.</li>
+                    <li><span class="term">"Item"</span> - The Player chose to use an item.</li>
+                    <li><span class="term">"Spare"</span> - The Player chose to spare an enemy.</li>
+                    <li><span class="term">"Defend"</span> - The Player chose to defend.</li>
+                </ul>
+                <br><br>
+                * Shouldn't be modified.
+            </p><br>
+
+            <p>
+                <span class="function"><span class="string"></span> <span class="userdata">OR</span> <span class="number"></span> <span class="term">Entity.subAction</span></span>
+				Additional information used to
+                perform this Player's action correctly.
+                <br><br>
+                Here is a list of the values it can to have:
+                <ul>
+                    <li><span class="term">If Entity.action is "Act"</span> - <span class="string"></span>: The name of the action command to perform.</li>
+                    <li><span class="term">If Entity.action is "Magic"</span> - <span class="string"></span>: The name of the spell to cast.</li>
+                    <li><span class="term">If Entity.action is "Item"</span> - <span class="number"></span>: The index of the item to use.</li>
+                </ul>
+                <br><br>
+                * Shouldn't be modified.
+            </p><br>
+
+            <p>
+                <span class="function"><span class="userdata">sprite</span> <span class="term">Entity.targetCursor</span></span>
+				Sprite displaying the "TARGET" cursor on this Player in the state ENEMYDIALOGUE if applicable.
+                <br><br>
+                Setting the current Player's animation's <span class="term">targetShift</span> variable will
+                move the sprite automatically.
+            </p><br>
+
+            <p>
+                <span class="function"><span class="string"></span> <span class="term">Entity.targetType [P]</span></span>
+                Type of this player's target.
+                <br><br>
+                It can have either of these values:
+                <ul>
+                    <li><span class="term">"Player"</span> - A unique Player entity.</li>
+                    <li><span class="term">"Enemy"</span> - A unique enemy entity.</li>
+                </ul>
+                <br><br>
+                * Shouldn't be modified.
+            </p>
+
+            <hr>
+            <h4>Enemy-specific variables and functions</h4><br>
+
+            <!--
+            <p>
+                <span class="function"><span class="number"></span> <span class="term">Entity.bubbleOffsetX</span></span>
+				Horizontal offset of the bubble displayed for this enemy in the state ENEMYDIALOGUE.<br>
+                Can be modified directly or using <span class="term">Entity.SetBubbleOffset()</span>.
+            </p><br>
+
+            <p>
+                <span class="function"><span class="number"></span> <span class="term">Entity.bubbleOffsetY</span></span>
+				Vertical offset of the bubble displayed for this enemy in the state ENEMYDIALOGUE.<br>
+                Can be modified directly or using <span class="term">Entity.SetBubbleOffset()</span>.
+            </p><br>
+
+            <p>
+                <span class="function"><span class="number"></span> <span class="term">Entity.sliceAnimOffsetX</span></span>
+				Horizontal shift of the slash animation shown when this enemy is attacked by a Player
+                in the state ATTACKING.<br>
+                Can be modified directly or using <span class="term">Entity.SetSliceAnimOffset()</span>.
+            </p><br>
+
+            <p>
+                <span class="function"><span class="number"></span> <span class="term">Entity.sliceAnimOffsetY</span></span>
+				Vertical shift of the slash animation shown when this enemy is attacked by a Player
+                in the state ATTACKING.<br>
+                Can be modified directly or using <span class="term">Entity.SetSliceAnimOffset()</span>.
+            </p><br>
+            -->
+
+            <p>
+                <span class="function"><span class="string"></span> <span class="term">Entity.spareOrFleeAnim</span></span>
+				Tells the engine if this enemy is currently in a flee (no more HP) or spare animation.
+                <br><br>
+                Its value is <span class="term">"spare"</span> if it is in a spare animation, <span class="term">"flee"</span>
+                if it is in a flee animation, and nil otherwise.
+                <br><br>
+                * Shouldn't be modified.
+            </p><br>
+
+            <p>
+                <span class="function"><span class="number"></span> <span class="term">Entity.spareOrFleeStart</span></span>
+				Frame at which this enemy's spare or flee animation started. 0 if not started.
+                <br><br>
+                * Shouldn't be modified.
+            </p><br>
+
+            <p>
+                <span class="function"><span class="string"></span> <span class="term">Entity.targetType [M]</span></span>
+                Type of this monster's target for waves. Set this before <span class="term">ENEMYDIALOGUE</span>.
+                <br><br>
+                It can have any of these values:
+                <ul>
+                    <li><span class="term">"all"</span> - Targets all players.</li>
+                    <li><span class="term">"simple"</span> - Randomly targets a single player.</li>
+                    <li><span class="number"></span> id - The ID of the player to attack. See <span class="term">Entity.ID</span>.</li>
+                </ul>
+            </p><br>
+
+            <!--
+            <p>
+                <span class="function"><span class="luatable"><span class="userdata">sprite</span></span> <span class="term">Entity.spareStars</span></span>
+				Pool of sprites used when updating the stars on an enemy's
+                spare animation. Shouldn't be modified.
+            </p><br>
+
+            <p>
+                <span class="function"><span class="luatable"><span class="userdata">sprite</span></span> <span class="term">Entity.fleeSprites</span></span>
+				Pool of sprites used to make the sprite effect displayed
+                when the enemy is fleeing the battle. Shouldn't be modified.
+            </p><br>
+
+            <p>
+                <span class="function"><span class="number"></span> <span class="term">Entity.fleeSpritesNeeded</span></span>
+				Variable used to count how many flee sprites are needed to display the flee animation of
+                the enemy correctly. Shouldn't be modified.
+            </p><br>
+
+            <p>
+                <span class="function"><span class="number"></span> <span class="term">Entity.fleeSpritesEnabled</span></span>
+				Variable used to count how many flee sprites have been activated in the current flee
+                animation. Also used as the main frame count of the flee animation. Shouldn't be modified.
+            </p><br>
+
+            <p>
+                <span class="function"><span class="userdata">sprite</span> <span class="term">Entity.fleeDrops</span></span>
+				Sprite displaying sweat drops used at the beginning of the enemy's flee animation.
+                Shouldn't be modified.
+            </p><br>
+            -->
+        </div>
+
+
+
+        <div class="tab-pane text-style" id="mercy">
+            <h2 style="text-decoration: none; line-height:50px;">
+                * YOU WON!<br>
+                * You earned 0 EXP and 0 gold.<br>
+                * also the nav menu is broken now
+            </h2><br>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="col-xs-3"><img class="centerbt black" alt="Undertale fake button" src="../img/fightbt_0.png" height="42">
+    </div>
+    <div class="col-xs-3"><img class="centerbt black" alt="Undertale fake button" src="../img/actbt_0.png" height="42">
+    </div>
+    <div class="col-xs-3"><img class="centerbt black" alt="Undertale fake button" src="../img/itembt_0.png" height="42">
+    </div>
+    <div class="col-xs-3"><a href="#mercy" data-toggle="tab"><img class="centerbt black" alt="Undertale fake button"
+                                                                  src="../img/mercybt_0.png" height="42"></a>
+    </div>
+</div>
+<br>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../js/show_hide_comments.js"></script>
+
+<script type="text/javascript" src="../js/FontToggleButton.js"></script>
+</body>
+</html>
