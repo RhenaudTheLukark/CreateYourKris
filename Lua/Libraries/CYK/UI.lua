@@ -144,13 +144,14 @@ return function(CYK)
         playerUI.upperBgStats.y = 0
 
         -- Life bar!
+        -- TODO: Find out why the lifebar isn't at the same place when CYF is scaled up
         playerUI.lifebar = CreateSprite("px", "UpperUI")
         playerUI.lifebar.Scale(76 * player.hp / player.maxhp, 9)
         playerUI.lifebar.SetParent(playerUI.upperBg)
         playerUI.lifebar.SetPivot(0, 0)
         playerUI.lifebar.SetAnchor(0, 0)
         playerUI.lifebar.x = 128
-        playerUI.lifebar.y = 8
+        playerUI.lifebar.y = 7
         playerUI.lifebar.color = player.playerColor
 
         -- FaceSprite, ooo
