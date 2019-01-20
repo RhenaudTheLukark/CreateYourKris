@@ -199,8 +199,7 @@ return function(self)
         local entity = data
 
         -- Entity sprite
-        local entitySprite = "CreateYourKris/" .. (isPlayer and "Players/" or "Monsters/") .. entity.scriptName .. "/Idle/0"
-        entity.sprite = CreateSprite(entitySprite, "Entity")
+        entity.sprite = CreateSprite("empty", "Entity")
         entity.sprite.SetPivot(0, 0)
         entity.sprite.absx = entity.posX
         entity.sprite.absy = entity.posY
@@ -212,7 +211,7 @@ return function(self)
         entity.monstersprite = entity.sprite
 
         -- Entity flash sprite
-        entity.sprite["f"] = CreateSprite(entitySprite .. "f", "Entity")
+        entity.sprite["f"] = CreateSprite("empty", "Entity")
         entity.sprite["f"].SetParent(entity.sprite)
         entity.sprite["f"].SetPivot(0, 0)
         entity.sprite["f"].SetAnchor(0, 0)
