@@ -94,7 +94,7 @@ function UpdateTurn(frame, absoluteFrame)
                 end
             end
 
-            if rudeBusterAttacked and Input.Confirm == 1 then
+            if rudeBusterAttacked and Input.Confirm == 1 and GetCurrentState() == "PLAYERTURN" and CYK.turn == ID then
                 if #rudeBusters == 0 then
                     rudeBusterActive = false
                 end
