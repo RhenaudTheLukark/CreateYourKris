@@ -676,8 +676,6 @@ return function ()
             end
             self.hasEnemyTargetsBeenReset = false
             OldState("NONE")
-            -- Call DefenseEnding() in the EncounterScript if it exists
-            ProtectedCYKCall(DefenseEnding)
             -- Hide the arena if it is shown
             if self.arenaAnimInfo.shown then
                 self.StartArenaAnim(false, true, true)
