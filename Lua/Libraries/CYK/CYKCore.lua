@@ -23,7 +23,7 @@ return function ()
     end
 
     -- Layers!
-    CreateLayer("Background", "Top")
+    CreateLayer("Background", "Top", true)
     CreateLayer("Entity", "Background")
     CreateLayer("LowerUI", "Entity")
     CreateLayer("UpperUI", "LowerUI")
