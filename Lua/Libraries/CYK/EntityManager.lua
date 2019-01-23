@@ -273,14 +273,18 @@ return function(self)
         self.SetAnim(entity, "Idle")
     end
 
-    function self.GetEntityCurrentID(entity)
+    function self.GetEntityCurrentOrHypotheticalID(entity)
         local pool = entity.UI and self.players or self.enemies
+        local hypothesis = #pool + 1
         for i = 1, #pool do
             if pool[i] == entity then
                 return i
+            elseif pool[i].ID > entity.ID then
+                hypothesis = i
+                break
             end
         end
-        return -1
+        return hypothesis
     end
 
     function self.GetEntityUp(target, arg2)
@@ -291,7 +295,10 @@ return function(self)
         local pool = target.UI and self.players or self.enemies
         if not target.isactive or target.hp < 0 then
             if arg2 then
-                local targetID = self.GetEntityCurrentID(target)
+                local targetID = self.GetEntityCurrentOrHypotheticalID(target)
+                if targetID > #pool then
+                    targetID = 1
+                end
                 local i = targetID
                 repeat
                     if i > #pool then
