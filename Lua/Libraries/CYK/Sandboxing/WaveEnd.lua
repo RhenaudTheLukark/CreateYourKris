@@ -103,10 +103,11 @@ function OnHit(bullet)
             end
         -- Targets the player who is targeted by the enemy: damage this player
         else
+            playerID = SuperCall(Encounter, "CYK.GetEntityUp", playerID, true)
             if damageForced then
-                Encounter["CYK"].allPlayers[playerID].presetDamage = damageForced
+                Encounter["players"][playerID].presetDamage = damageForced
             end
-            SuperCall(Encounter, "CYK.AtkMgr.Attack", SuperCall(Encounter, "CYK.GetEntityUp", playerID, true), true, enemyID, false, damageMult or 1)
+            SuperCall(Encounter, "CYK.AtkMgr.Attack", playerID, true, enemyID, false, damageMult or 1)
         end
         -- Plays the hurt sound and makes the player invulnerable
         if not Encounter["doneFor"] then
