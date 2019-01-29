@@ -24,6 +24,13 @@ function GetCurrentState()
     return CYK.state
 end
 
+-- Calls a function only if it exists. Simple yet deadly
+function ProtectedCYKCall(func, ...)
+    if func then
+        return func(...)
+    end
+end
+
 getset = require("Libraries/CYK/GetSet")
 
 -- Inventory object, better not use it in a wave!

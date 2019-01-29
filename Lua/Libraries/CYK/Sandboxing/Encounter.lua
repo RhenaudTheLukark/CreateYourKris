@@ -58,12 +58,5 @@ function EnteringRealState(newstate, oldstate)
     end
 end
 
--- Calls a function only if it exists. Simple yet deadly
-function ProtectedCYKCall(func, ...)
-    if func then
-        return func(...)
-    end
-end
-
 -- Basic arena information. Its values will be replaced when needed
 arenainfo = { x = 0, y = 0, width = 0, height = 0, rotation = 0 }
