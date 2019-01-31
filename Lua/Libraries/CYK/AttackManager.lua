@@ -237,7 +237,7 @@ return function(CYK)
         local dmg = math.ceil((target.UI and 5 or 7.5) * attacker.atk)
         dmg = math.ceil((dmg - (3 * target.def)) * coeff)
         if target.action == "Defend" then
-            dmg = math.ceil(dmg / 3 * 2)
+            dmg = math.ceil(dmg * 2 / 3)
         end
 
         return dmg
@@ -294,6 +294,7 @@ return function(CYK)
                         Player.sprite.set("ut-heart")
                         Player.sprite.alpha = 1
                         doneFor = true
+                        unescape = false
                         _Player.Hurt(999, 0)
                     end
                     color = { 1, 0, 0 }
