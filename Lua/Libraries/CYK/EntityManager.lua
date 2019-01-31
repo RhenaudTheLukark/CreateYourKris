@@ -242,6 +242,8 @@ return function(self)
             entity.targetCursor.y = idleTargetShift and idleTargetShift[2] or 0
             entity.targetCursor.SetAnimation({ "CreateYourKris/UI/TargetCursor/0", "CreateYourKris/UI/TargetCursor/1" }, 1 / 2)
             entity.targetCursor.alpha = 0
+
+            entity.targetType = "Player"  -- Type of the target of this entity
         else
             entity.bubbleOffsetX = 0
             entity.bubbleOffsetY = 0
@@ -258,7 +260,6 @@ return function(self)
         end
 
         entity.target = nil           -- Target of this entity
-        entity.targetType = "Player"  -- Type of the target of this entity
 
         if entity.maxhp == nil then
             entity.maxhp = entity.hp
@@ -285,6 +286,19 @@ return function(self)
             end
         end
         return hypothesis
+    end
+
+    -- Returns the available entities
+    function self.GetAvailableEntities(isPlayer, isActive)
+        local pool = isPlayer and (isActive and self.players or self.allPlayers) or
+                                  (isActive and self.enemies or self.allEnemies)
+        local availableEntities = { }
+        for i = 1, #pool do
+            if pool[i].hp > 0 then
+                table.insert(availableEntities, pool[i].ID)
+            end
+        end
+        return availableEntities
     end
 
     function self.GetEntityUp(target, arg2)

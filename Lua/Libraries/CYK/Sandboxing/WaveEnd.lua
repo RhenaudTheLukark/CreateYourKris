@@ -148,6 +148,15 @@ function ShowArenaAfterEndAnim()
     Player.sprite.alpha = 1
 end
 
+-- Returns the Player entity/entities which will be damaged by the Player
+function GetTargetEntityFromBullet(bullet)
+    local targetID = Encounter["enemies"][bullet["from"]].target
+    if targetID == 0 then
+        return SuperCall(Encounter, "CYK.GetAvailableEntities", true, true)
+    end
+    return { SuperCall(Encounter, "CYK.GetEntityUp", targetID, true) }
+end
+
 -- Checks for the grazing collision, using WD's Rotational Collision Library TM
 RotationalCollision = require "Libraries/CYK/RotationalCollision"
 local lastGrazeFrame = 0
