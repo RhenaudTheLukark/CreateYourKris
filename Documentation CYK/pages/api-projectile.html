@@ -157,11 +157,20 @@ it's w3c valid, at least
             <p>
                 <span class="function"><span class="CYK"></span> <span class="number"></span> <span class="term">
                 Bullet["from"]</span></span>
-				Number ID of the active enemy who is currently handling this bullet. Any computing of the damage dealt to the
+                Number ID of the active enemy who is currently handling this bullet. Any computing of the damage dealt to the
                 Players on hit will use this enemy's stats.
                 <br><br>
                 This value will be between 1 and the max number of active enemies. If you're not sure, check out
-                <span class="term">Entity.ID</span> in the <span class="ref">Entity Object</span> page.
+                <span class="term">Entity.ID</span> in the <span class="ref">Entity Object</span> page.<br><br>
+                This value is overridden by <span class="term">Bullet["target"]</span> if it's set.
+            </p><br>
+
+            <p>
+                <span class="function"><span class="CYK"></span> <span class="number"></span> <span class="term">
+                Bullet["target"]</span></span>
+                Number ID of the active Player this bullet will damage if it's set, instead of going through the target value
+                of an enemy entity using <span class="term">Bullet["from"]</span>.<br><br>
+                Using the value <span class="term">0</span> will target all Players.
             </p><br>
 
             <p>

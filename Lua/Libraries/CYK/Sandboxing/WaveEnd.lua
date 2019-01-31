@@ -13,12 +13,10 @@ function OnHit(bullet)
     -- Only triggered when the Player is not hurting and if the Player's OnHit() has returned anything, if it exists
     if not Player.ishurting and (damage ~= nil or not onHitOverridden) then
         local enemyID = bullet["from"]
-        local playerID = nil
         -- No attacking enemy set for this bullet -> Pick a random attacking enemy
         if not enemyID then
             enemyID = Encounter["CYK"].enemies[math.random(1, #Encounter["CYK"].enemies)].ID
         end
-        playerID = Encounter["CYK"].enemies[enemyID].target
 
         local damageMult = nil
         local damageForced = nil
@@ -84,32 +82,31 @@ function OnHit(bullet)
         end
 
         -- Targets all players: the amount of damage dealt to each player is divided by the amount of Players who haven't been KO'd
-        if playerID == 0 then
-            local availablePlayers = 0
-            -- Count how many players are still alive
-            for i = 1, #Encounter["CYK"].players do
-                if Encounter["CYK"].players[i].hp > 0 then
-                    availablePlayers = availablePlayers + 1
-                end
+        local playerIDs = Encounter["CYK"].enemies[enemyID].target
+        if Encounter["CYK"].enemies[enemyID].target == 0 then
+            playerIDs = SuperCall(Encounter, "CYK.GetAvailableEntities", true, true)
+        end
+
+        playerIDs = type(playerIDs) == "table" and playerIDs or { playerIDs }
+        -- Override: bullet["target"] overrides bullet["from"]
+        if bullet["target"] then
+            if type(bullet["target"]) ~= "number" then                                       error("bullet[\"target\"] must be an integer if it's set!")
+            elseif bullet["target"] < 0 or bullet["target"] > #Encounter["CYK"].players then error("bullet[\"target\"] must be an integer between 1 and the number of active players!")
+            elseif bullet["target"] == 0 then                                                playerIDs = SuperCall(Encounter, "CYK.GetAvailableEntities", true, true)
+            else                                                                             playerIDs = { bullet["target"] }
             end
-            -- Compute the amount of damage dealt for each player, and apply this damage
-            for i = 1, #Encounter["CYK"].players do
-                local playerID = Encounter["CYK"].players[i].ID
-                if Encounter["CYK"].players[i].hp > 0 then
-                    Encounter["CYK"].players[i].presetDamage = damageForced or
-                        math.ceil(-SuperCall(Encounter, "CYK.AtkMgr.ComputeDamage", playerID, enemyID, damageMult, true, false) / availablePlayers)
-                    SuperCall(Encounter, "CYK.AtkMgr.Attack", playerID, true, enemyID, false, 1)
-                end
-            end
-        -- Targets the player who is targeted by the enemy: damage this player
-        else
+        end
+
+        -- For each player to attack, check if this entity can be attacked, and attack it
+        for i = 1, #playerIDs do
+            local playerID = playerIDs[i]
             playerID = SuperCall(Encounter, "CYK.GetEntityUp", playerID, true)
-            if damageForced then
-                Encounter["players"][playerID].presetDamage = damageForced
-            end
+            Encounter["players"][playerID].presetDamage = damageForced or
+                math.ceil(-SuperCall(Encounter, "CYK.AtkMgr.ComputeDamage", playerID, enemyID, damageMult, true, false) / #playerIDs)
             SuperCall(Encounter, "CYK.AtkMgr.Attack", playerID, true, enemyID, false, damageMult or 1)
         end
-        -- Plays the hurt sound and makes the player invulnerable
+
+        -- Plays the hurt sound and makes the player invulnerable for a while
         if not Encounter["doneFor"] then
             if (type(damage) == "string" and damage[1] ~= "-") or (type(damage) == "number" and damage >= 0) then
                 _Player.Hurt(0, invulTimer)
