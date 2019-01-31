@@ -28,6 +28,11 @@ function SetActive(newActive)
                 isactive = false
                 if UI then
                     CYK.DisablePlayer(i)
+                elseif bubbleTextObject then
+                    bubbleTextObject.DestroyText()
+                    bubbleTextObject = nil
+                    bubble.Remove()
+                    bubble = nil
                 end
                 break
             end
@@ -81,18 +86,20 @@ function TryKill()
 end
 
 -- Kills the enemy directly, without checking if a function named OnDeath() exists
-function Kill()
+function Kill(cancelAnim)
     if UI then
         error("You can only use entity.Kill() on an enemy entity.")
     else
         SetActive(false)
         spareOrFleeAnim = "flee"
-        spareOrFleeStart = CYK.frame
+        if not cancelAnim then
+            spareOrFleeStart = CYK.frame
+        end
     end
 end
 
 -- Tries to spare the enemy. If the enemy has a function named OnSpare(), it will fire it instead
-function TrySpare()
+function TrySpare(cancelAnim)
     if UI then
         error("You can only use entity.TrySpare() on an enemy entity.")
     else
@@ -111,7 +118,9 @@ function Spare()
     else
         SetActive(false)
         spareOrFleeAnim = "spare"
-        spareOrFleeStart = CYK.frame
+        if not cancelAnim then
+            spareOrFleeStart = CYK.frame
+        end
     end
 end
 
