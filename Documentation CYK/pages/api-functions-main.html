@@ -421,8 +421,10 @@ end</pre>
             </p><br>
 
             <p>
-                <span class="function">Kill() [M]</span>
-                Kills the monster immediately. If this was the last monster, the battle ends.
+                <span class="function">Kill(<span class="boolean"></span> cancelAnim) [M]</span>
+                Kills the monster immediately. If this was the last monster, the battle ends.<br>
+                Setting <span class="term">cancelAnim</span> to false will cancel the usual animation played when the enemy flees, allowing you
+                to handle it manually.
             </p><br>
 
             <p>
@@ -432,8 +434,10 @@ end</pre>
             </p><br>
 
             <p>
-                <span class="function">Spare() [M]</span>
-                Spares the monster immediately. Similar to <span class="term">Kill()</span>, if this was the last monster, the battle ends.
+                <span class="function">Spare(<span class="boolean"></span> cancelAnim) [M]</span>
+                Spares the monster immediately. Similar to <span class="term">Kill()</span>, if this was the last monster, the battle ends.<br>
+                Setting <span class="term">cancelAnim</span> to false will cancel the usual animation played when the enemy is spared, allowing you
+                to handle it manually.
             </p><br>
 
             <p>

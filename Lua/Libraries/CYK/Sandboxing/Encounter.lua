@@ -34,6 +34,23 @@ function RandomEncounterText()
     return textToDisplay
 end
 
+function CallEntityFunc(isPlayer, entityID, func, ...)
+    local pool = isPlayer and players or enemies
+    local entity = pool[entityID]
+    if entity == nil then
+        error("CallEntityFunc: The " .. (isPlayer and "Player" or "Enemy") .. " entity #" .. entityID .. " doesn't exist.")
+    end
+    if entity[func] == nil then
+        if CYKDebugLevel > 0 then
+            DEBUG("[WARN] The " .. (isPlayer and "Player" or "Enemy") .. " " .. entity.scriptName .. " doesn't have a function named " .. func .. "!")
+        end
+    elseif type(entity[func]) ~= "function" then
+        error("The " .. (isPlayer and "Player" or "Enemy") .. " " .. entity.scriptName .. "'s " .. func .. " variable is not a function!")
+    else
+        return entity[func](...)
+    end
+end
+
 -- Function executed when the current CYF state has changed
 function EnteringRealState(newstate, oldstate)
     -- End of a wave

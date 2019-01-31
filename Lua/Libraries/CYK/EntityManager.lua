@@ -432,7 +432,29 @@ return function(self)
                 end
             end
         end
-        return text
+
+        -- Replace all func calls
+        local superText = text
+        for j = 1, type(superText) == "table" and #superText or 1 do
+            text = type(superText) == "table" and superText[j] or superText
+
+            local funcs = string.split(text, "%[ *func *: *", true)
+            if #funcs > 1 then
+                text = funcs[1]
+                for i = 2, #funcs do
+                    local textPart = funcs[i]
+                    local func = string.split(textPart, "]")[1]
+                    local startFuncLength = #func
+                    func = string.gsub(string.gsub(func, "{", ""), "}", "")
+                    textPart = "[func:CallEntityFunc,{false," .. tostring(enemy.ID) .. "," .. func .. "}" .. string.sub(textPart, startFuncLength + 1, #textPart)
+                    text = text .. textPart
+                end
+                if type(superText) == "table" then
+                    superText[j] = text
+                end
+            end
+        end
+        return superText
     end
 
     -- Get the enemy's bubble sprite

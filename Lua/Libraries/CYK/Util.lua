@@ -35,15 +35,24 @@ end
 
 -- Takes a string and returns a table of strings between the characters we were searching for
 -- Ex: string.split("test:testy", ":") --> { "test", "testy" }
-function string.split(inputstr, sep)
+-- Improved by WD200019
+function string.split(inputstr, sep, isPattern)
     if sep == nil then
         sep = "%s"
     end
     local t = { }
-    local i = 1
-    for str in string.gmatch(inputstr, "([^" .. sep .. "]+)") do
-        t[i] = str
-        i = i + 1
+    if isPattern then
+        while string.find(inputstr, sep) ~= nil do
+            local matchrange = { string.find(inputstr, sep) }
+            local preceding = string.sub(inputstr, 0, matchrange[1] - 1)
+            table.insert(t, preceding ~= "" and preceding or nil)
+            inputstr = string.sub(inputstr, matchrange[2] + 1)
+        end
+        table.insert(t, inputstr)
+    else
+        for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
+            table.insert(t, str)
+        end
     end
     return t
 end
