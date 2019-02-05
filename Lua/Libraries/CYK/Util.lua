@@ -102,8 +102,8 @@ function LoadEntityFile(_ENV_BASE, path, CYK)
     sandboxENV.self = sandboxENV
     _ENV = sandboxENV
 
-    dofile ("Mods/" .. GetModName() .. "/Lua/Libraries/CYK/Sandboxing/Entity.lua")(_ENV)
-    dofile ("Mods/" .. GetModName() .. "/Lua/" .. path .. ".lua")(_ENV)
+    dofile (GetModName() .. "/Lua/Libraries/CYK/Sandboxing/Entity.lua")(_ENV)
+    dofile (GetModName() .. "/Lua/" .. path .. ".lua")(_ENV)
 
     -- Back to the old _ENV
     _G.oldENV.newENV = _ENV
@@ -155,18 +155,8 @@ function GetModName()
     local SpritesFolderPos = output:find("asdbfiosdjfaosdijcfiosdjsdo") - 10
     output = output:sub(1, SpritesFolderPos)
 
-    -- Get the name of the mod, too!
-    -- Find the position of the last slash in the file name
-    local lastSlashIndex = 0
-    for i = #output, 1, -1 do
-        if output[i] == "/" then
-            lastSlashIndex = i
-            break
-        end
-    end
-
-    -- Get the name of the mod itself
-    return output:sub(lastSlashIndex + 1, SpritesFolderPos)
+    local paths = string.split(output, "Attempted to load ", true)
+    return paths[#paths]
 end
 
 function PlaySoundOnceThisFrame(sound)
