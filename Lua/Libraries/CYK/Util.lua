@@ -102,8 +102,9 @@ function LoadEntityFile(_ENV_BASE, path, CYK)
     sandboxENV.self = sandboxENV
     _ENV = sandboxENV
 
-    dofile (GetModName() .. "/Lua/Libraries/CYK/Sandboxing/Entity.lua")(_ENV)
-    dofile (GetModName() .. "/Lua/" .. path .. ".lua")(_ENV)
+    local modName = GetModName()
+    dofile (modName .. "/Lua/Libraries/CYK/Sandboxing/Entity.lua")(_ENV)
+    dofile (modName .. "/Lua/" .. path .. ".lua")(_ENV)
 
     -- Back to the old _ENV
     _G.oldENV.newENV = _ENV
