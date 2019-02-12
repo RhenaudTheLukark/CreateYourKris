@@ -1170,7 +1170,10 @@ return function ()
         -- ACTUALLY move the cursor
         local pageChanged = false
         local pageSize = self.TxtMgr.lastTwoColumns and 6 or 3
-        if self.choiceIndex < 1 or self.choiceIndex > self.choiceIndexLimit then
+        -- Override: if there's only one choice, well...no need to compute anything, self.choiceIndex is set to 1
+        if self.choiceIndexLimit == 1 and self.TxtMgr.currentPage == 1 then
+            self.choiceIndex = 1
+        elseif self.choiceIndex < 1 or self.choiceIndex > self.choiceIndexLimit then
             local prev = self.choiceIndex < 1
             -- Check page up and down
             if (prev and self.TxtMgr.textArrow.alpha > 0) or (not prev and self.TxtMgr.textArrowDown.alpha > 0) then
