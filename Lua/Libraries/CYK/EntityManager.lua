@@ -308,7 +308,9 @@ return function(self)
         local tab = { }
         local pool = isPlayer and self.players or self.enemies
         for i = 1, #pool do
-            tab[i] = i
+            if pool[i].hp > 0 then
+                table.insert(tab, i)
+            end
         end
         return tab
     end

@@ -84,7 +84,7 @@ function OnHit(bullet)
         -- Targets all players: the amount of damage dealt to each player is divided by the amount of Players who haven't been KO'd
         local playerIDs = Encounter["CYK"].enemies[enemyID].target
         if Encounter["CYK"].enemies[enemyID].target == 0 then
-            playerIDs = SuperCall(Encounter, "CYK.GetAvailableEntities", true, true)
+            playerIDs = SuperCall(Encounter, "CYK.GetAvailableEntities", true)
         end
 
         playerIDs = type(playerIDs) == "table" and playerIDs or { playerIDs }
@@ -92,7 +92,7 @@ function OnHit(bullet)
         if bullet["target"] then
             if type(bullet["target"]) ~= "number" then                                       error("bullet[\"target\"] must be an integer if it's set!")
             elseif bullet["target"] < 0 or bullet["target"] > #Encounter["CYK"].players then error("bullet[\"target\"] must be an integer between 1 and the number of active players!")
-            elseif bullet["target"] == 0 then                                                playerIDs = SuperCall(Encounter, "CYK.GetAvailableEntities", true, true)
+            elseif bullet["target"] == 0 then                                                playerIDs = SuperCall(Encounter, "CYK.GetAvailableEntities", true)
             else                                                                             playerIDs = { bullet["target"] }
             end
         end
@@ -149,7 +149,7 @@ end
 function GetTargetEntityFromBullet(bullet)
     local targetID = Encounter["enemies"][bullet["from"]].target
     if targetID == 0 then
-        return SuperCall(Encounter, "CYK.GetAvailableEntities", true, true)
+        return SuperCall(Encounter, "CYK.GetAvailableEntities", true)
     end
     return { SuperCall(Encounter, "CYK.GetEntityUp", targetID, true) }
 end

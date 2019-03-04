@@ -482,9 +482,11 @@ return function ()
             if type(enemy.targetType) == "number" and enemy.targetType > 0 and enemy.targetType < #self.allPlayers then
                 enemy.target = self.GetEntityUp(self.allPlayers[enemy.targetType], true)
             else
+                local availablePlayers = self.GetAvailableEntities(true, true)
+
                 -- If the enemy's targetType is all, it'll target all non-down Players
                 -- Otherwise it'll target a random Player
-                enemy.target = enemy.targetType == "all" and 0 or math.random(1, #self.players)
+                enemy.target = enemy.targetType == "all" and 0 or availablePlayers[math.random(1, #availablePlayers)]
                 if enemy.targetType == "all" then
                     self.playerTargets = { 0 }
                 end
