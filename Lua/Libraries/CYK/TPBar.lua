@@ -19,7 +19,7 @@ return function(CreateYourKris)
     self.bar = { }
 
     -- TP bar background
-    self.bar.bg = CreateSprite("px", "Arena")
+    self.bar.bg = CreateSprite("px", "UpperUI")
     self.bar.bg.Scale(19, 187)
     self.bar.bg.SetPivot(0, 1)
     self.bar.bg.absx = 41
