@@ -1,7 +1,7 @@
 _EnteringState = EnteringState
 function EnteringState(newstate, oldstate, isCYKState)
     if not isCYKState then EnteringRealState(newstate, oldstate)
-    else                   ProtectedCYKCall(_EnteringState)
+    else                   ProtectedCYKCall(_EnteringState, newstate, oldstate)
     end
 end
 
