@@ -65,6 +65,8 @@ return function(self)
             if ProtectedCYKCall(entity.HandleAnimationChange, animName) == false then
                 return
             end
+        elseif animName == "Hurt" and sprite["currAnim"] ~= "Defend" and entity.UI ~= nil then
+            entity.UI.faceSprite.SetAnimation({ "CreateYourKris/Players/" .. sprite["anim"] .. "/UI/Hurt", "CreateYourKris/Players/" .. sprite["anim"] .. "/UI/Normal" }, 1/2)
         end
 
         -- If the current animation doesn't exist, abort
@@ -126,15 +128,13 @@ return function(self)
         for i = #self.anims.followUps, 1, -1 do
             local followUp = self.anims.followUps[i]
             if followUp.entity.sprite.animcomplete then
-                local isPlayer = table.containsObj(self.players, followUp.entity)
-
                 -- Move the sprite back where it was if the current animation was Hurt
                 if followUp.entity.sprite["currAnim"] == "Hurt" then
                     followUp.entity.sprite.absx = followUp.entity.posX
                 end
 
                 -- Update the Player UI's face sprite if the followUp is one of the player and it is supposed to go back to Idle
-                if isPlayer and followUp.next == "Idle" then
+                if followUp.entity.UI ~= nil and followUp.next == "Idle" then
                     followUp.entity.UI.faceSprite.Set("CreateYourKris/Players/" .. followUp.entity.sprite["anim"] .. "/UI/Normal")
                 end
 

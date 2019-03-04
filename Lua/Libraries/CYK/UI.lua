@@ -161,6 +161,7 @@ return function(CYK)
         playerUI.faceSprite.SetAnchor(0, 0)
         playerUI.faceSprite.x = 2
         playerUI.faceSprite.y = 2
+        playerUI.faceSprite.loopmode = "ONESHOT"
 
         -- Player's hp text
         playerUI.hpText = CreateText({ "[instant][font:HPFont][novoice]OONDARTEL" }, {80, 420}, 1000, "UpperUI")
