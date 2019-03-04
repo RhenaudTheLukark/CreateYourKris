@@ -482,11 +482,9 @@ return function ()
             if type(enemy.targetType) == "number" and enemy.targetType > 0 and enemy.targetType < #self.allPlayers then
                 enemy.target = self.GetEntityUp(self.allPlayers[enemy.targetType], true)
             else
-                local availablePlayers = self.GetAvailableEntities(true, true)
-
                 -- If the enemy's targetType is all, it'll target all non-down Players
                 -- Otherwise it'll target a random Player
-                enemy.target = enemy.targetType == "all" and 0 or availablePlayers[math.random(1, #availablePlayers)]
+                enemy.target = enemy.targetType == "all" and 0 or math.random(1, #self.players)
                 if enemy.targetType == "all" then
                     self.playerTargets = { 0 }
                 end
@@ -1046,7 +1044,16 @@ return function ()
     -- Goes to another Player's turn
     function self.ChangePlayerTurn(anim, prev)
         local oldPlayer = self.players[self.turn]
-        local oldAction = oldPlayer.action
+
+        -- Only if we're going to the next Player, change the old Player's face UI and change his animation
+        if not prev then
+            if oldAction ~= "" then
+                oldPlayer.UI.faceSprite.Set("CreateYourKris/Players/" .. oldPlayer.sprite["anim"] .. "/UI/" .. oldPlayer.action)
+            end
+            if oldPlayer.action ~= "Defend" and self.state ~= "PLAYERTURN" then
+                self.SetAnim(oldPlayer, "Prepare" .. oldPlayer.action)
+            end
+        end
 
         local setTurnResult = self.SetTurn(prev and -1 or 1, prev)
         -- If it was the last Player's choice, execute the Players' actions
@@ -1076,16 +1083,6 @@ return function ()
                 self.SetAnim(newPlayer, "Idle")
             end
             self.State("ACTIONSELECT")
-        end
-
-        -- Only if we're going to the next Player, change the old Player's face UI and change his animation
-        if not prev then
-            if oldAction ~= "" then
-                oldPlayer.UI.faceSprite.Set("CreateYourKris/Players/" .. oldPlayer.sprite["anim"] .. "/UI/" .. oldAction)
-            end
-            if oldAction ~= "Defend" and self.state ~= "PLAYERTURN" then
-                self.SetAnim(oldPlayer, "Prepare" .. oldAction)
-            end
         end
     end
 
