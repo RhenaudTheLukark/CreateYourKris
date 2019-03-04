@@ -1,3 +1,7 @@
+-- This library is the real core of CYK: it's where all the magic happens!
+-- Without this library, CYK wouldn't even be active to begin with!
+
+-- Wraps the EnteringState() function, and only calls the Encounter's EnteringState() function if CYK's state is changed
 _EnteringState = EnteringState
 function EnteringState(newstate, oldstate, isCYKState)
     if not isCYKState then EnteringRealState(newstate, oldstate)
@@ -5,6 +9,7 @@ function EnteringState(newstate, oldstate, isCYKState)
     end
 end
 
+-- Wraps the EncounterStarting() function to include CYK itself, duh
 _EncounterStarting = EncounterStarting
 function EncounterStarting()
     require "Libraries/CYK/Sandboxing/Encounter"
@@ -12,6 +17,7 @@ function EncounterStarting()
     ProtectedCYKCall(_EncounterStarting)
 end
 
+-- Wraps the Update() function to update CYK and each active entity
 _Update = Update
 function Update()
     CYK.Update()
@@ -31,6 +37,8 @@ function Update()
     end
 end
 
+-- Big function that checks if CYK's variables are correctly setup at the beginning of the Encounter
+-- Will throw errors or warnings if anything's wrong
 function CYKDataChecker()
     if CYKDebugLevel == nil then                DEBUG("CYKDebugLevel was not found. Setting to 0."); CYKDebugLevel = 0
     elseif type(CYKDebugLevel) ~= "number" then error("The encounter must have a variable named CYKDebugLevel as a number, but it is a " .. type(CYKDebugLevel) .. ".\nCYKDebugLevel tells CYK if it must display some warnings or debug texts.")
@@ -170,5 +178,6 @@ end
 
 CYKDataChecker()
 
+-- CYK contains actually no CYF enemy, so we don't want the enemies table entered by the modder to load CYF enemies instead
 _enemies = enemies
 enemies = { }

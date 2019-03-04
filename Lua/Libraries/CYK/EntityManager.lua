@@ -1,5 +1,8 @@
+-- This library handles everything related to entities
+-- No wonder why it got its current name!
 return function(self)
     -- Checks if a loaded Entity file is valid
+    -- If anything is wrong, it can throw errors or warnings.
     function self.CheckEntityFile(entity, entityName, isPlayer)
         local debug = CYKDebugLevel > 0
 
@@ -157,32 +160,38 @@ return function(self)
     enemies = _enemies
     _enemies = nil
 
-    -- Sets the entities up
+    -- Creates the entity objects and stores them in the appropriate entity table
     for i = 1, #self.allPlayers + #self.allEnemies do
         local isPlayer = i <= #self.allPlayers
         local realI = isPlayer and i or i - #self.allPlayers
         local entity = isPlayer and self.allPlayers[realI] or self.allEnemies[realI]
 
+        -- Loads the entity file itself
         local queriedEntityFile = entity
         if isPlayer then self.allPlayers[realI] = LoadEntityFile(self._ENV_BASE, "Players/" .. queriedEntityFile, self)
         else             self.allEnemies[realI] = LoadEntityFile(self._ENV_BASE, "Monsters/" .. queriedEntityFile, self)
         end
-        entity = isPlayer and self.allPlayers[realI] or self.allEnemies[realI] -- Refresh
+        -- Checks if the entity file is correct
+        entity = isPlayer and self.allPlayers[realI] or self.allEnemies[realI]
         self.CheckEntityFile(entity, queriedEntityFile, isPlayer)
 
+        -- Add some extra useful values to the entity and the animation table
         entity.scriptName = queriedEntityFile
         if entity.name == nil then
             entity.name = queriedEntityFile
         end
+        -- Add this entity's animations to the table containing all animations
         self.anims[entity.scriptName] = entity.animations
         self.anims[entity.scriptName].isPlayer = isPlayer
+        -- Moves the entity based on its value in the table self.playersPos or self.enemiesPos
         local entityPos = (isPlayer and self.playersPos or self.enemiesPos)[realI]
         if not entityPos then
-            error("The " .. (isPlayer and "player" or "enemy") .. " #" .. tostring(realI) .. " can't be placed. Did you forget to set his position in the self." .. (isPlayer and "players" or "enemies") .. "Pos table?")
+            error("The " .. (isPlayer and "player" or "enemy") .. " #" .. tostring(realI) .. " can't be placed. Did you forget to set its position in the self." .. (isPlayer and "players" or "enemies") .. "Pos table?")
         end
         entity.posX = entityPos[1]
         entity.posY = entityPos[2]
 
+        -- If the entity is active, add it to the active players or active enemies table
         if entity.isactive == nil or entity.isactive then
             entity.isactive = true
             if isPlayer then table.insert(self.players, self.allPlayers[realI])
@@ -191,7 +200,7 @@ return function(self)
         end
     end
 
-    -- Build the content in the self.anims table to make it look like proper animations usable with sprite.SetAnimation()
+    -- Builds the content in the self.anims table to make it look like proper animations usable with sprite.SetAnimation()
     self.BuildAnimations()
 
     -- Creates an entity
@@ -245,11 +254,13 @@ return function(self)
 
             entity.targetType = "Player"  -- Type of the target of this entity
         else
+            -- Bubble and animation related variables
             entity.bubbleOffsetX = 0
             entity.bubbleOffsetY = 0
             entity.sliceAnimOffsetX = 0
             entity.sliceAnimOffsetY = 0
 
+            -- Variables related to the flee and spare animations
             entity.spareOrFleeAnim = nil
             entity.spareOrFleeStart = 0
             entity.spareStars = { }
@@ -259,21 +270,25 @@ return function(self)
             entity.fleeDrops = nil
         end
 
-        entity.target = nil           -- Target of this entity
+        -- Target of this entity
+        entity.target = nil
 
         if entity.maxhp == nil then
             entity.maxhp = entity.hp
         end
 
+        -- Variables related to the damage texts of this entity
         entity.HPChangeTexts = { }
-
         entity.damageUIOffsetX = 0
         entity.damageUIOffsetY = 0
+
         entity.presetDamage = nil
 
         self.SetAnim(entity, "Idle")
     end
 
+    -- If this entity is in the active players or active enemies table, get its ID in this table
+    -- Otherwise, get the ID it'd have if it was added to the active table
     function self.GetEntityCurrentOrHypotheticalID(entity)
         local pool = entity.UI and self.players or self.enemies
         local hypothesis = #pool + 1
@@ -288,19 +303,18 @@ return function(self)
         return hypothesis
     end
 
-    -- Returns the available entities
-    function self.GetAvailableEntities(isPlayer, isActive)
-        local pool = isPlayer and (isActive and self.players or self.allPlayers) or
-                                  (isActive and self.enemies or self.allEnemies)
-        local availableEntities = { }
+    -- Returns the table containing the indexes of the active players or active enemies
+    function self.GetAvailableEntities(isPlayer)
+        local tab = { }
+        local pool = isPlayer and self.players or self.enemies
         for i = 1, #pool do
-            if pool[i].hp > 0 then
-                table.insert(availableEntities, pool[i].ID)
-            end
+            tab[i] = i
         end
-        return availableEntities
+        return tab
     end
 
+    -- Gets an entity in the active players or active enemies table related to the entity given as parameter
+    -- (Can be this entity itself or an entity which is after it in the active entity table)
     function self.GetEntityUp(target, arg2)
         local oldTarget = target
         if type(target) == "number" then
@@ -338,6 +352,7 @@ return function(self)
         return oldTarget
     end
 
+    -- Returns a table with some values related to the commands of an enemy and their availability
     function self.GetAvailableActions(enemy, withoutPlayerChars)
         local tab = { commands = table.copy(enemy.commands), isDown = { }, IDs = { } }
         for i = 1, #tab.commands do

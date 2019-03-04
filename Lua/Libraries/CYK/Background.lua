@@ -1,3 +1,4 @@
+-- This library handles everything related to the background
 return function(CYK, isActive, isFadeActive)
     local self = { }
 
@@ -29,6 +30,8 @@ return function(CYK, isActive, isFadeActive)
         end
     end
 
+    -- This black sprite is used to "fade" the background
+    -- It's actually just this sprite's alpha changing so the background can be darker
     if self.isFadeActive then
         self.fade = CreateSprite("px", "Background")
         self.fade.absx = 320
@@ -45,6 +48,7 @@ return function(CYK, isActive, isFadeActive)
 
     -- Updates the background
     function self.Update()
+        -- Move the purple square grids at different speeds if the background's active
         if self.isActive then
             for i = 1, #self do
                 local bg = self[i]
@@ -62,6 +66,7 @@ return function(CYK, isActive, isFadeActive)
             end
         end
 
+        -- Change the fade sprite's alpha when the background is fading in or out
         if self.anim and self.isFadeActive then
             local alpha = self.maxHideTimer == 0 and (self.anim == "show" and 0 or 0.5)
                                                  or  (self.anim == "show" and (self.hideTimer / self.maxHideTimer) * 0.5
@@ -77,7 +82,7 @@ return function(CYK, isActive, isFadeActive)
         end
     end
 
-    -- Hides or shows the bg
+    -- Hides or shows the background
     function self.Display(show, timer)
         if self.isFadeActive then
             self.hideTimer = timer or 0

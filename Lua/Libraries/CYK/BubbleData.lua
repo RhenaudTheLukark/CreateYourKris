@@ -1,3 +1,5 @@
+-- This library contains the data used by the bubbles used in CYK.
+-- Please update this library if you plan to add more bubbles.
 return {
     DRBubble =        { side = "left",   x = 8,  y = 21, wideness = 120 },
     left =            { side = "left",   x = 9,  y = 21, wideness = 70  },
