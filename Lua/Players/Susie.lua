@@ -44,13 +44,13 @@ rudeBusterActive = false
 rudeBusterAttacked = false
 function UpdateTurn(frame, absoluteFrame)
     if action == "Magic" and subAction == "Rude Buster" or rudeBusterActive then
+        if not rudeBusterActive then
+            rudeBusterStartFrame = -1
+            rudeBusterAttacked = false
+            rudeBusterActive = true
+            SetCYKAnimation("RudeBuster")
+        end
         if sprite["currAnim"] ~= "Magic" then
-            if not rudeBusterActive then
-                rudeBusterStartFrame = -1
-                rudeBusterAttacked = false
-                rudeBusterActive = true
-                SetCYKAnimation("RudeBuster")
-            end
             if sprite.currentframe >= 6 and rudeBusterStartFrame == -1 then
                 rudeBusterStartFrame = absoluteFrame
                 Audio.PlaySound("rudebusterswing")
