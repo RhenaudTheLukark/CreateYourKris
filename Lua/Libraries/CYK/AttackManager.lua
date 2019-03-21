@@ -264,7 +264,7 @@ return function(CYK)
             -- If this (Player) entity is healed, display the text "Up" instead
             elseif target.hp > 0 and value >= target.hp then
                 textValue = "Up"
-                target.hp = target.maxhp / 5
+                target.hp = math.min(math.max(math.ceil(target.maxhp / 5), target.hp), target.maxhp)
                 CYK.SetAnim(target, "Idle")
                 if isPlayer then
                     target.UI.faceSprite.Set("CreateYourKris/Players/" .. target.sprite["anim"] .. "/UI/Normal")
