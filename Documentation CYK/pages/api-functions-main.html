@@ -415,6 +415,24 @@ end</pre>
             <h4>Monster script functions</h4><br>
 
             <p>
+                <span class="function"><span class="CYK"></span> AddAct(<span class="string"></span> name, <span class="string"></span> description,
+                <span class="number"></span> tpCost, <span class="luatable"><span class="string"></span></span> requiredPlayers) [M]</span>
+                Adds a usable act command with the name <span class="term">name</span>. Using this act command will use
+                <span class="term">tpCost</span> % of the TP bar, so it must be between 0 and 100.
+                <br><br>You can add a short description to it using <span class="term">description</span>, and the Players with the names given
+                in the parameter <span class="term">requiredPlayers</span> are needed in order to execute this command.
+                <br><br>
+                Usage:
+                <ul>
+                    <li><span class="term">name</span>: The name of your custom act command.</li>
+                    <li><span class="term">description</span>: Short description of your custom act command.</li>
+                    <li><span class="term">tpCost</span>: Cost of the act command in %TP. Must be between 0 and 100.</li>
+                    <li><span class="term">requiredPlayers</span>: Table containing the names of the Players required to
+                    perform this command. All Players must be present and active. If any Players are down, the action will be grayed out instead.</li>
+                </ul>
+            </p><br>
+
+            <p>
                 <span class="function"><span class="CYK"></span> TryKill() [M]</span>
                 Tries to kill the monster. If this entity has a function named <span class="term">OnDeath()</span>, it will fire it instead.
                 Otherwise, if this was the last monster, the battle ends.

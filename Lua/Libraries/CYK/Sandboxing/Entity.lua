@@ -285,4 +285,33 @@ function UpdateUI()
     end
 end
 
+-- Adds an act to an enemy
+function AddAct(name, description, tpCost, requiredPlayers)
+    -- Add the acts table if it doesn't exist
+    if acts == nil then
+        acts = { }
+    end
+
+    -- Function usage checking
+    if type(name) ~= "string" then
+        error("The first argument of CYK.AddAct() must be a string. (name)")
+    elseif type(description) ~= "string" then
+        error("The second argument of CYK.AddAct() must be a string. (description)")
+    elseif type(tpCost) ~= "number" or tpCost < 0 or tpCost > 100 then
+        error("The third argument of CYK.AddAct() must be a number between 0 and 100. (tpCost)")
+    elseif requiredPlayers ~= nil and type(requiredPlayers) ~= "table" then
+        error("The fourth argument of CYK.AddAct() must be a table of string values or nil. (requiredPlayers)")
+    elseif acts[name] then
+        if CYKDebugLevel > 1 then
+            DEBUG("[WARN] The act command " .. name .. " already exists in " .. scriptName .. "'s act command database.")
+        end
+    end
+
+    local act = { }
+    act.description = "[font:uidialog][novoice][instant][color:808080]" .. description .. (tpCost > 0 and ("\n[color:ff8040]" .. tostring(tpCost) .. "% TP") or "")
+    act.tpCost = tpCost
+    act.requiredPlayers = requiredPlayers
+    acts[name] = act
+end
+
 end

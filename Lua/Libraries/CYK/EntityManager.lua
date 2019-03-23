@@ -124,20 +124,6 @@ return function(self)
                 end
             end
 
-            if entity.multicommands == nil then if debug then DEBUG("The Enemy Entity file " .. entityName .. " doesn't have a variable named multicommands. Using an empty table instead.") end entity.multicommands = { }
-            elseif type(entity.multicommands) ~= "table" then error("The Enemy Entity file " .. entityName .. "'s multicommands must be a table of table of strings, yet it is a " .. type(entity.multicommands) .. ".")
-            else
-                for k, v in pairs(entity.multicommands) do
-                    if type(v) ~= "table" then                error("The Enemy Entity file " .. entityName .. "'s multicommands must be a table of table of strings, yet its " .. k .. " value is a " .. type(v) .. ".")
-                    else
-                        for i = 1, #v do
-                            if type(v[i]) ~= "string" then    error("The Enemy Entity file " .. entityName .. "'s multicommands must be a table of table of strings, yet the value #" .. i .. " of its " .. k .. " value is a " .. type(v[i]) .. ".")
-                            end
-                        end
-                    end
-                end
-            end
-
             if entity.OnSpare == nil then if debug then    DEBUG("[WARN] " .. (isPlayer and "Player" or "Enemy") .. " " .. entityName .. ": OnSpare() missing.") end
             elseif type(entity.OnSpare) ~= "function" then error("The " .. (isPlayer and "Player" or "Enemy") .. " " .. entityName .. " can have a variable named OnSpare as a function, but it is a " .. type(entity.OnSpare) .. ".")
             end
@@ -331,13 +317,13 @@ return function(self)
                 end
                 local i = targetID
                 repeat
+                    i = i + 1
                     if i > #pool then
                         i = 1
                     end
                     if pool[i].hp > 0 and pool[i].isactive then
                         return i
                     end
-                    i = i + 1
                 until i == targetID
                 return i
             else
@@ -361,13 +347,17 @@ return function(self)
             tab.isDown[i] = 1
             tab.IDs[i] = 1
         end
-        if enemy.multicommands then
-            for i = #tab.commands, 1, -1 do
-                local isOK = true
-                local isOKButDown = false
-                local lockedDown = false
-                local IDs = { }
-                local playersRequired = enemy.multicommands[string.gsub(tab.commands[i], " ", "_")]
+        for i = #tab.commands, 1, -1 do
+            local command = tab.commands[i]
+            local isOK = true
+            local isOKButDown = false
+            local lockedDown = false
+            local IDs = { }
+            if not enemy.acts or not enemy.acts[command] then
+                break
+            end
+            if enemy.acts[command].requiredPlayers then
+                local playersRequired = enemy.acts[command].requiredPlayers
                 -- Check if this action requires other players
                 if playersRequired then
                     for j = 1, #playersRequired do
@@ -379,7 +369,7 @@ return function(self)
                         for k = 1, #self.players do
                             local availablePlayer = self.players[k]
                             -- If this player is available, check for the other required players
-                            if availablePlayer.name == playerRequired and availablePlayer ~= player then
+                            if availablePlayer.name == playerRequired and availablePlayer ~= self.players[self.turn] then
                                 playerID = availablePlayer.ID
                                 if availablePlayer.hp <= 0 then
                                     isOKButDown = true
@@ -408,11 +398,11 @@ return function(self)
                         end
                     end
                 end
-                if not lockedDown and not isOK then table.remove(tab.commands, i) table.remove(tab.isDown, i) table.remove(tab.IDs, i)
-                else
-                    tab.isDown[i] = lockedDown
-                    tab.IDs[i] = IDs
-                end
+            end
+            if not lockedDown and not isOK then table.remove(tab.commands, i) table.remove(tab.isDown, i) table.remove(tab.IDs, i)
+            else
+                tab.isDown[i] = lockedDown
+                tab.IDs[i] = IDs
             end
         end
         return tab
@@ -563,26 +553,22 @@ return function(self)
             -- Grey out all normally unharmed players
             self.lastBgAnim = self.Background.anim
             if self.Background.maxHideTimer > 0 then
-                if self.playerTargets[1] ~= 0 then
-                    for i = 1, #self.players do
-                        if not table.containsObj(self.playerTargets, i, true) then
-                            local coeff = self.Background.hideTimer / self.Background.maxHideTimer * 0.5
-                            self.players[i].sprite["f"].alpha = self.Background.anim == "show" and coeff or 0.5 - coeff
-                            self.players[i].sprite["f"].color = { 0, 0, 0 }
-                        else
-                            self.players[i].sprite["f"].alpha = 0
-                        end
+                for i = 1, #self.players do
+                    if self.players[i].hp <= 0 or (self.playerTargets[1] ~= 0 and not table.containsObj(self.playerTargets, i, true)) then
+                        local coeff = self.Background.hideTimer / self.Background.maxHideTimer * 0.5
+                        self.players[i].sprite["f"].alpha = self.Background.anim == "show" and coeff or 0.5 - coeff
+                        self.players[i].sprite["f"].color = { 0, 0, 0 }
+                    else
+                        self.players[i].sprite["f"].alpha = 0
                     end
                 end
             end
         elseif self.lastBgAnim then
-            if self.playerTargets[1] ~= 0 then
-                for i = 1, #self.players do
-                    if not table.containsObj(self.playerTargets, i, true) then
-                        self.players[i].sprite["f"].alpha = self.lastBgAnim == "show" and 0 or 0.5
-                    else
-                        self.players[i].sprite["f"].alpha = 0
-                    end
+            for i = 1, #self.players do
+                if self.players[i].hp <= 0 or (self.playerTargets[1] ~= 0 and not table.containsObj(self.playerTargets, i, true)) then
+                    self.players[i].sprite["f"].alpha = self.lastBgAnim == "show" and 0 or 0.5
+                else
+                    self.players[i].sprite["f"].alpha = 0
                 end
             end
             self.lastBgAnim = nil

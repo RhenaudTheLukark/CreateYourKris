@@ -411,7 +411,6 @@ check = "Check message goes here."
 canspare = false
 tired = false
 
-multicommands = { Act_2 = { "Susie" }, Act_3 = { "Ralsei" }, Act_4 = { "Ieslar" }, Act_5 = { "Susie", "Ralsei" } }
 animations = {
     Hurt      = { { 0 },                                           1     , { next = "Idle" }, true },
     Idle      = { { 0, 1, 2, 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 1 / 15, { }              , true },
@@ -420,6 +419,19 @@ animations = {
             </div>
 
             <h4>Entity object basic variables</h4>
+            <br>
+
+            <p>
+                <br><span class="function"><span class="entity"></span> <span class="term">self</span></span>
+                The entity itself.
+                <br><br>
+                It allows the user to spare themselves from searching through the entity tables in the Encounter when referencing this entity.
+                <br><br>
+                Example: If you want to call <span class="term">Entity.Hurt(damage, from)</span>, the second argument is an entity file.
+                Pass <span class="term">self</span> as the second argument to easily reference the current script.
+                <br><br>
+                * Should not be modified.
+            </p>
 
             <p>
                 <br><span class="function"><span class="string"></span> <span class="term">name</span></span>
@@ -454,7 +466,7 @@ animations = {
 			</p>
 
             <p>
-				<br><span class="function"><span class="number"></span> <span class="term">mag</span></span>
+				<br><span class="function"><span class="CYK"></span> <span class="number"></span> <span class="term">mag</span></span>
                 Your entity's MAG.
 			</p>
 
@@ -688,29 +700,6 @@ animations = {
 				<br><span class="function"><span class="CYK"></span> <span class="boolean"></span> <span class="term">tired</span></span>
                 False by default. If you change this to true, your monster's name will turn blue and it can be spared by casting Ralsei's
                 <span class="term">"PURIFY"</span> spell, if you haven't modified the code related to this spell.
-			</p>
-
-            <p>
-				<br><span class="function"><span class="CYK"></span> <span class="luatable"><span class="luatable">
-                <span class="string"></span></span></span> <span class="term">multicommands</span></span>
-                This table contains the names of act commands requiring other Players. If a required Player is not in the team, the act
-                command will be hidden, and if the required Player is unavailable, the act command will be greyed out.
-                <br><br>
-                Note that spaces can't be added to tables directly, so to solve this problem, replace all the
-                spaces in your commands' names with underscores (<span class="term">_</span>) in order to add them to the table.
-                <br><br>
-                Here are some examples:
-                <div class="code-container">
-<pre class="brush: lua;">
-multicommands = {
-    Act_2 = { "Susie" },
-    Act_3 = { "Ralsei" }
-    Do_Something = { "Susie", "Ralsei" }
-}
-
--- These display as "Act 2", "Act 3" and "Do Something"
-</pre>
-            </div>
 			</p>
 
             <hr>

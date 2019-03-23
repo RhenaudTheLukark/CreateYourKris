@@ -23,7 +23,7 @@ enemypositions = {
     { 500, 260 },
 }
 
--- unescape = true -- Uncomment me to remove the pesky QUITTING text when trying to exit the encounter!
+-- unescape = false -- Uncomment me to remove the pesky QUITTING text when trying to exit the encounter!
 
 -- CYK's debug level:
 -- 0- = No warning

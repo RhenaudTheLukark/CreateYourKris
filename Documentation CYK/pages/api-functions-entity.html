@@ -53,7 +53,7 @@ it's w3c valid, at least
                         <li class="li-indent"><a href="api-functions-newaudio.html"><span class="CYF"></span> The NewAudio Object</a></li>
                         <li class="li-indent"><a href="api-functions-input.html">The Input Object</a></li>
                         <li class="li-indent"><a href="api-functions-time.html">The Time Object</a></li>
-                        <li class="li-indent"><a href="api-functions-misc.html"><span class="CYF"></span>The Misc Object</a></li>
+                        <li class="li-indent"><a href="api-functions-misc.html"><span class="CYF"></span> The Misc Object</a></li>
                         <li class="li-indent"><a href="api-functions-waves.html">Wave Scripts</a></li>
                         <li class="li-indent"><a href="cyf-inventory.html"><span class="CYF"></span> The Inventory Object</a></li>
                         <li class="li-indent"><a href="cyf-text.html"><span class="CYF"></span> The Text Object</a></li>
@@ -87,86 +87,98 @@ it's w3c valid, at least
             <h4>Variables and functions used by Players and enemies.</h4><br>
 
             <p>
-                <span class="function"><span class="string"></span> <span class="term">Entity.name</span></span>
-				Name of the entity. Is automatically created using the script's name.
+                <span class="function"><span class="string"></span> <span class="term">name</span></span>
+                Name of the entity. Is automatically created using the script's name.
                 <br><br>
                 If used on a Player, its name shown in the Player UI won't be modified accordingly. To update it, you must use the
-                function <span class="term">Entity.UpdateUI()</span> (see <span class="ref">Player-specific variables and functions</span>).
+                function <span class="term">UpdateUI()</span> (see <span class="ref">Player-specific variables and functions</span>).
                 <br><br>
                 * Should not be modified for monster scripts.
             </p><br>
 
             <p>
-                <span class="function"><span class="boolean"></span> <span class="term">Entity.isactive</span></span>
-				Is the entity currently active?
+                <span class="function"><span class="entity"></span> <span class="term">self</span></span>
+                The entity itself.
                 <br><br>
-                * Shouldn't be changed manually, use <span class="term">Entity.SetActive()</span> instead.
+                It allows the user to spare themselves from searching through the entity tables in the Encounter when referencing this entity.
+                <br><br>
+                Example: If you want to call <span class="term">Hurt(damage, from)</span>, the second argument is an entity file.
+                Pass <span class="term">self</span> as the second argument to easily reference the current script.
+                <br><br>
+                * Should not be modified.
             </p><br>
 
             <p>
-                <span class="function"><span class="number"></span> <span class="term">Entity.posX</span></span>
+                <span class="function"><span class="boolean"></span> <span class="term">isactive</span></span>
+				Is the entity currently active?
+                <br><br>
+                * Shouldn't be changed manually, use <span class="term">SetActive()</span> instead.
+            </p><br>
+
+            <p>
+                <span class="function"><span class="number"></span> <span class="term">posX</span></span>
 				X position of the entity used by CYK to run animations on the entity, such as the shaking animation
                 when this entity is being damaged.
                 <br><br>
-                * Shouldn't be changed manually, use <span class="term">Entity.Move()</span>, <span class="term">
-                Entity.MoveTo()</span> or <span class="term">Entity.MoveToAbs()</span> instead.
+                * Shouldn't be changed manually, use <span class="term">Move()</span>, <span class="term">
+                MoveTo()</span> or <span class="term">MoveToAbs()</span> instead.
             </p><br>
 
             <p>
-                <span class="function"><span class="number"></span> <span class="term">Entity.posY</span></span>
+                <span class="function"><span class="number"></span> <span class="term">posY</span></span>
 				Y position of the entity used by CYK to run animations on the entity, such as the shaking animation
                 when this entity is being damaged.
                 <br><br>
-                * Shouldn't be changed manually, use <span class="term">Entity.Move()</span>, <span class="term">
-                Entity.MoveTo()</span> or <span class="term">Entity.MoveToAbs()</span> instead.
+                * Shouldn't be changed manually, use <span class="term">Move()</span>, <span class="term">
+                MoveTo()</span> or <span class="term">MoveToAbs()</span> instead.
             </p><br>
 
             <p>
-                <span class="function"><span class="userdata">sprite</span> <span class="term">Entity.sprite</span></span>
+                <span class="function"><span class="userdata">sprite</span> <span class="term">sprite</span></span>
 				Main sprite of the entity. Shouldn't be replaced.<br>
                 This sprite object contains other variables useful for CYK:<br><br>
                 <ul>
-                    <li><span class="userdata">sprite</span> <span class="term">Entity.sprite["f"]</span> - Sprite used to display several effects on the main sprite. When needed, it must
-                        display the same animation as <span class="term">Entity.sprite</span>, except all the sprites of this animation must be white.
+                    <li><span class="userdata">sprite</span> <span class="term">sprite["f"]</span> - Sprite used to display several effects on the main sprite. When needed, it must
+                        display the same animation as <span class="term">sprite</span>, except all the sprites of this animation must be white.
                         <br><br>
                         * Shouldn't be modified.</li><br>
-                    <li><span class="string"></span> <span class="term">Entity.sprite["anim"]</span> - Contains the name of the folder where this entity's animations can be found.
+                    <li><span class="string"></span> <span class="term">sprite["anim"]</span> - Contains the name of the folder where this entity's animations can be found.
                         <br><br>
                         * Represents this entity's name at startup, and shouldn't be changed.</li><br>
-                    <li><span class="string"></span> <span class="term">Entity.sprite["currAnim"]</span> - Name of the last animation started for this entity.
+                    <li><span class="string"></span> <span class="term">sprite["currAnim"]</span> - Name of the last animation started for this entity.
                         <br><br>
                         * Shouldn't be modified.</li><br>
-                    <li><span class="number"></span> <span class="term">Entity.sprite["lastAnimTime"]</span> - Timestamp in seconds when this entity's animation was last changed.
+                    <li><span class="number"></span> <span class="term">sprite["lastAnimTime"]</span> - Timestamp in seconds when this entity's animation was last changed.
                         <br><br>
                         * Shouldn't be modified.</li><br>
-                    <li><span class="number"></span> <span class="term">Entity.sprite["xShift"]</span> - Horizontal offset of the entity's sprite while this entity's animation is playing. Set by <span class="term">animations</span>.
+                    <li><span class="number"></span> <span class="term">sprite["xShift"]</span> - Horizontal offset of the entity's sprite while this entity's animation is playing. Set by <span class="term">animations</span>.
                         <br><br>
                         * Shouldn't be modified.</li><br>
-                    <li><span class="number"></span> <span class="term">Entity.sprite["yShift"]</span> - Vertical offset of the entity's sprite while this entity's animation is playing. Set by <span class="term">animations</span>.
+                    <li><span class="number"></span> <span class="term">sprite["yShift"]</span> - Vertical offset of the entity's sprite while this entity's animation is playing. Set by <span class="term">animations</span>.
                         <br><br>
                         * Shouldn't be modified.</li><br>
-                    <li><span class="boolean"></span> <span class="term">Entity.sprite["isF"]</span> - Tells the engine if this sprite is an effect sprite.<br>
+                    <li><span class="boolean"></span> <span class="term">sprite["isF"]</span> - Tells the engine if this sprite is an effect sprite.<br>
                         True for sprites such as <span class="term">"frame0f"</span> and nil on all other sprites.
                         <br><br>
                         * Shouldn't be modified.</li><br>
                     <!--
-                    <li><span class="boolean"></span> <span class="term">Entity.sprite["hurtMovePlus"]</span> - Internal variable used to know if the sprite should be moved left or right
+                    <li><span class="boolean"></span> <span class="term">sprite["hurtMovePlus"]</span> - Internal variable used to know if the sprite should be moved left or right
                         while an entity is playing its Hurt animation. Shouldn't be modified.</li><br>
-                    <li><span class="number"></span> <span class="term">Entity.sprite["lastXMove"]</span> - Internal variable used to know the last horizontal movement applied to this
+                    <li><span class="number"></span> <span class="term">sprite["lastXMove"]</span> - Internal variable used to know the last horizontal movement applied to this
                         sprite if the screen is shaking. Shouldn't be modified.</li><br>
-                    <li><span class="number"></span> <span class="term">Entity.sprite["lastYMove"]</span> - Internal variable used to know the last vertical movement applied to this
+                    <li><span class="number"></span> <span class="term">sprite["lastYMove"]</span> - Internal variable used to know the last vertical movement applied to this
                         sprite if the screen is shaking. Shouldn't be modified.</li>
                     -->
                 </ul>
             </p><br>
 
             <p>
-                <span class="function"><span class="userdata">sprite</span> <span class="term">Entity.monstersprite</span></span>
-				Shortcut to <span class="term">Entity.sprite</span>, used to match CYF's variable names.
+                <span class="function"><span class="userdata">sprite</span> <span class="term">monstersprite</span></span>
+				Shortcut to <span class="term">sprite</span>, used to match CYF's variable names.
             </p><br>
 
             <p>
-                <span class="function"><span class="number"></span> <span class="term">Entity.ID</span></span>
+                <span class="function"><span class="number"></span> <span class="term">ID</span></span>
 				Index of this entity in its matching entity pool: if this entity is a Player, it'll be its index in the
                 table <span class="term">players</span>, and if it is an enemy, it'll be its index in the table <span class="term">enemies</span>.
                 <br><br>
@@ -175,14 +187,14 @@ it's w3c valid, at least
 
             <!--
             <p>
-                <span class="function"><span class="luatable"><span class="userdata">tables (complex)</span></span> <span class="term">Entity.HPChangeTexts</span></span>
+                <span class="function"><span class="luatable"><span class="userdata">tables (complex)</span></span> <span class="term">HPChangeTexts</span></span>
 				Pool of damage texts, containing all the damage
                 texts associated to an entity. Really shouldn't be modified, as it is totally handled by CYK.
             </p><br>
             -->
 
             <p>
-                <span class="function"><span class="entity"></span> <span class="term">Entity.target</span></span>
+                <span class="function"><span class="entity"></span> <span class="term">target</span></span>
 				The entity this entity's action will affect.
                 <br><br>
                 * Shouldn't be modified unless you know what you are doing.
@@ -190,31 +202,45 @@ it's w3c valid, at least
 
             <!--
             <p>
-                <span class="function"><span class="number"></span> <span class="term">Entity.damageUIOffsetX</span></span>
+                <span class="function"><span class="number"></span> <span class="term">damageUIOffsetX</span></span>
 				Horizontal offset of any damage text spawning for this Player.<br>
-                Can be modified directly or using <span class="term">Entity.SetDamageUIOffset()</span>.
+                Can be modified directly or using <span class="term">SetDamageUIOffset()</span>.
             </p><br>
 
             <p>
-                <span class="function"><span class="number"></span> <span class="term">Entity.damageUIOffsetY</span></span>
+                <span class="function"><span class="number"></span> <span class="term">damageUIOffsetY</span></span>
 				Vertical offset of any damage text spawning for this Player.<br>
-                Can be modified directly or using <span class="term">Entity.SetDamageUIOffset()</span>.
+                Can be modified directly or using <span class="term">SetDamageUIOffset()</span>.
             </p>
             -->
+
+            <p>
+                <span class="function"> <span class="term">Hurt(<span class="number"></span> damage, <span class="entity"></span> from)</span></span>
+                Removes a given amount of HP from this entity. The entity <span class="term">from</span> is used to determine the color
+                of the damage text.
+                <br><br>
+                Example: If you want an entity to hurt itself, call <span class="term">Hurt(damage, self)</span>.
+                <span class="term">self</span> is the current entity script, so it will hurt itself.
+            </p><br>
+
+            <p>
+                <span class="function"> <span class="term">Heal(<span class="number"></span> amount)</span></span>
+                Restores a given amount of HP to this entity. The entity's HP can't be higher than its Max HP.
+            </p><br>
 
             <hr>
             <h4>Player-specific variables and functions</h4><br>
 
             <p>
-                <span class="function"><span class="term">Entity.UpdateUI()</span></span>
+                <span class="function"><span class="term">UpdateUI()</span></span>
                 This function will update the displayed UI for the player.
                 <br><br>
-                If you change <span class="term">Entity.name</span> or <span class="term">Entity.playerColor</span>,
+                If you change <span class="term">name</span> or <span class="term">playerColor</span>,
                 call this function to update the UI accordingly.
             </p><br>
 
             <p>
-                <span class="function"><span class="string"></span> <span class="term">Entity.action</span></span>
+                <span class="function"><span class="string"></span> <span class="term">action</span></span>
 				Name of the action this Player is doing for this turn.<br>
                 Here is a list of the different values it can have:
                 <ul>
@@ -231,22 +257,22 @@ it's w3c valid, at least
             </p><br>
 
             <p>
-                <span class="function"><span class="string"></span> <span class="userdata">OR</span> <span class="number"></span> <span class="term">Entity.subAction</span></span>
+                <span class="function"><span class="string"></span> <span class="userdata">OR</span> <span class="number"></span> <span class="term">subAction</span></span>
 				Additional information used to
                 perform this Player's action correctly.
                 <br><br>
                 Here is a list of the values it can to have:
                 <ul>
-                    <li><span class="term">If Entity.action is "Act"</span> - <span class="string"></span>: The name of the action command to perform.</li>
-                    <li><span class="term">If Entity.action is "Magic"</span> - <span class="string"></span>: The name of the spell to cast.</li>
-                    <li><span class="term">If Entity.action is "Item"</span> - <span class="number"></span>: The index of the item to use.</li>
+                    <li><span class="term">If action is "Act"</span> - <span class="string"></span>: The name of the action command to perform.</li>
+                    <li><span class="term">If action is "Magic"</span> - <span class="string"></span>: The name of the spell to cast.</li>
+                    <li><span class="term">If action is "Item"</span> - <span class="number"></span>: The index of the item to use.</li>
                 </ul>
                 <br><br>
                 * Shouldn't be modified.
             </p><br>
 
             <p>
-                <span class="function"><span class="userdata">sprite</span> <span class="term">Entity.targetCursor</span></span>
+                <span class="function"><span class="userdata">sprite</span> <span class="term">targetCursor</span></span>
 				Sprite displaying the "TARGET" cursor on this Player in the state ENEMYDIALOGUE if applicable.
                 <br><br>
                 Setting the current Player's animation's <span class="term">targetShift</span> variable will
@@ -254,7 +280,7 @@ it's w3c valid, at least
             </p><br>
 
             <p>
-                <span class="function"><span class="string"></span> <span class="term">Entity.targetType [P]</span></span>
+                <span class="function"><span class="string"></span> <span class="term">targetType [P]</span></span>
                 Type of this player's target.
                 <br><br>
                 It can have either of these values:
@@ -271,34 +297,52 @@ it's w3c valid, at least
 
             <!--
             <p>
-                <span class="function"><span class="number"></span> <span class="term">Entity.bubbleOffsetX</span></span>
+                <span class="function"><span class="number"></span> <span class="term">bubbleOffsetX</span></span>
 				Horizontal offset of the bubble displayed for this enemy in the state ENEMYDIALOGUE.<br>
-                Can be modified directly or using <span class="term">Entity.SetBubbleOffset()</span>.
+                Can be modified directly or using <span class="term">SetBubbleOffset()</span>.
             </p><br>
 
             <p>
-                <span class="function"><span class="number"></span> <span class="term">Entity.bubbleOffsetY</span></span>
+                <span class="function"><span class="number"></span> <span class="term">bubbleOffsetY</span></span>
 				Vertical offset of the bubble displayed for this enemy in the state ENEMYDIALOGUE.<br>
-                Can be modified directly or using <span class="term">Entity.SetBubbleOffset()</span>.
+                Can be modified directly or using <span class="term">SetBubbleOffset()</span>.
             </p><br>
 
             <p>
-                <span class="function"><span class="number"></span> <span class="term">Entity.sliceAnimOffsetX</span></span>
+                <span class="function"><span class="number"></span> <span class="term">sliceAnimOffsetX</span></span>
 				Horizontal shift of the slash animation shown when this enemy is attacked by a Player
                 in the state ATTACKING.<br>
-                Can be modified directly or using <span class="term">Entity.SetSliceAnimOffset()</span>.
+                Can be modified directly or using <span class="term">SetSliceAnimOffset()</span>.
             </p><br>
 
             <p>
-                <span class="function"><span class="number"></span> <span class="term">Entity.sliceAnimOffsetY</span></span>
+                <span class="function"><span class="number"></span> <span class="term">sliceAnimOffsetY</span></span>
 				Vertical shift of the slash animation shown when this enemy is attacked by a Player
                 in the state ATTACKING.<br>
-                Can be modified directly or using <span class="term">Entity.SetSliceAnimOffset()</span>.
+                Can be modified directly or using <span class="term">SetSliceAnimOffset()</span>.
             </p><br>
             -->
 
             <p>
-                <span class="function"><span class="string"></span> <span class="term">Entity.spareOrFleeAnim</span></span>
+                <span class="function"><span class="term">AddAct(<span class="string"></span> name, <span class="string"></span> description,
+                <span class="number"></span> tpCost, <span class="luatable"><span class="string"></span></span> requiredPlayers)</span></span>
+                Adds a usable act command with the name <span class="term">name</span>. Using this act command will use
+                <span class="term">tpCost</span> % of the TP bar, so it must be between 0 and 100.
+                <br><br>You can add a short description to it using <span class="term">description</span>, and the Players with the names given
+                in the parameter <span class="term">requiredPlayers</span> are needed in order to execute this command.
+                <br><br>
+                Usage:
+                <ul>
+                    <li><span class="term">name</span>: The name of your custom act command.</li>
+                    <li><span class="term">description</span>: Short description of your custom act command.</li>
+                    <li><span class="term">tpCost</span>: Cost of the act command in %TP. Must be between 0 and 100.</li>
+                    <li><span class="term">requiredPlayers</span>: Table containing the names of the Players required to
+                    perform this command. All Players must be present and active. If any Players are down, the action will be grayed out instead.</li>
+                </ul>
+            </p><br>
+
+            <p>
+                <span class="function"><span class="string"></span> <span class="term">spareOrFleeAnim</span></span>
 				Tells the engine if this enemy is currently in a flee (no more HP) or spare animation.
                 <br><br>
                 Its value is <span class="term">"spare"</span> if it is in a spare animation, <span class="term">"flee"</span>
@@ -308,58 +352,56 @@ it's w3c valid, at least
             </p><br>
 
             <p>
-                <span class="function"><span class="number"></span> <span class="term">Entity.spareOrFleeStart</span></span>
+                <span class="function"><span class="number"></span> <span class="term">spareOrFleeStart</span></span>
 				Frame at which this enemy's spare or flee animation started. 0 if not started.
                 <br><br>
                 * Shouldn't be modified.
             </p><br>
 
             <p>
-                <span class="function"><span class="string"></span> <span class="term">Entity.targetType [M]</span></span>
+                <span class="function"><span class="string"></span> <span class="term">targetType [M]</span></span>
                 Type of this monster's target for waves. Set this before <span class="term">ENEMYDIALOGUE</span>.
                 <br><br>
                 It can have any of these values:
                 <ul>
                     <li><span class="term">"all"</span> - Targets all players.</li>
                     <li><span class="term">"simple"</span> - Randomly targets a single player.</li>
-                    <li><span class="number"></span> id - The ID of the player to attack. See <span class="term">Entity.ID</span>.</li>
+                    <li><span class="number"></span> id - The ID of the player to attack. See <span class="term">ID</span>.</li>
                 </ul>
             </p><br>
 
             <!--
             <p>
-                <span class="function"><span class="luatable"><span class="userdata">sprite</span></span> <span class="term">Entity.spareStars</span></span>
+                <span class="function"><span class="luatable"><span class="userdata">sprite</span></span> <span class="term">spareStars</span></span>
 				Pool of sprites used when updating the stars on an enemy's
                 spare animation. Shouldn't be modified.
             </p><br>
 
             <p>
-                <span class="function"><span class="luatable"><span class="userdata">sprite</span></span> <span class="term">Entity.fleeSprites</span></span>
+                <span class="function"><span class="luatable"><span class="userdata">sprite</span></span> <span class="term">fleeSprites</span></span>
 				Pool of sprites used to make the sprite effect displayed
                 when the enemy is fleeing the battle. Shouldn't be modified.
             </p><br>
 
             <p>
-                <span class="function"><span class="number"></span> <span class="term">Entity.fleeSpritesNeeded</span></span>
+                <span class="function"><span class="number"></span> <span class="term">fleeSpritesNeeded</span></span>
 				Variable used to count how many flee sprites are needed to display the flee animation of
                 the enemy correctly. Shouldn't be modified.
             </p><br>
 
             <p>
-                <span class="function"><span class="number"></span> <span class="term">Entity.fleeSpritesEnabled</span></span>
+                <span class="function"><span class="number"></span> <span class="term">fleeSpritesEnabled</span></span>
 				Variable used to count how many flee sprites have been activated in the current flee
                 animation. Also used as the main frame count of the flee animation. Shouldn't be modified.
             </p><br>
 
             <p>
-                <span class="function"><span class="userdata">sprite</span> <span class="term">Entity.fleeDrops</span></span>
+                <span class="function"><span class="userdata">sprite</span> <span class="term">fleeDrops</span></span>
 				Sprite displaying sweat drops used at the beginning of the enemy's flee animation.
                 Shouldn't be modified.
             </p><br>
             -->
         </div>
-
-
 
         <div class="tab-pane text-style" id="mercy">
             <h2 style="text-decoration: none; line-height:50px;">

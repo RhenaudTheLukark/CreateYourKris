@@ -6,12 +6,20 @@ _ENV = newENV
 comments = { "ENMEY SATND!", "LEIF POZEZ.", "AMRS FUNNEH." }
 commands = { "CEHCK", "AKT1", "AKT2", "AKT3", "AKT4", "AKT5", "AKT6" }
 randomdialogue = {
-    { "NOCIE SUTF.",           "PLS"        },
+    { "NOCIE SUTF.", "PLS"                  },
     { "SEE.",        "...",    "PLSSSS"     },
     { "HREE.",       "AM GUD."              },
     { "LOKO!",       "MOAR!",  "MOAAAAAAR!" },
       "WROKS!"
 }
+
+AddAct("CEHCK", "", 0)
+AddAct("AKT1", "", 0)
+AddAct("AKT2", "", 0, { "ZOOZIE" })
+AddAct("AKT3", "", 0, { "2FPEST" })
+AddAct("AKT4", "", 0, { "Ieslar" })
+AddAct("AKT5", "", 0, { "ZOOZIE", "2FPEST" })
+AddAct("AKT6", "MANI AKTS!!!", 0)
 
 hp = 250
 atk = 10
@@ -25,13 +33,6 @@ cancheck = true
 mag = 9001            -- MAGIC stat of the enemy
 targetType = "all"    -- Specifies how many (or which) target(s) this enemy's bullets will target
 tired = false         -- If true, the Player will be able to spare this enemy using the spell "Pacify"
-
-multicommands = {
-    AKT2 = { "ZOOZIE" },
-    AKT3 = { "2FPEST" },
-    AKT4 = { "Ieslar" },
-    AKT5 = { "ZOOZIE", "2FPEST" }
-}
 
 animations = {
     Hurt      = { { 0 }, 1, { next = "Idle" }, true },
@@ -60,7 +61,7 @@ end
 -- You don't need an all-caps version of the act commands here.
 function HandleCustomCommand(user, command)
     local text = { "" }
-    if command == "Check" then
+    if command == "CEHCK" then
         text = { name .. " - " .. atk .. " AKT " .. def .. " FED\n" .. check }
     elseif command == "AKT1" then
         currentdialogue = {"AKT1 IN!"}

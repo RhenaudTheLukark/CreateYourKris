@@ -181,6 +181,25 @@ end
                 point in time, it will not get executed.
             </p>
 
+            <p>
+                <br><span class="function"> <span class="CYK"></span>OnGameOver()</span>
+                This function runs the instant the last living player dies.<br>
+                But this event works differently than the others.
+                <br><br>
+                By adding <span class="term">return false</span>, you can <b>prevent the game over sequence from
+                starting</b> and replace it with your own code!
+                <br><br>
+                <b style="color:#ffffff">NOTE</b>: If you plan to use <span class="term">BattleDialog</span> in this
+                event, you MUST call <span class="term">State("NONE")</span> first!
+                <br><br>
+                <h5 style="color:#ff0000; line-height:20px">WARNING: Be careful when using <span class="term">return false</span> to
+                run your own code.<br>
+                CYK is designed to work with living, active players. You may encounter errors and problems outside
+                of <span class="term">ENEMYDIALOGUE</span> and <span class="term">NONE</span>!
+                <br><br>
+                ALSO NOTE that killing the players again will <b>trigger this event a second time!</b></h5>
+            </p>
+
             <hr>
             <h3><span class="CYK"></span> Entity script events</h3>
 

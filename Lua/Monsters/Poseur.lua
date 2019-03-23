@@ -13,6 +13,12 @@ randomdialogue = {
       "It's working."
 }
 
+AddAct("Check", "", 0)
+AddAct("Talk", "Little chit-chat", 0)
+AddAct("Flirt", "Seduce the enemy", 0, { "Kris" })
+AddAct("Pose", "Show him who's cool!", 5, { "Ralsei" })
+AddAct("Working?", "Is this working?", 50, { "Ralsei" })
+
 hp = 250
 atk = 10
 def = 2
@@ -24,16 +30,6 @@ check = "Check message goes here."
 mag = 9001            -- MAGIC stat of the enemy
 targetType = "single" -- Specifies how many (or which) target(s) this enemy's bullets will target
 tired = false         -- If true, the Player will be able to spare this enemy using the spell "Pacify"
-
--- Used if a given ACT command needs the action from another player
--- Use the ACT's name as the row's name except you replace all spaces with underscores
--- Ex: "Act 1" must have "Act_1" as key
-multicommands = {
-    Act_2 = { "Susie" },
-    Act_3 = { "Ralsei" },
-    Act_4 = { "Ieslar" },
-    Act_5 = { "Susie", "Ralsei" }
-}
 
 -- Check the "Special Variables" page of the documentation to learn how to modify this mess
 animations = {

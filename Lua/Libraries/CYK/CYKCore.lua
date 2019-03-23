@@ -67,6 +67,7 @@ return function ()
     self.Inventory = (require "Libraries/CYK/Inventory")(self)       -- Inventory management
     self.ScreenShake = (require "Libraries/CYK/ScreenShake")(self)   -- Screen shaking handler
     self.BubbleData = require "Libraries/CYK/BubbleData"             -- Lists all the bubbles usable in CYK
+    self.GameOver = require "Libraries/CYK/GameOver"                 -- Handles fake game over
 
     -- Background! You can disable it by setting the variable background to false
     self.Background = (require "Libraries/CYK/Background")(self, background, backgroundfade)
@@ -147,7 +148,15 @@ return function ()
                     PlaySoundOnceThisFrame("menumove")
                     return
                 end
+
                 player.subAction = availableActions.commands[realChoice]
+                local act = player.target.acts[player.subAction]
+                -- Check if the player has enough TP to use this act command
+                if act.tpCost > self.TP.trueValue then
+                    PlaySoundOnceThisFrame("menumove")
+                    return
+                end
+
                 -- Prepare the other Players needed for the current action too
                 for i = 1, #availableActions.IDs[realChoice] do
                     local player = self.allPlayers[availableActions.IDs[realChoice][i]]
@@ -155,6 +164,7 @@ return function ()
                     player.action = "MultiAct"
                     player.UI.faceSprite.Set("CreateYourKris/Players/" .. player.sprite["anim"] .. "/UI/Act")
                 end
+
                 self.turnMultis[self.turn] = availableActions.IDs[realChoice]
                 PlaySoundOnceThisFrame("menuconfirm")
                 self.ChangePlayerTurn("PrepareAct")
@@ -276,7 +286,7 @@ return function ()
                         self.SetAnim(player, player.action == "Act" and "Spare" or player.action)
                         -- If the Player's last action is to use an Act, also set the animation of the other players needed to perform this action
                         if player.action == "Act" then
-                            if enemy.multicommands[string.gsub(player.subAction, " ", "_")] then
+                            if enemy.acts[player.subAction].requiredPlayers then
                                 for i = 1, #availableActions.commands do
                                     if availableActions.commands[i] == player.subAction then
                                         for j = 1, #availableActions.IDs[i] do
@@ -397,27 +407,31 @@ return function ()
 
             -- If we're choosing an item, fetch the remaining items
             local availableActions = nil
+            local actionNames = nil
             if pool == "Item" then
                 actionPool = actionPool.inventory
             -- If we're choosing an action, don't include the actions requiring other Players if they're not available
             elseif pool == "Act" then
                 availableActions = self.GetAvailableActions(player.target)
-                actionPool = availableActions.commands
+                actionPool = self.GetAvailableActions(player.target, true).commands
             end
+
+            local dataPool = pool == "Magic" and self.spells or pool == "Act" and player.target.acts or self.Inventory.items
 
             -- Add each action/item/spell to the next choice
             for i = 1, #actionPool do
-                local name = actionPool[i]
+                local name = pool == "Act" and availableActions.commands[i] or actionPool[i]
                 local cost = 0
-                local isEnemyTired = false
-                local isMultiActPlayerDown = false
-                if pool == "Magic" then
-                    if self.spells[actionPool[i]] == nil then
-                         error("The spell " .. tostring(actionPool[i]) .. " doesn't exist.")
+                -- If we're adding an act command or a spell, check if it has been added to its act command or spell database
+                if pool ~= "Item" then
+                    local isEnemyTired = false
+                    local isMultiActPlayerDown = false
+                    if dataPool[actionPool[i]] == nil then
+                         error("The " .. (pool == "Magic" and "spell" or "act command") .. " " .. tostring(actionPool[i]) .. " doesn't exist" .. (pool == "Act" and (" for the enemy " .. player.target.sprite["anim"]) or "") .. ".")
                     end
-                    cost = self.spells[actionPool[i]].tpCost
+                    cost = dataPool[actionPool[i]].tpCost
                     -- Set the SPELL "Pacify" in blue if an enemy can be put asleep
-                    if name == "Pacify" then
+                    if pool == "Magic" and name == "Pacify" then
                         for j = 1, #self.enemies do
                             if self.enemies[j].tired then
                                 isEnemyTired = true
@@ -427,21 +441,21 @@ return function ()
                         name = isEnemyTired and "[color:00b2ff]Pacify" or name
                     end
                 end
-                local pre = (((pool == "Magic" and cost > self.TP.trueValue) or (pool == "Act" and availableActions.isDown[i])) and "[color:808080]" or "[color:ffffff]")
-                table.insert(actions, pre .. (pre ~= "" and actionPool[i] or name))
+                -- If it has been added correctly, check if the tp cost of this act command or spell is greater than the current amount of TP of the team
+                -- If it is greater, grey out the act command or spell
+                local pre = (((pool ~= "Item" and cost > self.TP.trueValue) or (pool == "Act" and availableActions.isDown[i])) and "[color:808080]" or "[color:ffffff]")
+                table.insert(actions, pre .. name)
             end
 
             -- Displays the choice and stuff
-            self.TxtMgr.SetChoice(actions, false, true, pool == "Magic" or pool == "Item")
+            self.TxtMgr.SetChoice(actions, false, true, true)
             self.MovePlayer()
 
             -- Updates the description text if we need it
-            if pool == "Magic" or pool == "Item" then
-                local data = (pool == "Magic" and self.spells or self.Inventory.items)[actionPool[1]]
-                self.TxtMgr.textDescription.SetText({ data.description })
-                if pool == "Magic" then
-                    self.TP.PreviewTPLoss(data.tpCost)
-                end
+            local data = dataPool[actionPool[1]]
+            self.TxtMgr.textDescription.SetText({ data.description })
+            if pool ~= "Item" then
+                self.TP.PreviewTPLoss(data.tpCost)
             end
         -- State when the enemies are talking
         elseif state == "ENEMYDIALOGUE" then
@@ -644,6 +658,20 @@ return function ()
     function self.State(newState, secondaryData)
         local oldState = self.state
 
+        -- Throws an error if the state ACTIONSELECT is entered while all Players are KO
+        if newState == "ACTIONSELECT" then
+            local isAlive = false
+            for i = 1, #self.players do
+                if self.players[i].hp > 0 then
+                    isAlive = true
+                    break
+                end
+            end
+            if not isAlive then
+                error("The state ACTIONSELECT can't be entered if all Players are DOWN!")
+            end
+        end
+
         -- Calls EnteringState at the start of the function
         EnteringState(newState, self.state, true)
         -- If the state has been changed, don't go any further
@@ -724,13 +752,12 @@ return function ()
         elseif oldState == "ACTMENU" then
             self.TxtMgr.HideText()
             -- Remove the preview of the TP bar
-            if self.players[self.turn].action == "Magic" then
-                self.TP.PreviewTPLoss(101)
-                -- If we choose an enemy, that means we player agreed to go further, so we can remove the amount of TP the spell uses!
-                if newState == "ENEMYSELECT" then
-                    local spell = self.spells[self.players[self.turn].subAction]
-                    self.TP.Set(-spell.tpCost, true)
-                end
+            self.TP.PreviewTPLoss(101)
+            -- If we choose an enemy, that means we player agreed to go further, so we can remove the amount of TP the spell or act command needs!
+            if Input.Confirm == 1 and self.players[secondaryData].action ~= "Item" then
+                local spellOrAct = self.players[secondaryData].action == "Magic" and self.spells[self.players[self.turn].subAction] or
+                                                                                     self.players[secondaryData].target.acts[self.players[secondaryData].subAction]
+                self.TP.Set(-spellOrAct.tpCost, true)
             end
             Player.sprite.alpha = 0
             self.choiceIndex = 1
@@ -815,9 +842,9 @@ return function ()
                     if player.action ~= "Defend" then
                         if player.hp > 0 then
                             self.SetAnim(player, "Idle")
+                            player.UI.faceSprite.Set("CreateYourKris/Players/" .. player.sprite["anim"] .. "/UI/Normal")
                         end
                         player.action = ""
-                        player.UI.faceSprite.Set("CreateYourKris/Players/" .. player.sprite["anim"] .. "/UI/Normal")
                     end
                 end
             end
@@ -826,7 +853,7 @@ return function ()
         self.state = newState
 
         -- New turn if we reached one of the states where the player can take action from a state where the player can't take action
-        if not hackDoubleDefending and (oldState == "PLAYERTURN" or oldState == "ENEMYDIALOGUE" or oldState == "DEFENDING")
+        if not hackDoubleDefending and (oldState == "PLAYERTURN" or oldState == "ENEMYDIALOGUE" or oldState == "DEFENDING" or oldState == "NONE")
            and (newState == "ACTIONSELECT" or newState == "ITEMMENU" or newState == "ACTMENU" or newState == "ENEMYSELECT") then
             self.NewPlayerTurns()
         end
@@ -848,13 +875,15 @@ return function ()
 
             local set = false
             -- Resets the current Player's buttons
-            for i = 1, #self.players[self.turn].UI.buttons do
-                local button = self.players[self.turn].UI.buttons[i]
-                if button["active"] then
-                    button.Set("CreateYourKris/UI/Buttons/" .. self.players[self.turn].UI.buttonNames[i] .. "S"  .. (CYK.CrateYourKris and "T" or ""))
-                    if self.state == "ACTIONSELECT" then
-                        self.choiceIndex = i
-                        set = true
+            if self.turn > 0 then
+                for i = 1, #self.players[self.turn].UI.buttons do
+                    local button = self.players[self.turn].UI.buttons[i]
+                    if button["active"] then
+                        button.Set("CreateYourKris/UI/Buttons/" .. self.players[self.turn].UI.buttonNames[i] .. "S"  .. (CYK.CrateYourKris and "T" or ""))
+                        if self.state == "ACTIONSELECT" then
+                            self.choiceIndex = i
+                            set = true
+                        end
                     end
                 end
             end
@@ -885,7 +914,7 @@ return function ()
             self.Background.Display(false, 30)
             -- Show the "TARGET" cursor on each Player who can be hit during this wave
             for i = 1, #self.players do
-                if table.containsObj(self.playerTargets, i, true) or self.playerTargets[1] == 0 then
+                if self.players[i].hp > 0 and (table.containsObj(self.playerTargets, i, true) or self.playerTargets[1] == 0) then
                     local targetShift = self.players[i].animations[self.players[i].sprite["currAnim"]][3].targetShift
                     self.players[i].targetCursor.x = targetShift and targetShift[1] or 0
                     self.players[i].targetCursor.y = targetShift and targetShift[2] or 0
@@ -1057,10 +1086,11 @@ return function ()
             end
         end
 
+        local oldTurn = self.turn
         local setTurnResult = self.SetTurn(prev and -1 or 1, prev)
         -- If it was the last Player's choice, execute the Players' actions
         if setTurnResult == "after" then
-            self.State("PLAYERTURN")
+            self.State("PLAYERTURN", oldTurn)
         elseif setTurnResult == "before" then
             return
         else
@@ -1084,7 +1114,7 @@ return function ()
                 self.turnMultis[self.turn] = nil
                 self.SetAnim(newPlayer, "Idle")
             end
-            self.State("ACTIONSELECT")
+            self.State("ACTIONSELECT", oldTurn)
         end
     end
 
@@ -1202,9 +1232,8 @@ return function ()
             self.EnableButton(self.turn, self.choiceIndex)
         elseif self.state == "ACTMENU" then
             -- Update the current display of the previewed TP loss
-            if self.players[self.turn].action == "Magic" then
-                self.TP.PreviewTPLoss(self.spells[self.players[self.turn].abilities[self.choiceIndex]].tpCost)
-            end
+            local actOrSpell = player.action == "Magic" and self.spells[player.abilities[self.choiceIndex]] or player.target.acts[player.target.commands[self.choiceIndex]]
+            self.TP.PreviewTPLoss(actOrSpell.tpCost)
         elseif self.state == "ENEMYSELECT" then
             -- Hide the flashing animation of the last target
             self.HideFlash((player.targetType == "Enemy" and self.enemies or self.players)[oldRealChoiceIndex])
@@ -1212,10 +1241,12 @@ return function ()
             pool[self.choiceIndex].sprite["f"].color = { 1, 1, 1 }
         end
 
-        -- Update the spell description if we're in the MAGIC menu
+        -- Update the spell or act command's description if we're in the MAGIC or ACT menu
         if self.TxtMgr.textDActive then
             local currentObject = self.choiceIndex + 6 * (self.TxtMgr.currentPage - 1)
-            self.TxtMgr.textDescription.SetText({ (player.action == "Magic" and self.spells[player.abilities[currentObject]] or self.Inventory.items[self.Inventory.GetCurrentInventory().inventory[currentObject]]).description })
+            self.TxtMgr.textDescription.SetText({ (player.action == "Magic" and self.spells[player.abilities[currentObject]] or
+                                                   player.action == "Act" and   player.target.acts[self.GetAvailableActions(player.target, true).commands[currentObject]] or
+                                                                                self.Inventory.items[self.Inventory.GetCurrentInventory().inventory[currentObject]]).description })
         end
     end
 

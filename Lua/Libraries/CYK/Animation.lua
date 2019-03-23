@@ -50,6 +50,11 @@ return function(self)
     -- Sets a sprite object's animation
     function self.SetAnim(entity, animName, isF, noF, followUpData)
         local sprite = isF and entity.sprite["f"] or entity.sprite
+
+        if entity.hp and entity.hp <= 0 then
+            animName = self.anims[sprite["anim"]]["Down"] and "Down" or "Idle"
+        end
+
         local animObject = self.anims[sprite["anim"]][animName]
         followUpData = followUpData or { }
 

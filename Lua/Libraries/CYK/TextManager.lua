@@ -63,6 +63,13 @@ return function(CYK)
 
     -- Displays an encounter text
     function self.SetText(text, text2, noReplaceTexts)
+        if CYK.state == "NONE" then
+            self.text.progressmode = "manual"
+            self.text2.progressmode = "manual"
+        else
+            self.text.progressmode = "none"
+            self.text2.progressmode = "none"
+        end
         self.faceSprite.alpha = 0
         self.textLine = 1
         self.DestroyLifebars()
@@ -150,7 +157,7 @@ return function(CYK)
             end
             charIndex = charIndex + 1
             if #text < charIndex then
-                charIndex = #text
+                charIndex = #text + 1
                 break
             end
         end

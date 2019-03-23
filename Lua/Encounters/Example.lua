@@ -29,7 +29,7 @@ enemypositions = {
     { 500, 180 }
 }
 
--- unescape = true -- Uncomment me to remove the pesky QUITTING text when trying to exit the encounter!
+-- unescape = false -- Uncomment me to remove the pesky QUITTING text when trying to exit the encounter!
 
 -- Preloads all of CYK's animations to reduce loading times in-game, at the price of an increasing loading time at the start of the encounter
 preloadAnimations = true
@@ -117,6 +117,28 @@ function HandleItem(user, targets, itemID, itemData)
         end
         BattleDialog(text)
     end
+end
+
+local gameOverCount = 0
+function OnGameOver()
+    if gameOverCount == 0 then
+        State("NONE")
+        Audio.Pause()
+        BattleDialog({ "[noskip]Your consciousness fades...",
+                       "[noskip][waitall:5].....[waitall:1]But suddenly, [w:20]an unknown energy invades your SOUL!",
+                       "[noskip][func:Revive]Kris regains 1 HP!",
+                       "[noskip]But you feel like you won't be this lucky next time...",
+                       "[noskip][func:State, { ACTIONSELECT, 1 }]"})
+        gameOverCount = gameOverCount + 1
+        return false
+    end
+end
+
+function Revive()
+    players[1].Heal(players[1].maxhp)
+    players[1].hp = 1
+    players[1].UpdateUI()
+    Audio.Unpause()
 end
 
 require "Libraries/CYK/CYKPreProcessing"  -- NEEDED FOR CYK TO RUN

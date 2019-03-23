@@ -131,7 +131,7 @@ return function(CYK)
         playerUI.upperBg.SetPivot(0, 0)
         playerUI.upperBg.SetAnchor(0, 0)
         playerUI.upperBg.x = -500
-        playerUI.upperBg.y = 117
+        playerUI.upperBg.y = 117.5
         playerUI.upperBg.color = player.playerColor
         playerUI.upperBg.alpha = 0
 
@@ -151,7 +151,7 @@ return function(CYK)
         playerUI.lifebar.SetPivot(0, 0)
         playerUI.lifebar.SetAnchor(0, 0)
         playerUI.lifebar.x = 128
-        playerUI.lifebar.y = 7
+        playerUI.lifebar.y = 8
         playerUI.lifebar.color = player.playerColor
 
         -- FaceSprite, ooo
@@ -160,7 +160,7 @@ return function(CYK)
         playerUI.faceSprite.SetPivot(0, 0)
         playerUI.faceSprite.SetAnchor(0, 0)
         playerUI.faceSprite.x = 2
-        playerUI.faceSprite.y = 2
+        playerUI.faceSprite.y = 1.95
         playerUI.faceSprite.loopmode = "ONESHOT"
 
         -- Player's hp text
@@ -283,7 +283,7 @@ return function(CYK)
         uiObject.animTimer = 0
         uiObject.sides.alpha = 1
         uiObject.upperBg.alpha = 1
-        uiObject.upperBg.y = 117
+        uiObject.upperBg.y = 117.5
         uiObject.shown = true
     end
 
@@ -304,7 +304,7 @@ return function(CYK)
         end
         uiObject.sides.alpha = 0
         uiObject.upperBg.alpha = 0
-        uiObject.upperBg.y = 149
+        uiObject.upperBg.y = 149.5
         uiObject.shown = false
     end
 

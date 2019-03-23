@@ -7,6 +7,11 @@ comments = { "Smells like the work of an enemy stand.", "Poseur is posing like h
 commands = { "Check", "Act 1", "Act 2", "Act 3" }
 randomdialogue = { "It's working." }
 
+AddAct("Check", "", 0)
+AddAct("Act 1", "", 0)
+AddAct("Act 2", "", 0)
+AddAct("Act 3", "", 0)
+
 name = "Poseur"
 hp = 150
 atk = 10

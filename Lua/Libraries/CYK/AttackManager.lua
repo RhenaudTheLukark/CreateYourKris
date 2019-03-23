@@ -285,7 +285,7 @@ return function(CYK)
                         end
                     end
                     -- If all the Players are down, GAME OVER
-                    if gameOver then
+                    if gameOver and ProtectedCYKCall(OnGameOver) ~= false then
                         if CYK.Background then
                             for i = 1, #CYK.Background do
                                 CYK.Background[i].Remove()
@@ -295,7 +295,7 @@ return function(CYK)
                         Player.sprite.alpha = 1
                         doneFor = true
                         unescape = false
-                        _Player.Hurt(999, 0)
+                        CYK.GameOver.StartGameOver()
                     end
                     color = { 1, 0, 0 }
                     textValue = "Down"
