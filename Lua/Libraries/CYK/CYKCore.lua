@@ -754,7 +754,7 @@ return function ()
             -- Remove the preview of the TP bar
             self.TP.PreviewTPLoss(101)
             -- If we choose an enemy, that means we player agreed to go further, so we can remove the amount of TP the spell or act command needs!
-            if Input.Confirm == 1 and self.players[secondaryData].action ~= "Item" then
+            if secondaryData and Input.Confirm == 1 and self.players[secondaryData].action ~= "Item" then
                 local spellOrAct = self.players[secondaryData].action == "Magic" and self.spells[self.players[self.turn].subAction] or
                                                                                      self.players[secondaryData].target.acts[self.players[secondaryData].subAction]
                 self.TP.Set(-spellOrAct.tpCost, true)
