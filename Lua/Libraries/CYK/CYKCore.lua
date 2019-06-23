@@ -673,7 +673,11 @@ return function ()
         end
 
         -- Calls EnteringState at the start of the function
-        EnteringState(newState, self.state, true)
+        if not self.stateLock then
+            self.stateLock = true
+            EnteringState(newState, self.state, true)
+        end
+        self.stateLock = nil
         -- If the state has been changed, don't go any further
         if self.state ~= oldState then return end
 
