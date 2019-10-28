@@ -127,11 +127,11 @@ return function(CYK)
                     local commandName = string.split(command, ":")[1]
                     -- Remove any func, color or alpha call
                     if commandName == "func" or commandName == "color" or commandName == "alpha" then
-                        text = string.sub(text, 1, bracketBegin - 1) .. (#text < index and "" or string.sub(text, index + 1, #text))
+                        text = string.sub(text, 1, bracketBegin - 1) .. (#text > index and "" or string.sub(text, index + 1, #text))
                         index = bracketBegin - 1
                     -- Add [novoice] to any font or voice call
                     elseif commandName == "font" or commandName == "voice" then
-                        text = string.sub(text, 1, index) .. "[novoice]" .. (#text < index and "" or string.sub(text, index + 1, #text))
+                        text = string.sub(text, 1, index) .. "[novoice]" .. (#text > index and "" or string.sub(text, index + 1, #text))
                         index = index + 9
                     end
                     bracketBegin = -1
