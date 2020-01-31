@@ -76,7 +76,7 @@ function Arena.MoveToAndResize(x, y, width, height, movePlayer, immediate) _Aren
 -- New Arena functions and values
 getset.defineProperty(Arena, "inner",    { get = function() return FakeArena.arena["inner"] end, set = function(value) error("Can't set the Arena's inner sprite!") end })
 getset.defineProperty(Arena, "outer",    { get = function() return FakeArena.arena          end, set = function(value) error("Can't set the Arena's outer sprite!") end })
-getset.defineProperty(Arena, "rotation", { get = function() return FakeArena.arena.rotation end, set = function(value) FakeArena.RotateArena(rot, false)            end })
+getset.defineProperty(Arena, "rotation", { get = function() return FakeArena.arena.rotation end, set = function(value) FakeArena.RotateArena(value, false)            end })
 
 function Arena.Update() FakeArena.Update() end
 
