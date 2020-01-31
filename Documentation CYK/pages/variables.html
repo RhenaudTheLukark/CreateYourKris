@@ -540,40 +540,6 @@ animations = {
                                 and by the second number vertically, for this animation.
                                 <br><br>
                                 The "TARGET" sprite is centered if this value is not set or is <span class="term">{0, 0}</span>.</li><br>
-                        </ul></li>
-                    <li><span class="boolean"></span> Optional, false by default.
-                        <br><br>
-                        In Deltarune, whenever you select an enemy to target or use an ACT command on, they will
-                        normally "glow" white slowly.<br>
-                        Also, whenever a player is not target during a wave, their sprite will "fade out" to black.
-                        <br><br>
-                        In order to do this effect in CYK, an <b>all-white version of each sprite</b> in an animation
-                        is required.
-                        <br><br>
-                        By setting this variable to true, you're signalling that <b>you have set up all-white versions
-                        of every sprite in this animation</b>.
-                        <br><br>
-                        In order to set this up, you have to:
-                        <ol>
-                            <br><li>Copy all the sprites used in your animation, and rename them to <span class="term">namef.png</span>, where
-                            <span class="term">name</span> is the original name of the image. For example, if you copied the sprite <span class="term">"frame0.png"</span>, the new sprite has to be
-                                named <span class="term">"frame0f.png"</span>.</li>
-                            <br><li>Open each image and set the colors of all non-transparent pixels of the sprite to white.</li><br>
-                        </ol>
-                        Here is a quick list of animations used by the engine that'll require such additional animation. If you need more
-                        information about those animations, check the entity function <span class="term">SetCYKAnimation()</span>
-                        in the <span class="ref">Misc. Functions</span> page:
-                        <br><br>
-                        <ul>
-                            <li><span class="term">Defend</span></li>
-                            <li><span class="term">Down</span></li>
-                            <li><span class="term">Hurt</span></li>
-                            <li><span class="term">Idle</span></li>
-                            <li><span class="term">PrepareAct</span></li>
-                            <li><span class="term">PrepareFight</span></li>
-                            <li><span class="term">PrepareMagic</span></li>
-                            <li><span class="term">PrepareItem</span></li>
-                            <li><span class="term">PrepareSpare</span></li>
                         </ul>
                     </li>
                 </ol>

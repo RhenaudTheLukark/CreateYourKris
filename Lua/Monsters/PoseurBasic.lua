@@ -26,8 +26,8 @@ targetType = "single" -- Specifies how many (or which) target(s) this enemy's bu
 
 -- Check the "Special Variables" page of the documentation to learn how to modify this mess
 animations = {
-    Hurt      = { { 0 },                                           1     , { next = "Idle" }, true },
-    Idle      = { { 0, 1, 2, 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 1 / 15, { }              , true },
+    Hurt      = { { 0 },                                           1     , { next = "Idle" } },
+    Idle      = { { 0, 1, 2, 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 1 / 15, { }               },
 }
 
 -- Triggered when a Player attacks (or misses) this enemy in the ATTACKING state

@@ -35,9 +35,9 @@ targetType = "all"    -- Specifies how many (or which) target(s) this enemy's bu
 tired = false         -- If true, the Player will be able to spare this enemy using the spell "Pacify"
 
 animations = {
-    Hurt      = { { 0 }, 1, { next = "Idle" }, true },
-    Idle      = { { 0 }, 1, { }              , true },
-    Spareable = { { 0 }, 1, { }              , true },
+    Hurt      = { { 0 }, 1, { next = "Idle" } },
+    Idle      = { { 0 }, 1, { }               },
+    Spareable = { { 0 }, 1, { }               },
 }
 
 -- Triggered just before computing an attack on this target

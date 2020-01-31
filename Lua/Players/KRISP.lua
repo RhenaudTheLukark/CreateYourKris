@@ -16,14 +16,14 @@ damageColor = { 0, 162/255, 232/255 } -- Color used in this Player's damage text
 
 -- Check the "Special Variables" page of the documentation to learn how to modify this mess
 animations = {
-    Down =          { { 0 },                1,      { loop = "ONESHOT" },                       true },
-    Fight =         { { 0, 1, 2, 3 },       2 / 15, { loop = "ONESHOT", posShift = { 0, -12 } }      },
-    Hurt =          { { 0 },                1,      { next = "Idle" },                          true },
-    Idle =          { { 0 },                1,      { heartShift = { -40, 0 } },                true },
-    PrepareAct =    { { 0, 1 },             3 / 15, { },                                        true },
-    PrepareSpare =  { { 0, 1 },             3 / 15, { },                                        true },
-    Spare =         { { 0, 1, 2, 3, 4, 5 }, 2 / 15, { next = "Idle" }                                },
-    SliceAnim =     { { 0, 1, 2 },          2 / 15, { loop = "ONESHOTEMPTY" }                        },
+    Down =          { { 0 },                1,      { loop = "ONESHOT" },                       },
+    Fight =         { { 0, 1, 2, 3 },       2 / 15, { loop = "ONESHOT", posShift = { 0, -12 } } },
+    Hurt =          { { 0 },                1,      { next = "Idle" },                          },
+    Idle =          { { 0 },                1,      { heartShift = { -40, 0 } },                },
+    PrepareAct =    { { 0, 1 },             3 / 15, { },                                        },
+    PrepareSpare =  { { 0, 1 },             3 / 15, { },                                        },
+    Spare =         { { 0, 1, 2, 3, 4, 5 }, 2 / 15, { next = "Idle" }                           },
+    SliceAnim =     { { 0, 1, 2 },          2 / 15, { loop = "ONESHOTEMPTY" }                   },
 }
 
 -- Started when this Player casts a spell through the MAGIC command.

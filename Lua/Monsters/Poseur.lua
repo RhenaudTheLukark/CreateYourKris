@@ -33,9 +33,9 @@ tired = false         -- If true, the Player will be able to spare this enemy us
 
 -- Check the "Special Variables" page of the documentation to learn how to modify this mess
 animations = {
-    Hurt      = { { 0 },                                           1     , { next = "Idle" }, true },
-    Idle      = { { 0, 1, 2, 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 1 / 15, { }              , true },
-    Spareable = { { 0, 1, 2, 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 1 / 15, { }              , true },
+    Hurt      = { { 0 },                                           1     , { next = "Idle" } },
+    Idle      = { { 0, 1, 2, 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 1 / 15, { }               },
+    Spareable = { { 0, 1, 2, 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 1 / 15, { }               },
 }
 
 -- Triggered just before computing an attack on this target

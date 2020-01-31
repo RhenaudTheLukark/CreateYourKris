@@ -18,13 +18,13 @@ damageColor = { 234/255,  121/255, 200/255 } -- Color used in this Player's dama
 AddSpell("ROOD BOSTOR", "ROOD ADMAG", 50, "Enemy")
 
 animations = {
-    RudeBuster =    { { 0, 1, 2, 3 }, 2 / 15, { next = "Idle" },             },
-    Down =          { { 0 },          1,      { loop = "ONESHOT" },     true },
-    Fight =         { { 0, 1, 2, 3 }, 2 / 15, { loop = "ONESHOT" }           },
-    Hurt =          { { 0 },          1,      { next = "Idle" },        true },
-    Idle =          { { 0, 1 },       1 / 15, { },                      true },
-    Spare =         { { 0 },          1,      { next = "Idle" }              },
-    SliceAnim =     { { 0, 1, 2, 3 }, 2 / 15, { loop = "ONESHOTEMPTY" }      },
+    RudeBuster =    { { 0, 1, 2, 3 }, 2 / 15, { next = "Idle" },        },
+    Down =          { { 0 },          1,      { loop = "ONESHOT" },     },
+    Fight =         { { 0, 1, 2, 3 }, 2 / 15, { loop = "ONESHOT" }      },
+    Hurt =          { { 0 },          1,      { next = "Idle" },        },
+    Idle =          { { 0, 1 },       1 / 15, { },                      },
+    Spare =         { { 0 },          1,      { next = "Idle" }         },
+    SliceAnim =     { { 0, 1, 2, 3 }, 2 / 15, { loop = "ONESHOTEMPTY" } },
 }
 
 rudeBusterStartFrame = -1
