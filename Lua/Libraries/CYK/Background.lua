@@ -54,14 +54,14 @@ return function(CYK, isActive, isFadeActive)
                 local bg = self[i]
                 bg.Move(self.dir[i], -self.dir[i])
                 if bg.absx > bg["startX"] + 25 then
-                    bg.absx = bg.absx - 50
+                    bg.absx = bg.absx - 51
                 elseif bg.absx < bg["startX"] - 25 then
-                    bg.absx = bg.absx + 50
+                    bg.absx = bg.absx + 51
                 end
                 if bg.absy > bg["startY"] + 25 then
-                    bg.absy = bg.absy - 50
+                    bg.absy = bg.absy - 51
                 elseif bg.absy < bg["startY"] - 25 then
-                    bg.absy = bg.absy + 50
+                    bg.absy = bg.absy + 51
                 end
             end
         end
