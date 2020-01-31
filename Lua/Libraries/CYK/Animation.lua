@@ -12,31 +12,14 @@ return function(self)
             v.isPlayer = nil
             -- For each animation in the current entity
             for k2, v2 in pairs(v) do
-                if not string.ends_with(k2, "F") then
-                    -- If there is an anim which has flash sprites, build the flash anim
-                    local hasF = #v2 > 3 and v2[4]
-                    if hasF then
-                        v[k2 .. "F"] = table.copy(v2)
-                        local vF = v[k2 .. "F"]
-                        vF[4] = nil
-                        for k3, v3 in pairs(vF[3]) do
-                            if k == "xShift" or k == "yShift" then
-                                vF[3][k] = 0
-                            end
-                        end
-                    end
-                    -- Create the animation with file paths
-                    for i = 1, #v2[1] do
-                        local file = "CreateYourKris/" .. (isPlayer and "Players/" or "Monsters/") .. k .. "/" .. k2 .. "/" .. tostring(v2[1][i])
-                        v2[1][i] = file
-                        if hasF then
-                            v[k2 .. "F"][1][i] = file .. "f"
-                        end
-                    end
-                    -- Starts the anim if preloadAnimations is true to register it in CYK
-                    if preloadAnimations then
-                        testSprite.SetAnimation(v2[1], v2[2])
-                    end
+                -- Create the animation with file paths
+                for i = 1, #v2[1] do
+                    local file = "CreateYourKris/" .. (isPlayer and "Players/" or "Monsters/") .. k .. "/" .. k2 .. "/" .. tostring(v2[1][i])
+                    v2[1][i] = file
+                end
+                -- Starts the anim if preloadAnimations is true to register it in CYK
+                if preloadAnimations then
+                    testSprite.SetAnimation(v2[1], v2[2])
                 end
             end
         end
@@ -48,8 +31,8 @@ return function(self)
     end
 
     -- Sets a sprite object's animation
-    function self.SetAnim(entity, animName, isF, noF, followUpData)
-        local sprite = isF and entity.sprite["f"] or entity.sprite
+    function self.SetAnim(entity, animName, followUpData)
+        local sprite = entity.sprite
 
         if entity.hp and entity.hp <= 0 then
             animName = self.anims[sprite["anim"]]["Down"] and "Down" or "Idle"
@@ -66,7 +49,7 @@ return function(self)
         end
 
         -- Check if this entity allows this animation to play
-        if not isF and animName ~= "Hurt" and not followUpData.noAnimOverride then
+        if animName ~= "Hurt" and not followUpData.noAnimOverride then
             if ProtectedCYKCall(entity.HandleAnimationChange, animName) == false then
                 return
             end
@@ -107,23 +90,11 @@ return function(self)
         sprite["xShift"] = xShift
         sprite["yShift"] = yShift
 
-        -- If this sprite has a flash sprite, animate it too
-        local needSynchro = false
-        if sprite["f"] and not noF then
-            local animObjectF = self.anims[sprite["anim"]][animName .. "F"]
-            if animObjectF then
-                self.SetAnim(entity, animName .. "F", true)
-                needSynchro = true
-            end
-        end
-
         -- FINALLY set the animation
         sprite.SetAnimation(animObject[1], animObject[2])
-
-        -- Synchronize the two animations if needed
-        if needSynchro then
-            sprite.currenttime = 0
-            sprite["f"].currenttime = 0
+        -- Don't forget the sprite's mask
+        if sprite["mask"] then
+            sprite["mask"].SetAnimation(animObject[1], animObject[2])
         end
     end
 

@@ -93,7 +93,7 @@ return function(CYK)
                             star.absx = player.sprite.absx + math.random(player.sprite.width / 2, player.sprite.width)
                             star.absy = player.sprite.absy + math.random(0, player.sprite.height / 2)
                             star["anim"] = "damageStar"
-                            CYK.SetAnim({ sprite = star }, "Idle", nil, nil, { noAnimOverride = true, destroyOnEnd = true })
+                            CYK.SetAnim({ sprite = star }, "Idle", { noAnimOverride = true, destroyOnEnd = true })
                             star["startX"] = star.absx
                             attackingPlayer.perfectStars[j] = star
                         end

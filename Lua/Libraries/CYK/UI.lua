@@ -208,7 +208,7 @@ return function(CYK)
             playerUI.atkZone.separator.alpha = 0
         end
 
-        playerUI.atkZone.faceSprite = CreateSprite("CreateYourKris/Players/" .. player.name .. "/UI/Normal", "LowerUI")
+        playerUI.atkZone.faceSprite = CreateSprite("CreateYourKris/Players/" .. player.sprite["anim"] .. "/UI/Normal", "LowerUI")
         playerUI.atkZone.faceSprite.SetParent(playerUI.atkZone.press)
         playerUI.atkZone.faceSprite.SetAnchor(0, 0)
         playerUI.atkZone.faceSprite.SetPivot(0, 0)

@@ -978,11 +978,13 @@ return function ()
     function self.Left()
         -- Moves the cursor left and changes the cursor's position for both cases
         if self.state == "ACTIONSELECT" then
-            PlaySoundOnceThisFrame("menumove")
-            self.MoveCursor(-1)
+            if self.MoveCursor(-1, true) then
+                PlaySoundOnceThisFrame("menumove")
+            end
         elseif (self.state == "ACTMENU" or self.state == "ITEMMENU" or self.state == "ENEMYSELECT") and self.TxtMgr.twoColumns then
-            PlaySoundOnceThisFrame("menumove")
-            self.MoveCursor(self.choiceIndex % 2 == 0 and -1 or 1)
+            if self.MoveCursor(self.choiceIndex % 2 == 0 and -1 or 1, true) then
+                PlaySoundOnceThisFrame("menumove")
+            end
             self.MovePlayer()
         end
     end
@@ -991,11 +993,13 @@ return function ()
     function self.Right()
         -- Moves the cursor right and changes the cursor's position for both cases
         if self.state == "ACTIONSELECT" then
-            PlaySoundOnceThisFrame("menumove")
-            self.MoveCursor(1)
+            if self.MoveCursor(1, true) then
+                PlaySoundOnceThisFrame("menumove")
+            end
         elseif (self.state == "ACTMENU" or self.state == "ITEMMENU" or self.state == "ENEMYSELECT") and self.TxtMgr.twoColumns then
-            PlaySoundOnceThisFrame("menumove")
-            self.MoveCursor(self.choiceIndex % 2 == 0 and -1 or 1)
+            if self.MoveCursor(self.choiceIndex % 2 == 0 and -1 or 1, true) then
+                PlaySoundOnceThisFrame("menumove")
+            end
             self.MovePlayer()
         end
     end
@@ -1004,8 +1008,9 @@ return function ()
     function self.Up()
         -- Moves the cursor up and changes the cursor's position if we're in some states
         if self.state == "ACTMENU" or self.state == "ITEMMENU" or self.state == "ENEMYSELECT" then
-            PlaySoundOnceThisFrame("menumove")
-            self.MoveCursor(self.TxtMgr.twoColumns and -2 or -1)
+            if self.MoveCursor(self.TxtMgr.twoColumns and -2 or -1) then
+                PlaySoundOnceThisFrame("menumove")
+            end
             self.MovePlayer()
         end
     end
@@ -1014,8 +1019,9 @@ return function ()
     function self.Down()
         -- Moves the cursor down and changes the cursor's position if we're in some states
         if self.state == "ACTMENU" or self.state == "ITEMMENU" or self.state == "ENEMYSELECT" then
-            PlaySoundOnceThisFrame("menumove")
-            self.MoveCursor(self.TxtMgr.twoColumns and 2 or 1)
+            if self.MoveCursor(self.TxtMgr.twoColumns and 2 or 1) then
+                PlaySoundOnceThisFrame("menumove")
+            end
             self.MovePlayer()
         end
     end
@@ -1191,7 +1197,7 @@ return function ()
     end
 
     -- Moves the cursor in a choice by a given amount
-    function self.MoveCursor(val)
+    function self.MoveCursor(val, isHorz)
         local oldChoiceIndex = self.choiceIndex
         local oldRealChoiceIndex = self.GetRealChoiceIndex()
         self.choiceIndex = self.choiceIndex + val
@@ -1202,6 +1208,10 @@ return function ()
         -- Override: if there's only one choice, well...no need to compute anything, self.choiceIndex is set to 1
         if self.choiceIndexLimit == 1 and self.TxtMgr.currentPage == 1 then
             self.choiceIndex = 1
+        -- If two columns, horz movement and on the last value then do nothing
+        elseif isHorz and self.choiceIndexLimit == oldChoiceIndex and self.choiceIndexLimit % 2 == 1 and self.TxtMgr.twoColumns then
+            self.choiceIndex = oldChoiceIndex
+        -- If the new value is out of bounds
         elseif self.choiceIndex < 1 or self.choiceIndex > self.choiceIndexLimit then
             local prev = self.choiceIndex < 1
             -- Check page up and down
@@ -1211,18 +1221,20 @@ return function ()
                 -- Update the choice index limit value and put the choice index back in bounds
                 local oldChoiceIndexLimit = self.choiceIndexLimit
                 self.choiceIndexLimit = math.min(#self.TxtMgr.lastChoice - pageSize * (self.TxtMgr.currentPage - 1), pageSize)
-                self.choiceIndex = self.choiceIndex > 0 and self.choiceIndex + (self.choiceIndexLimit - oldChoiceIndexLimit) or self.choiceIndex
-            end
-            -- Keep choiceIndex below choiceIndexLimit
-            self.choiceIndex = self.choiceIndex + self.choiceIndexLimit * (prev and 1 or -1) + (self.choiceIndexLimit % math.abs(val)) * (prev and -1 or 1)
-            if self.choiceIndex > self.choiceIndexLimit then
-                self.choiceIndex = self.choiceIndexLimit
+                self.choiceIndex = self.choiceIndexLimit == 1 and 1 or self.choiceIndex > 0 and self.choiceIndex - oldChoiceIndexLimit or self.choiceIndexLimit + self.choiceIndex
+            else
+                -- Keep choiceIndex below choiceIndexLimit
+                local secondSign = (prev and self.choiceIndex % 2 == 0) and -1 or prev and 1 or self.choiceIndex % 2 == 0 and 1 or -1
+                self.choiceIndex = self.choiceIndex + self.choiceIndexLimit * (prev and 1 or -1) + (self.choiceIndexLimit % math.abs(val)) * secondSign
+                if self.choiceIndex > self.choiceIndexLimit then
+                    self.choiceIndex = self.choiceIndexLimit
+                end
             end
         end
 
         -- Same value for choiceIndex: do nothing
         if self.choiceIndex == oldChoiceIndex and not pageChanged then
-            return
+            return false
         end
 
         local player = self.players[self.turn]
@@ -1248,6 +1260,8 @@ return function ()
                                                    player.action == "Act" and   player.target.acts[self.GetAvailableActions(player.target, true).commands[currentObject]] or
                                                                                 self.Inventory.items[self.Inventory.GetCurrentInventory().inventory[currentObject]]).description })
         end
+
+        return true
     end
 
     -- Handles the buttons in a Player's UI and display one button as "active"

@@ -205,18 +205,18 @@ return function(self)
         -- CYF shortcut
         entity.monstersprite = entity.sprite
 
+        -- Entity mask sprite
+        entity.sprite["mask"] = CreateSprite("empty", "Entity")
+        entity.sprite["mask"].SetParent(entity.sprite)
+        entity.sprite["mask"].MoveTo(0, 0)
+        entity.sprite["mask"].Mask("stencil")
+
         -- Entity flash sprite
-        entity.sprite["f"] = CreateSprite("empty", "Entity")
-        entity.sprite["f"].SetParent(entity.sprite)
-        entity.sprite["f"].SetPivot(0, 0)
-        entity.sprite["f"].SetAnchor(0, 0)
-        entity.sprite["f"].x = 0
-        entity.sprite["f"].y = 0
-        entity.sprite["f"]["anim"] = entity.scriptName
-        entity.sprite["f"]["isF"] = true
+        entity.sprite["f"] = CreateSprite("px", "Entity")
+        entity.sprite["f"].SetParent(entity.sprite["mask"])
+        entity.sprite["f"].Scale(640, 480)
+        entity.sprite["f"].MoveTo(0, 0)
         entity.sprite["f"].alpha = 0
-        entity.sprite["f"]["xShift"] = 0
-        entity.sprite["f"]["yShift"] = 0
 
         entity.scriptName = nil
 
@@ -636,7 +636,6 @@ return function(self)
             entity.sprite["f"].alpha = frame / 15
         elseif frame == 20 then
             entity.sprite["f"].alpha = 1
-            self.SetAnim(entity, "SpareableF", false, true)
         elseif frame < 60 then
             entity.sprite.x = entity.sprite.x + 2
             entity.sprite.alpha = 1 - ((frame - 20) / 40)
@@ -690,6 +689,7 @@ return function(self)
         self.GetEntity(self.allEnemies[i], i)
     end
 
+    OldBattleDialog = BattleDialog
     function BattleDialog(text)
         if type(text) ~= "table" or type(text[1]) ~= "string" then
             error("BattleDialog() needs a table of strings as argument.")

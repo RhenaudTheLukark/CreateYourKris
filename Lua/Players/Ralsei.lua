@@ -14,10 +14,10 @@ playerColor = { 0, 1, 0 }                  -- Color used in this Player's main U
 atkBarColor = { 0, .5, 0 }                 -- Color used in this Player's atk bar
 damageColor = { 180/255, 230/255, 29/255 } -- Color used in this Player's damage text
 
--- Check the "Special Variables" page of the documentation to learn how to modify this mess
 AddSpell("Pacify", "Spare TIRED foe", 16, "Enemy")
 AddSpell("Heal Prayer", "Heal Ally", 32, "Player")
 
+-- Check the "Special Variables" page of the documentation to learn how to modify this mess
 animations = {
     Defend =        { { 0, 1, 2, 3, 4 },                                    1 / 15, { loop = "ONESHOT", targetShift = { -14, 11 } }, true },
     Down =          { { 0 },                                                1,      { loop = "ONESHOT" },                            true },
@@ -58,7 +58,7 @@ function HandleCustomSpell(target, spell)
 end
 
 -- Function called whenever this entity's animation is changed.
--- Make it return true if you want the animation to be changed like normal, otherwise do your own stuff here!
+-- Make it return true if you want the newAnim animation to be played, otherwise do your own stuff here!
 function HandleAnimationChange(newAnim) end
 
 ----- DO NOT MODIFY BELOW -----

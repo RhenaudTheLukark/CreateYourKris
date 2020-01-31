@@ -138,8 +138,12 @@ it's w3c valid, at least
 				Main sprite of the entity. Shouldn't be replaced.<br>
                 This sprite object contains other variables useful for CYK:<br><br>
                 <ul>
-                    <li><span class="userdata">sprite</span> <span class="term">sprite["f"]</span> - Sprite used to display several effects on the main sprite. When needed, it must
-                        display the same animation as <span class="term">sprite</span>, except all the sprites of this animation must be white.
+                    <li><span class="userdata">sprite</span> <span class="term">sprite["mask"]</span> - Sprite used to display several effects on the main sprite. When needed, it must
+                        display the same animation as <span class="term">sprite</span>.
+                        <br><br>
+                        * Shouldn't be modified.</li><br>
+                    <li><span class="userdata">sprite</span> <span class="term">sprite["f"]</span> - Masked sprite used to display several effects on the main sprite. Basically a 1x1px
+                        sprite scaled by a lot.
                         <br><br>
                         * Shouldn't be modified.</li><br>
                     <li><span class="string"></span> <span class="term">sprite["anim"]</span> - Contains the name of the folder where this entity's animations can be found.

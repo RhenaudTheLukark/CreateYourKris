@@ -2,6 +2,7 @@ require "Libraries/CYK/ScriptOwnerBypass"
 require "Libraries/CYK/Util"
 
 -- Pre-call to CYF's State() function. Updates awaitingCYKInput, which allows the player to use CYK
+_OldState = State
 function OldState(state, forceAwaitingCYKInput)
     if forceAwaitingCYKInput then
         awaitingCYKInput = forceAwaitingCYKInput
@@ -12,14 +13,12 @@ function OldState(state, forceAwaitingCYKInput)
 end
 
 -- CYK's State() function
-function _State(state, arg1, arg2, arg3)
+function State(state, arg1, arg2, arg3)
     return CYK.PlayerState(state, arg1, arg2, arg3)
 end
-_OldState = State
-State = _State
-_State = nil
 
 -- GetCurrentState() returns CYK's state instead of CYF's state
+OldGetCurrentState = GetCurrentState
 function GetCurrentState()
     return CYK.state
 end
