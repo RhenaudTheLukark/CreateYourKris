@@ -94,6 +94,7 @@ return function(self)
         sprite.SetAnimation(animObject[1], animObject[2])
         -- Don't forget the sprite's mask
         if sprite["mask"] then
+            sprite["mask"].loopmode = loopmode
             sprite["mask"].SetAnimation(animObject[1], animObject[2])
         end
     end
