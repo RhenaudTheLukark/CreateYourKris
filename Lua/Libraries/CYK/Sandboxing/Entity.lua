@@ -4,7 +4,7 @@ _ENV = newENV
 -- Sets an entity's sprite. Mostly useless as most of CYK's entities use animations.
 function SetSprite(path)
     if type(path) ~= "string" then
-        error("entity.SetSprite() needs one argument which is a string.")
+        error("entity.SetSprite() needs one argument which is a string.", 2)
     end
     sprite.Set(path)
 end
@@ -14,7 +14,7 @@ function SetActive(newActive)
     local pool = UI and CYK.players or CYK.enemies
     -- You can't disable the last remaining player
     if UI and #CYK.players == 1 and self == CYK.players[1] and not newActive then
-        error("Tried to deactivate the last remaining player.")
+        error("Tried to deactivate the last remaining player.", 2)
     end
     -- Disabling an entity
     if isactive and not newActive then
@@ -75,7 +75,7 @@ end
 -- Tries to kill the enemy. If the enemy has a function named OnDeath(), it will fire it instead
 function TryKill()
     if UI then
-        error("You can only use entity.TryKill() on an enemy entity.")
+        error("You can only use entity.TryKill() on an enemy entity.", 2)
     else
         if OnDeath then
             ProtectedCYKCall(OnDeath)
@@ -88,7 +88,7 @@ end
 -- Kills the enemy directly, without checking if a function named OnDeath() exists
 function Kill(cancelAnim)
     if UI then
-        error("You can only use entity.Kill() on an enemy entity.")
+        error("You can only use entity.Kill() on an enemy entity.", 2)
     else
         SetActive(false)
         spareOrFleeAnim = "flee"
@@ -101,7 +101,7 @@ end
 -- Tries to spare the enemy. If the enemy has a function named OnSpare(), it will fire it instead
 function TrySpare(cancelAnim)
     if UI then
-        error("You can only use entity.TrySpare() on an enemy entity.")
+        error("You can only use entity.TrySpare() on an enemy entity.", 2)
     else
         if OnSpare then
             ProtectedCYKCall(OnSpare)
@@ -114,7 +114,7 @@ end
 -- Kills the enemy directly, without checking if a function named OnSpare() exists
 function Spare()
     if UI then
-        error("You can only use entity.Spare() on an enemy entity.")
+        error("You can only use entity.Spare() on an enemy entity.", 2)
     else
         SetActive(false)
         spareOrFleeAnim = "spare"
@@ -127,7 +127,7 @@ end
 -- Moves the entity from where it was
 function Move(x, y)
     if type(x) ~= "number" or type(y) ~= "number" then
-        error("entity.Move() needs two numbers as arguments.")
+        error("entity.Move() needs two numbers as arguments.", 2)
     end
     sprite.x = sprite.x + x
     posX = posX + x
@@ -138,7 +138,7 @@ end
 -- Moves the entity from its parent's position (which is the bottom left corner of the screen if it has none)
 function MoveTo(x, y)
     if type(x) ~= "number" or type(y) ~= "number" then
-        error("entity.MoveTo() needs two numbers as arguments.")
+        error("entity.MoveTo() needs two numbers as arguments.", 2)
     end
     sprite.x = x
     posX = sprite.absx
@@ -149,7 +149,7 @@ end
 -- Moves the entity from the bottom left corner of the screen
 function MoveToAbs(x, y)
     if type(x) ~= "number" or type(y) ~= "number" then
-        error("entity.MoveToAbs() needs two numbers as arguments.")
+        error("entity.MoveToAbs() needs two numbers as arguments.", 2)
     end
     sprite.absx = x
     posX = x
@@ -167,7 +167,7 @@ end
 -- Sets the next amount of damage to deal to this entity the next time an Attack() function is fired with it as an argument
 function SetDamage(dmg)
     if type(dmg) ~= "number" then
-        error("entity.SetDamage() needs one number as argument.")
+        error("entity.SetDamage() needs one number as argument.", 2)
     end
     presetDamage = -dmg
 end
@@ -181,7 +181,7 @@ function SetBubbleOffset(x, y)
         return
     end
     if type(x) ~= "number" or type(y) ~= "number" then
-        error("entity.SetBubbleOffset() needs two numbers as arguments.")
+        error("entity.SetBubbleOffset() needs two numbers as arguments.", 2)
     end
     bubbleOffsetX = x
     bubbleOffsetY = y
@@ -190,7 +190,7 @@ end
 -- Moves this entity's damage text spawn position from where it originally was
 function SetDamageUIOffset(x, y)
     if type(x) ~= "number" or type(y) ~= "number" then
-        error("entity.SetDamageUIOffset() needs two numbers as arguments.")
+        error("entity.SetDamageUIOffset() needs two numbers as arguments.", 2)
     end
     damageUIOffsetX = x
     damageUIOffsetY = y
@@ -205,7 +205,7 @@ function SetSliceAnimOffset(x, y)
         return
     end
     if type(x) ~= "number" or type(y) ~= "number" then
-        error("entity.SetSliceAnimOffset() needs two numbers as arguments.")
+        error("entity.SetSliceAnimOffset() needs two numbers as arguments.", 2)
     end
     sliceAnimOffsetX = x
     sliceAnimOffsetY = y
@@ -214,7 +214,7 @@ end
 -- Same as CYF: displays an encounter text
 function BattleDialog(text)
     if type(text) ~= "table" or type(text[1]) ~= "string" then
-        error("BattleDialog() needs a table of strings as an argument.")
+        error("BattleDialog() needs a table of strings as an argument.", 2)
     end
     CYK.TxtMgr.SetText(text)
 end
@@ -224,7 +224,7 @@ canmove = true
 -- Heals this entity by a given amount
 function Heal(val)
     if type(val) ~= "number" then
-        error("entity.Heal() needs at least one number as argument.")
+        error("entity.Heal() needs at least one number as argument.", 2)
     end
     CYK.AtkMgr.ChangeHP(self, self, val)
 end
@@ -232,7 +232,7 @@ end
 -- Hurts this entity by a given amount, from another entity
 function Hurt(val, from)
     if type(val) ~= "number" and type(from) ~= "table" and type(from.name) ~= "string" then
-        error("entity.Hurt() needs one number and one entity as arguments.")
+        error("entity.Hurt() needs one number and one entity as arguments.", 2)
     end
     CYK.AtkMgr.ChangeHP(self, from, -val)
 end
@@ -240,7 +240,7 @@ end
 -- Attacks another entity, taking this entity's presetDamage value in account for the damage calculation
 function Attack(target, coeff)
     if type(val) ~= "number" and type(target) ~= "table" and type(target.name) ~= "string" then
-        error("entity.Attack() needs one entity and one number as arguments.")
+        error("entity.Attack() needs one entity and one number as arguments.", 2)
     end
     return CYK.AtkMgr.Attack(target.ID, target.UI ~= nil, ID, UI ~= nil, coeff)
 end
@@ -248,7 +248,7 @@ end
 -- Starts one of this entities' animations. These animations can be found in the table "animations"
 function SetCYKAnimation(anim)
     if type(anim) ~= "string" and type(from) ~= "table" and type(from.name) ~= "string" then
-        error("entity.SetCYKAnimation() needs one string as argument.")
+        error("entity.SetCYKAnimation() needs one string as argument.", 2)
     end
     return CYK.SetAnim(self, anim)
 end
@@ -294,13 +294,13 @@ function AddAct(name, description, tpCost, requiredPlayers)
 
     -- Function usage checking
     if type(name) ~= "string" then
-        error("The first argument of CYK.AddAct() must be a string. (name)")
+        error("The first argument of CYK.AddAct() must be a string. (name)", 2)
     elseif type(description) ~= "string" then
-        error("The second argument of CYK.AddAct() must be a string. (description)")
+        error("The second argument of CYK.AddAct() must be a string. (description)", 2)
     elseif type(tpCost) ~= "number" or tpCost < 0 or tpCost > 100 then
-        error("The third argument of CYK.AddAct() must be a number between 0 and 100. (tpCost)")
+        error("The third argument of CYK.AddAct() must be a number between 0 and 100. (tpCost)", 2)
     elseif requiredPlayers ~= nil and type(requiredPlayers) ~= "table" then
-        error("The fourth argument of CYK.AddAct() must be a table of string values or nil. (requiredPlayers)")
+        error("The fourth argument of CYK.AddAct() must be a table of string values or nil. (requiredPlayers)", 2)
     elseif acts[name] then
         if CYKDebugLevel > 1 then
             DEBUG("[WARN] The act command " .. name .. " already exists in " .. scriptName .. "'s act command database.")

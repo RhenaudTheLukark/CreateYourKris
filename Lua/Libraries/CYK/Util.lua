@@ -2,7 +2,7 @@
 -- Returns a key of the table if this object is found
 function table.containsObj(tab, obj, valueOnly)
     if type(tab) ~= "table" then
-        error("Can't use table.containsObj with a " .. type(tab) .. "!")
+        error("Can't use table.containsObj with a " .. type(tab) .. "!", 2)
     end
     for k, v in pairs(tab) do
         if (not valueOnly and k == obj) or v == obj then
@@ -69,7 +69,7 @@ function NumberToHex(number)
             hex = (tempHex < 10 and tostring(tempHex) or tostring(string.char(string.byte('a') + tempHex - 10))) .. hex
         until number == 0
     else
-        error("NumberToHex() needs a number variable.")
+        error("NumberToHex() needs a number variable.", 2)
     end
 
     return hex

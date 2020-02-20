@@ -60,7 +60,7 @@ return function(self)
         -- If the current animation doesn't exist, abort
         if not animObject then
             if CYKDebugLevel > 0 then
-                error("[WARN] The animation " .. animName .. " of the " .. (entity.UI and "player" or "enemy") .. " " .. tostring(entity.sprite["anim"]) .. " doesn't exist.")
+                error("[WARN] The animation " .. animName .. " of the " .. (entity.UI and "player" or "enemy") .. " " .. tostring(entity.sprite["anim"]) .. " doesn't exist.", 2)
             end
             return
         end

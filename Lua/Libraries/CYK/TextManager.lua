@@ -211,7 +211,7 @@ return function(CYK)
         Player.sprite.SetParent(CYK.UI.hider)
 
         if #choices == 0 then
-            error("Can't have a choice with 0 options!")
+            error("Can't have a choice with 0 options!", 2)
         end
 
         local choiceLimit = 3 * (twoColumns and 2 or 1)
@@ -352,7 +352,7 @@ return function(CYK)
     function SetFaceSprite(faceSprite)
         local faceSpriteData = string.split(faceSprite, '.')
         if #faceSpriteData ~= 3 then
-            error("SetFaceSprite needs an argument which is exactly composed of the name of the type of the entity, a dot, the name of the entity, a dot and the name of the faceSprite.\nExample: Players.Ralsei.Normal, Monsters.Poseur.Pissed")
+            error("SetFaceSprite needs an argument which is exactly composed of the name of the type of the entity, a dot, the name of the entity, a dot and the name of the faceSprite.\nExample: Players.Ralsei.Normal, Monsters.Poseur.Pissed", 2)
         end
         CYK.TxtMgr.faceSprite.alpha = 1
         CYK.TxtMgr.faceSprite.Set("CreateYourKris/" .. faceSpriteData[1] .. "/" .. faceSpriteData[2] .. "/FaceSprite/" .. faceSpriteData[3])

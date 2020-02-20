@@ -90,8 +90,8 @@ function OnHit(bullet)
         playerIDs = type(playerIDs) == "table" and playerIDs or { playerIDs }
         -- Override: bullet["target"] overrides bullet["from"]
         if bullet["target"] then
-            if type(bullet["target"]) ~= "number" then                                       error("bullet[\"target\"] must be an integer if it's set!")
-            elseif bullet["target"] < 0 or bullet["target"] > #Encounter["CYK"].players then error("bullet[\"target\"] must be an integer between 1 and the number of active players!")
+            if type(bullet["target"]) ~= "number" then                                       error("bullet[\"target\"] must be an integer if it's set!", 2)
+            elseif bullet["target"] < 0 or bullet["target"] > #Encounter["CYK"].players then error("bullet[\"target\"] must be an integer between 1 and the number of active players!", 2)
             elseif bullet["target"] == 0 then                                                playerIDs = SuperCall(Encounter, "CYK.GetAvailableEntities", true)
             else                                                                             playerIDs = { bullet["target"] }
             end

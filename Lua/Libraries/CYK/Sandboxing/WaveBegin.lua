@@ -1,7 +1,7 @@
 require "Libraries/CYK/Sandboxing/All"
 
 -- CYK is the environment!
-getset.defineProperty(_ENV, "CYK", { get = function() return Encounter["CYK"] end, set = function(value) error("Can't set the value CYK in a wave!") end })
+getset.defineProperty(_ENV, "CYK", { get = function() return Encounter["CYK"] end, set = function(value) error("Can't set the value CYK in a wave!", 2) end })
 
 -- As a wave is a different script, we have to update State() to go through the encounter script
 function State(state, arg1, arg2, arg3)
@@ -38,10 +38,10 @@ end
 -- Is this one even in the documentation?
 function CreateProjectileLayer(name, relatedTag, before)
     if type(name) ~= "string" then
-        error("CreateProjectileLayer needs a string for its name parameter.")
+        error("CreateProjectileLayer needs a string for its name parameter.", 2)
     end
     if type(relatedTag) ~= "string" and relatedTag ~= "nil" then
-        error("CreateProjectileLayer needs a string for its relatedTag parameter.")
+        error("CreateProjectileLayer needs a string for its relatedTag parameter.", 2)
     elseif relatedTag == nil then
         relatedTag = ""
     end
@@ -74,9 +74,9 @@ function Arena.MoveAndResize(x, y, width, height, movePlayer, immediate)   _Aren
 function Arena.MoveToAndResize(x, y, width, height, movePlayer, immediate) _Arena.MoveToAndResize(x, y, width, height, movePlayer, immediate) end
 
 -- New Arena functions and values
-getset.defineProperty(Arena, "inner",    { get = function() return FakeArena.arena["inner"] end, set = function(value) error("Can't set the Arena's inner sprite!") end })
-getset.defineProperty(Arena, "outer",    { get = function() return FakeArena.arena          end, set = function(value) error("Can't set the Arena's outer sprite!") end })
-getset.defineProperty(Arena, "rotation", { get = function() return FakeArena.arena.rotation end, set = function(value) FakeArena.RotateArena(value, false)            end })
+getset.defineProperty(Arena, "inner",    { get = function() return FakeArena.arena["inner"] end, set = function(value) error("Can't set the Arena's inner sprite!", 2) end })
+getset.defineProperty(Arena, "outer",    { get = function() return FakeArena.arena          end, set = function(value) error("Can't set the Arena's outer sprite!", 2) end })
+getset.defineProperty(Arena, "rotation", { get = function() return FakeArena.arena.rotation end, set = function(value) FakeArena.RotateArena(value, false)             end })
 
 function Arena.Update() FakeArena.Update() end
 
