@@ -12,6 +12,11 @@ return function ()
         error("Create Your Kris can only be used in Create Your Frisk v0.6.2.2 or a newer version.")
     end
 
+    local spr = CreateSprite("bg")
+    spr.Remove()
+    if spr.isactive then error("Please disable CYF's Retrocompatibility mode before starting this encounter!", 0) end
+    spr = nil
+
     -- Almost everything in CYK is handled in the state NONE!
     OldState("NONE")
 
