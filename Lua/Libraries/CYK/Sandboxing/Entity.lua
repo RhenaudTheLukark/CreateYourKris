@@ -141,9 +141,9 @@ function MoveTo(x, y)
         error("entity.MoveTo() needs two numbers as arguments.")
     end
     sprite.x = x
-    posX = absx
+    posX = sprite.absx
     sprite.y = y
-    posY = absy
+    posY = sprite.absy
 end
 
 -- Moves the entity from the bottom left corner of the screen
