@@ -11,7 +11,21 @@ I would also like to say that it would be easier for me to provide any help thro
 Finally, like any software, CYK is not perfect, and there is always room for improvement: if you want to contribute to CYK and make it a better engine for everyone, feel free to fork this repository and start working on it! I'll be glad to discuss any changes you'd like to apply to this engine, and even include said changes if they are appropriate!
 
 Create Your Kris would have never existed without the help of: 
-    - /u/DimitriB1 | DimitriB1#7677 for giving me some help with Kris' sprites and for giving me an arena library I was able to adapt to CYK! 
-    - /u/heartlessmushroom | heartlessmushroom#0194 for the Player name font, the magnificent Poseur animation and for the hours spent testing the engine! 
-    - /u/WD200019 | WD200019#8327 who helped me with the code when I needed help the most, for some scripts he gave me and Lua hacks we found together, and for the hours spent testing the engine!
-    - Ally 🍦#1540 for the hours spent testing the engine!
+
+- @DimitriBarronmore | DimitriB1#7677
+    - Giving me some help with Kris' sprites
+    - Giving me an arena library I was able to adapt to CYK
+    - The hours spent testing the engine
+- @heartlessmushroom | heartlessmushroom#0194
+    - The Player name font
+    - The magnificent Poseur animation
+    - The hours spent testing the engine
+- @Eir-nya | Eir#9375
+    - At least half of the documentation
+    - The DELTARUNE game over recreation, ScriptOwnerBypass, and rotatable collision libraries
+    - GetModName
+    - The Michael Jackson Kris sprites in Crate Your Kris
+    - Five merged Pull Requests
+    - The hours spent testing the engine
+- @AllyTally | Ally 🍦#1540
+    - The hours spent testing the engine
