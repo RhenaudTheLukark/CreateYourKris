@@ -318,13 +318,13 @@ return function(self)
             end
             local i = targetID
             repeat
-                i = i + 1
                 if i > #pool then
                     i = 1
                 end
                 if pool[i].hp > 0 and pool[i].isactive then
                     break
                 end
+                i = i + 1
             until i == targetID
             returnedTarget = i
         end
