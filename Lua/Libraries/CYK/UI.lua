@@ -536,16 +536,14 @@ return function(CYK)
                 local player = CYK.players[i]
                 local playerUI = player.UI
                 if playerUI.shown then
-                    if isAnyTired and not playerUI.buttons[2]["isAct"] and table.containsObj(player.abilities, "Pacify") and CYK.TP.trueValue >= CYK.spells.Pacify.tpCost then
-                        playerUI.buttons[2]["glow"].alpha = alpha
-                    elseif playerUI.buttons[2]["glow"] then
-                        playerUI.buttons[2]["glow"].alpha = 0
+                    if playerUI.buttons[2]["glow"] then
+                        if isAnyTired and table.containsObj(player.abilities, "Pacify") and CYK.TP.trueValue >= CYK.spells.Pacify.tpCost then
+                            playerUI.buttons[2]["glow"].alpha = alpha
+                        else
+                            playerUI.buttons[2]["glow"].alpha = 0
+                        end
                     end
-                    if isAnySpareable then
-                        playerUI.buttons[4]["glow"].alpha = alpha
-                    else
-                        playerUI.buttons[4]["glow"].alpha = 0
-                    end
+                    playerUI.buttons[4]["glow"].alpha = isAnySpareable and alpha or 0
                 end
             end
         end
