@@ -152,7 +152,7 @@ return function(CYK)
                     attackingPlayer.done = false
                     player.UI.faceSprite.Set("CreateYourKris/Players/" .. player.sprite["anim"] .. "/UI/Normal")
                     -- Attack the enemy, and if the attack is not missed, start a slashing animation on the target enemy!
-                    if self.Attack(enemy.ID, false, attackingPlayer.playerID, true, attackingPlayer.coeff) and attackingPlayer.coeff > 0 then
+                    if self.Attack(enemy.ID, false, player.ID, true, attackingPlayer.coeff) and attackingPlayer.coeff > 0 then
                         local atkSprite = CreateSprite("empty", "Entity")
                         atkSprite.absx = enemy.posX + enemy.sprite.width / 2
                         atkSprite.absy = enemy.posY + enemy.sprite.height / 2
@@ -206,8 +206,8 @@ return function(CYK)
     function self.Attack(targetID, isTargetPlayer, attackerID, isAttackerPlayer, coeff)
         local target = (isTargetPlayer and CYK.allPlayers or CYK.allEnemies)[targetID]
         local attacker = (isAttackerPlayer and CYK.allPlayers or CYK.allEnemies)[attackerID]
-        -- Do not attack a dead entity
-        if target.hp < 0 then
+        -- Do not attack a dead / disabled entity
+        if target.hp < 0 or not target.isactive then
             return false
         end
         -- If a Player is targeted, shake the screen

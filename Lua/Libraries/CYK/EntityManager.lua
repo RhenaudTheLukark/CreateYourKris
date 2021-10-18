@@ -294,8 +294,8 @@ return function(self)
         local tab = { }
         local pool = isPlayer and self.players or self.enemies
         for i = 1, #pool do
-            if pool[i].hp > 0 then
-                table.insert(tab, i)
+            if pool[i].hp > 0 and pool[i].isactive then
+                table.insert(tab, pool[i].ID)
             end
         end
         return tab
@@ -307,7 +307,7 @@ return function(self)
         if not returnAsID then returnAsID = isPlayer end
         local returnedTarget = target
         if type(target) == "number" then
-            target = isPlayer and self.players[target] or self.enemies[target]
+            target = isPlayer and self.allPlayers[target] or self.allEnemies[target]
         end
         local pool = target.UI and self.players or self.enemies
         if not target.isactive or target.hp < 0 then
@@ -547,7 +547,7 @@ return function(self)
             self.lastBgAnim = self.Background.anim
             if self.Background.maxHideTimer > 0 then
                 for i = 1, #self.players do
-                    if self.players[i].hp <= 0 or (self.playerTargets[1] ~= 0 and not table.containsObj(self.playerTargets, i, true)) then
+                    if self.players[i].hp <= 0 or (self.playerTargets[1] ~= 0 and not table.containsObj(self.playerTargets, self.players[i].ID, true)) then
                         local coeff = self.Background.hideTimer / self.Background.maxHideTimer * 0.5
                         self.players[i].sprite["f"].alpha = self.Background.anim == "show" and coeff or 0.5 - coeff
                         self.players[i].sprite["f"].color = { 0, 0, 0 }
@@ -558,7 +558,7 @@ return function(self)
             end
         elseif self.lastBgAnim then
             for i = 1, #self.players do
-                if self.players[i].hp <= 0 or (self.playerTargets[1] ~= 0 and not table.containsObj(self.playerTargets, i, true)) then
+                if self.players[i].hp <= 0 or (self.playerTargets[1] ~= 0 and not table.containsObj(self.playerTargets, self.players[i].ID, true)) then
                     self.players[i].sprite["f"].alpha = self.lastBgAnim == "show" and 0 or 0.5
                 else
                     self.players[i].sprite["f"].alpha = 0

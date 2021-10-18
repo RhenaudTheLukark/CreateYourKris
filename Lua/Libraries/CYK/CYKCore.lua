@@ -499,7 +499,7 @@ return function ()
             local enemy = self.enemies[i]
             -- If the enemy's targetType value is a number, then it'll always target the same player
             if type(enemy.targetType) == "number" and enemy.targetType > 0 and enemy.targetType < #self.allPlayers then
-                enemy.target = self.GetEntityUp(self.allPlayers[enemy.targetType], true)
+                enemy.target = self.players[self.GetEntityUp(self.allPlayers[enemy.targetType], true)].ID
             else
                 local availablePlayers = self.GetAvailableEntities(true, true)
 
@@ -923,7 +923,7 @@ return function ()
             self.Background.Display(false, 30)
             -- Show the "TARGET" cursor on each Player who can be hit during this wave
             for i = 1, #self.players do
-                if self.players[i].hp > 0 and (table.containsObj(self.playerTargets, i, true) or self.playerTargets[1] == 0) then
+                if self.players[i].hp > 0 and (table.containsObj(self.playerTargets, self.players[i].ID, true) or self.playerTargets[1] == 0) then
                     local targetShift = self.players[i].animations[self.players[i].sprite["currAnim"]][3].targetShift
                     self.players[i].targetCursor.x = targetShift and targetShift[1] or 0
                     self.players[i].targetCursor.y = targetShift and targetShift[2] or 0

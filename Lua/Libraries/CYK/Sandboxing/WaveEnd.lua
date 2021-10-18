@@ -103,7 +103,11 @@ function OnHit(bullet)
             playerID = SuperCall(Encounter, "CYK.GetEntityUp", playerID, true)
             Encounter["players"][playerID].presetDamage = damageForced or
                 math.ceil(-SuperCall(Encounter, "CYK.AtkMgr.ComputeDamage", playerID, enemyID, damageMult, true, false) / #playerIDs)
-            SuperCall(Encounter, "CYK.AtkMgr.Attack", playerID, true, enemyID, false, damageMult or 1)
+            -- If the attack was unsuccessful, pick another available player
+            if not SuperCall(Encounter, "CYK.AtkMgr.Attack", playerID, true, enemyID, false, damageMult or 1) then
+                local availablePlayers = SuperCall(Encounter, "CYK.GetAvailableEntities", true)
+                SuperCall(Encounter, "CYK.AtkMgr.Attack", availablePlayers[math.random(#availablePlayers)], true, enemyID, false, damageMult or 1)
+            end
         end
 
         -- Plays the hurt sound and makes the player invulnerable for a while
