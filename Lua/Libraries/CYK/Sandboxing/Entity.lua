@@ -92,6 +92,7 @@ function Kill(cancelAnim)
     else
         SetActive(false)
         spareOrFleeAnim = "flee"
+        CYK.stronger = true
         if not cancelAnim then
             spareOrFleeStart = CYK.frame
         end
