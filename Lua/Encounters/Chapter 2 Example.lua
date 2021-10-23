@@ -92,7 +92,7 @@ end
 function HandleSpare(player, enemy)
     -- If the enemy won't be spared this turn, then increase the percentage
     if enemy.GetMercyPercent()<100 then
-        enemy.ChangeMercyPercent(200)
+        enemy.ChangeMercyPercent(20)
     end
 end
 
