@@ -379,8 +379,20 @@ return function(CYK)
     end
 
     self.HPChangeTexts = { }
-    function self.CreateHPChangeText(value, entity, color)
+    function self.CreateChangeText(value, entity, color, isMercy)
         local container = { }
+        if isMercy==nil then isMercy=false end
+
+        --Change the color of the text if the value immediately spare the enemy (>100%) or decrease the percent for the Mercy system
+        if isMercy then
+            if value>=100 then
+                color={0, 1, 0}
+            elseif value<0 then
+                color={1, 0, 0}
+            else
+                color={1, 1, 1}
+            end
+        end
 
         local HPChangeTextEntity = 1
         -- Maximum 50 change hp objects at once for each entity
@@ -405,23 +417,39 @@ return function(CYK)
         container.parent = parent
 
         local isWord = false
-        if value == "Down" or value == "Max" or value == "Miss" or value == "Up" then
-            container[1] = value
-            isWord = true
-        else
-            if value < 0 then
-                value = -value
+        if not isMercy then
+            if value == "Down" or value == "Max" or value == "Miss" or value == "Up" then
+                container[1] = value
+                isWord = true
+            else
+                if value < 0 then
+                    value = -value
+                end
+                while value > 0 do
+                    local val = value % 10
+                    table.insert(container, 1, val)
+                    value = math.floor(value / 10)
+                end
             end
-            while value > 0 do
+            container.isWord = isWord
+        else
+            local valueBeforeModif=value
+            if value<0 then value=-value end
+            table.insert(container, 1, "%")
+            while value>0 do
                 local val = value % 10
                 table.insert(container, 1, val)
                 value = math.floor(value / 10)
             end
+            if valueBeforeModif>0 then
+                table.insert(container, 1, "+")
+            else
+                table.insert(container, 1, "-")
+            end
         end
-        container.isWord = isWord
 
         for i = 1, #container do
-            local HPNumber = CreateSprite("CreateYourKris/UI/HPChange/" .. tostring(container[i]))
+            local HPNumber = CreateSprite("CreateYourKris/UI/"..(isMercy and "MercyChange" or "HPChange").."/" .. tostring(container[i]))
             HPNumber.SetParent(parent)
             HPNumber.SetPivot(1, 0)
             HPNumber.absx = container.x - (isWord and 0 or 20 * (#container - i))
@@ -525,7 +553,7 @@ return function(CYK)
             if CYK.enemies[i].tired then
                 isAnyTired = true
             end
-            if CYK.enemies[i].canspare then
+            if (chapter2 and CYK.enemies[i].mercyPercent>=100) or (not chapter2 and CYK.enemies[i].canspare) then
                 isAnySpareable = true
             end
         end

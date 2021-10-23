@@ -254,6 +254,17 @@ return function(self)
             entity.fleeSpritesNeeded = 0
             entity.fleeSpritesEnabled = 0
             entity.fleeDrops = nil
+
+            -- Variables related to the mercy percentage.
+            if chapter2 then
+                entity.mercyPercent=0
+                if entity.canspare~=nil then
+                    entity.useMercyCounter=entity.canspare
+                else
+                    entity.useMercyCounter=true
+                end
+                entity.canspare=false
+            end
         end
 
         -- Target of this entity
