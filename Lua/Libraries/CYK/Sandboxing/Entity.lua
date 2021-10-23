@@ -325,7 +325,7 @@ end
 -- Returns the percentage of mercy of an enemy. Returns -1 if the enemy can't be spared.
 function GetMercyPercent(of)
     if not chapter2 then
-        error("entity.GetMercyPercent() is a function only usable in a mod with the functionnabilities of Chapter 2!\n\nSet chapter2 to true in the Encounter file to access it.")
+        error("entity.GetMercyPercent() is a function only usable in a mod with the features of Chapter 2!\n\nSet chapter2 to true in the Encounter file to access it.")
     end
     if of==nil then of=self end
     if type(of) ~= "table" and type(of.name) ~= "string" or of.IsPlayer() then error("entity.GetMercyPercent() needs an enemy as its first argument.") end

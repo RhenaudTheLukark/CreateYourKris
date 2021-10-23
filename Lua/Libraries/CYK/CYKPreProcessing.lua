@@ -146,7 +146,7 @@ function CYKDataChecker()
     if chapter2 == nil then
         if debug then DEBUG("chapter2 was not found. Setting to false.") end
         chapter2=false
-    elseif type(chapter2)~="boolean" then error("The encounter must have a variable named chapter2 as a boolean, but it is a "..type(chapter2)..". chapter2 tells the engine if it must use or not functionnalities from Deltarune Chapter 2 or not, such as the new Game Over or the new mercy system.")
+    elseif type(chapter2)~="boolean" then error("The encounter must have a variable named chapter2 as a boolean, but it is a "..type(chapter2)..". chapter2 tells the engine if it must use or not features from Deltarune Chapter 2 or not, such as the new Game Over or the new mercy system.")
     end
 
 
