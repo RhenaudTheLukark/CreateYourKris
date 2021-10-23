@@ -960,17 +960,17 @@ return function ()
                 self.SetAnim(self.players[i], "EndBattle")
                 if chapter2 then
                     if self.stronger then
-                        local hpAdd={2, 2, 2}
                         local p_hpAdd=self.players[i].hpAdd
-                        if p_hpAdd~=nil then
+                        if p_hpAdd then
                             if type(p_hpAdd)~="number" then
                                 if CYKDebugLevel>1 then DEBUG("entity.hpAdd must be a number but it was a "..type(p_hpAdd)..". The default value (2) will be used.") end
-                            else
-                                hpAdd[i]=p_hpAdd
+                                p_hpAdd=2
                             end
+                        else
+                            p_hpAdd=2
                         end
-                        self.players[i].maxhp=self.players[i].maxhp+hpAdd[i]
-                        self.players[i].hp=self.players[i].hp+hpAdd[i]
+                        self.players[i].maxhp=self.players[i].maxhp+p_hpAdd
+                        self.players[i].hp=self.players[i].hp+p_hpAdd
                         self.players[i].UpdateUI()
                     end
                 end
