@@ -381,7 +381,6 @@ return function(CYK)
     self.HPChangeTexts = { }
     function self.CreateChangeText(value, entity, color, isMercy)
         local container = { }
-        if isMercy==nil then isMercy=false end
 
         --Change the color of the text if the value immediately spare the enemy (>100%) or decrease the percent for the Mercy system
         if isMercy then
