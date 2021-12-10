@@ -259,11 +259,11 @@ function AddSpell(name, description, tpCost, targetType)
     return CYK.AddSpell(name, description, tpCost, targetType)
 end
 
--- Modify the pourcentage of mercy of an enemy
+-- Modify the pourcentage of mercy of an enemy and verify and they can be now spare
 function ChangeMercyPercent(val, target, text, sound)    
-    if not chapter2 then error("entity.ChangeMercyPercent() is a Chapter 2-only function!\n\nSet chapter2 to true in the Encounter file to access it!") end
+    if not chapter2 then error("entity.ChangeMercyPercent() is a Chapter 2-only function!\n\nSet chapter2 to true in the Encounter file to access it!", 2) end
     if type(val)~="number" then
-        error("entity.ChangeMercyPercent() needs a number as its first argument.")
+        error("entity.ChangeMercyPercent() needs a number as its first argument.", 2)
     end
     val=math.floor(val+0.5)
         
@@ -271,9 +271,9 @@ function ChangeMercyPercent(val, target, text, sound)
     if text  ==nil then text=  true end
     if sound ==nil then sound= true end
     if type(text)~="boolean" then
-        error("entity.ChangeMercyPercent() needs a boolean as its third argument.")
+        error("entity.ChangeMercyPercent() needs a boolean as its third argument.", 2)
     elseif type(sound)~="boolean" then
-        error("entity.ChangeMercyPercent() needs a boolean as its fourth argument.")
+        error("entity.ChangeMercyPercent() needs a boolean as its fourth argument.", 2)
     end
     local targetString=false
     if type(target)=="string" then
@@ -281,31 +281,33 @@ function ChangeMercyPercent(val, target, text, sound)
     end
 
     if (type(target)~="table" or (type(target)=="table" and type(target.name)~="string")) and not targetString then
-        error("entity.ChangeMercyPercent() needs either an enemy or a string saying \"All\" as its second argument.")
+        error("entity.ChangeMercyPercent() needs either an enemy or a string saying \"All\" as its second argument.", 2)
     elseif type(target)=="table" and target.IsPlayer() then
-        error("entity.ChangeMercyPercent() must be used on an enemy.")
+        error("entity.ChangeMercyPercent() must be used on an enemy.", 2)
     end
 
     if target=="All" or target=="all" then
         for i=1,#CYK.enemies do
             if not CYK.enemies[i].useMercyCounter then
-                if CYKDebugLevel>0 then DEBUG("[INFO] entity.ChangeMercyPercent() was called but the enemy's \"canspare\" has been set to false.") end
+                if CYKDebugLevel>0 then DEBUG("[INFO] entity.ChangeMercyPercent() was called but the enemy's \"useMercyCounter\" has been set to false.") end
             else
                 CYK.enemies[i].mercyPercent=CYK.enemies[i].mercyPercent+val
                 if CYK.enemies[i].mercyPercent>100 then CYK.enemies[i].mercyPercent=100
                 elseif CYK.enemies[i].mercyPercent<0 then CYK.enemies[i].mercyPercent=0 end
+                if CYK.enemies[i].mercyPercent==100 then CYK.enemies[i].canspare=true end
             end
         end
     elseif not targetString then
         if not target.useMercyCounter then
-            if CYKDebugLevel>0 then DEBUG("[INFO] entity.ChangeMercyPercent() was called but the enemy's \"canspare\" has been set to false.") end
+            if CYKDebugLevel>0 then DEBUG("[INFO] entity.ChangeMercyPercent() was called but the enemy's \"useMercyCounter\" has been set to false.") end
             return
         end
         target.mercyPercent=target.mercyPercent+val
         if target.mercyPercent>100 then target.mercyPercent=100
         elseif target.mercyPercent<0 then target.mercyPercent=0 end
+        if target.mercyPercent==100 then target.canspare=true end
     else
-        error("entity.ChangeMercyPercent() needs either an enemy or a string saying \"All\" as its second argument.")
+        error("entity.ChangeMercyPercent() needs either an enemy or a string saying \"All\" as its second argument.", 2)
     end
 
     if sound then
@@ -326,12 +328,12 @@ end
 -- Returns the percentage of mercy of an enemy. Returns -1 if the enemy can't be spared.
 function GetMercyPercent(of)
     if not chapter2 then
-        error("entity.GetMercyPercent() is a function only usable in a mod with the features of Chapter 2!\n\nSet chapter2 to true in the Encounter file to access it.")
+        error("entity.GetMercyPercent() is a function only usable in a mod with the features of Chapter 2!\n\nSet chapter2 to true in the Encounter file to access it.", 2)
     end
     if of==nil then of=self end
-    if type(of) ~= "table" and type(of.name) ~= "string" or of.IsPlayer() then error("entity.GetMercyPercent() needs an enemy as its first argument.") end
+    if type(of) ~= "table" and type(of.name) ~= "string" or of.IsPlayer() then error("entity.GetMercyPercent() needs an enemy as its first argument.", 2) end
     if not of.useMercyCounter then
-        if CYKDebugLevel>0 then DEBUG("[INFO] entity.GetMercyPercent() was called but the enemy's \"canspare\" has been set to false.") end
+        if CYKDebugLevel>0 then DEBUG("[INFO] entity.GetMercyPercent() was called but the enemy's \"useMercyCounter\" has been set to false.", 2) end
         return -1
     end
     return of.mercyPercent

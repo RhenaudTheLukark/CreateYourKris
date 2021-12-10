@@ -1,5 +1,8 @@
 -- This library handles everything related to entities
 -- No wonder why it got its current name!
+
+
+
 return function(self)
     -- Checks if a loaded Entity file is valid
     -- If anything is wrong, it can throw errors or warnings.
@@ -255,15 +258,15 @@ return function(self)
             entity.fleeSpritesEnabled = 0
             entity.fleeDrops = nil
 
-            -- Variables related to the mercy percentage.
+            -- Variables related to the mercy counter.
             if chapter2 then
-                entity.mercyPercent=0
-                if entity.canspare~=nil then
-                    entity.useMercyCounter=entity.canspare
-                else
-                    entity.useMercyCounter=true
+                if entity.useMercyCounter then
+                    entity.mercyPercent=0
+                    entity.canspare=false
                 end
-                entity.canspare=false
+
+                --local getset = require("Libraries/CYK/GetSet")
+                --getset.defineProperty(entity, "canspare", {get= function() return entity._canspare end, set = function() error("When chapter2 is set to true, canspare is read-only.") end})
             end
         end
 
@@ -512,7 +515,6 @@ return function(self)
         bubbleSprite.y = (bubbleData.side == "up"    and bubbleSprite.height or
                           bubbleData.side == "down"  and -enemy.sprite.height or
                                                          (bubbleSprite.height - enemy.sprite.height) / 2) + enemy.bubbleOffsetY + 0.01
-
         return bubbleSprite, bubbleData
     end
 

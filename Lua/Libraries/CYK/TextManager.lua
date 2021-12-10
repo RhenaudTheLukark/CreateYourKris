@@ -337,14 +337,16 @@ return function(CYK)
                         mercybar1.y = 84 - (30 * (i - start))
                         mercybar1.color = { 255/255, 80/255, 32/255 }
 
-                        mercybar2 = CreateSprite("px", "LowerUI")
-                        mercybar2.SetParent(mercybar1)
-                        mercybar2.Scale(81, 16)
-                        mercybar2.SetAnchor(0, 0)
-                        mercybar2.SetPivot(0, 0)
-                        mercybar2.x = 0
-                        mercybar2.y = 0
-                        mercybar2.color = { 1, 1, 0 }
+                        if targetPool[i].useMercyCounter then
+                            mercybar2 = CreateSprite("px", "LowerUI")
+                            mercybar2.SetParent(mercybar1)
+                            mercybar2.Scale(81, 16)
+                            mercybar2.SetAnchor(0, 0)
+                            mercybar2.SetPivot(0, 0)
+                            mercybar2.x = 0
+                            mercybar2.y = 0
+                            mercybar2.color = { 1, 1, 0 }
+                        end
 
                         if targetPool[i].useMercyCounter then
                             mercybarText = CreateText("0%", {0, 0}, 999, "LowerUI")
@@ -416,13 +418,15 @@ return function(CYK)
             local lifebar = self.lifebars[i]
             lifebar[1].Remove()
             lifebar[2].Remove()
-            --A lot of ifs to see if we're not about to delete something that wasn't set due to Chapter 2's new stuff
+            --A lot of ugly ifs to see if we're not about to delete something that wasn't set due to Chapter 2's new stuff
             if chapter2 and #lifebar>2 then
                 lifebar[3].DestroyText()
                 lifebar[4].DestroyText()
                 if #lifebar>4 then
                     lifebar[5].Remove()
-                    lifebar[6].Remove()
+                    if lifebar[6] then
+                        lifebar[6].Remove()
+                    end
                     if lifebar[7] then
                         lifebar[7].DestroyText()
                     end

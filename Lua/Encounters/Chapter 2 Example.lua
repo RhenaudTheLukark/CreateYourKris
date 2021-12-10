@@ -9,7 +9,7 @@ arenacolor = { 0, 1, 0 } -- Color of the sides of the at the start of the next w
 arenarotation = 0        -- Rotation of the arena at the start of the wave.
 autolinebreak = true     -- Returns the text to the next line if it goes past a text object's boundary.
 
-chapter2=true            -- Determine if CYK must use Chapter 2's features or not
+chapter2=true            -- Determine if CYK must use Chapter 2's functionnalities or not
 
 -- List of Players. Each Player added here must have a script with the same name in the mod's Lua/Players folder.
 players = { "Kris", "Susie", "Ralsei" }
@@ -91,7 +91,7 @@ end
 -- Can be called several times per turn
 function HandleSpare(player, enemy)
     -- If the enemy won't be spared this turn, then increase the percentage
-    if enemy.GetMercyPercent()<100 then
+    if not enemy.canspare then
         enemy.ChangeMercyPercent(20)
     end
 end

@@ -276,7 +276,7 @@ return function ()
                         end
                         -- Build the SPARE text
                         local text = player.name .. (self.CrateYourKris and " SPERD " or " spared ") .. enemy.name .. (self.CrateYourKris and "!!" or "!")
-                        if (chapter2 and enemy.mercyPercent<100) or (not chapter2 and not enemy.canspare) then
+                        if not enemy.canspare then
                             text = text .. (self.CrateYourKris and "\nBTU NO [color:ffff00]YEELO[color:ffffff]!?!" or "\nBut his name was not [color:ffff00]YELLOW[color:ffffff]...")
                         end
                         self.TxtMgr.SetText({ text })
@@ -389,14 +389,9 @@ return function ()
                 local gradientName = ""
                 -- Adds colors to the enemy names if they're spareable or pacifiable
                 if player.targetType == "Enemy" then
-                    if chapter2 then
-                        pre = entity.mercyPercent>=100 and "[color:ffff00]" or entity.tired and "[color:00b2ff]" or ""
-                        post = "[color:ffffff]      " .. (entity.mercyPercent>=100 and "è" or "ê") .. (entity.tired and "é[color:808080](Tired)[color:ffffff]" or "ê")
-                    else
-                        pre = entity.canspare and "[color:ffff00]" or entity.tired and "[color:00b2ff]" or ""
-                        post = "[color:ffffff]      " .. (entity.canspare and "è" or "ê") .. (entity.tired and "é[color:808080](Tired)[color:ffffff]" or "ê")
-                    end
-                    if (chapter2 and entity.mercyPercent>=100) or (not chapter2 and canspare) and entity.tired then
+                    pre = entity.canspare and "[color:ffff00]" or entity.tired and "[color:00b2ff]" or ""
+                    post = "[color:ffffff]      " .. (entity.canspare and "è" or "ê") .. (entity.tired and "é[color:808080](Tired)[color:ffffff]" or "ê")
+                    if canspare and entity.tired then
                         gradientName = "[color:00b2ff]"
                         local chars = #name - 1
                         -- Gradient effect

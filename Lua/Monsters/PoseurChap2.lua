@@ -24,7 +24,7 @@ hp = 250
 atk = 10
 def = 2
 dialogbubble = "DRBubble" -- See documentation for what bubbles you have available.
-canspare = true
+useMercyCounter=true
 check = "Check message goes here."
 isTiredWhenHPLow=true
 
