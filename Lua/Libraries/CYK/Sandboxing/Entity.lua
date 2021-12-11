@@ -317,10 +317,18 @@ function ChangeMercyPercent(val, target, text, sound)
     if text then
         if targetString then
             for i=1,#CYK.enemies do
-                CYK.UI.CreateChangeText(val, CYK.enemies[i], nil, true)
+                if not CYK.enemies[i].useMercyCounter then
+                    if CYKDebugLevel>0 then DEBUG("[INFO] entity.ChangeMercyPercent() was called but the enemy's \"useMercyCounter\" has been set to false.") end
+                else
+                    CYK.UI.CreateChangeText(val, CYK.enemies[i], nil, true)
+                end
             end
         else
-            CYK.UI.CreateChangeText(val, target, nil, true)
+            if not target.useMercyCounter then
+                if CYKDebugLevel>0 then DEBUG("[INFO] entity.ChangeMercyPercent() was called but the enemy's \"useMercyCounter\" has been set to false.") end
+            else
+                CYK.UI.CreateChangeText(val, target, nil, true)
+            end
         end
     end
 end
