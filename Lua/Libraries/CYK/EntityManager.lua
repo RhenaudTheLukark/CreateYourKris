@@ -1,8 +1,6 @@
 -- This library handles everything related to entities
 -- No wonder why it got its current name!
 
-
-
 return function(self)
     -- Checks if a loaded Entity file is valid
     -- If anything is wrong, it can throw errors or warnings.
