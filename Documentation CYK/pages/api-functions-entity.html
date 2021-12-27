@@ -245,7 +245,7 @@ it's w3c valid, at least
 
             <p>
                 <br><span class="function"><span class="CYK2"></span> <span class="number"></span> <span class="term">hpAdd</span></span>
-                The number of HPs that will be added to your entity's HPs and max HPs if the fight is ended with a least one enemy "killed". 2 by default.
+                The amount of HP that will be added to the entity's current MaxHP if at least one enemy was "killed" during this encounter. 2 by default.
             </p><br>
 
             <p>
@@ -380,9 +380,16 @@ it's w3c valid, at least
             </p><br>
 
             <p>
+                <span class="function"><span class="number"></span> <span class="term">mercyPercent [M]</span></span>
+                The percentage of mercy of an entity, going from 0 to 100.<br><br>
+
+                * Shouldn't be modified, use <span class="term">ChangeMercyPercent()</span> and <span class="term">GetMercyPercent()</span> instead.
+            </p><br>
+
+            <p>
                 <span class="function"><span class="CYK2"></span> <span class="term">ChangeMercyPercent(<span class="number"></span> value, <span class="entity"></span> <span class="userdata">OR</span> <span class="string"></span> target(s) = self,
                 <span class="boolean"></span> showText = true, <span class="boolean"></span> playSound = true)</span></span>
-                Changes the mercy percentage of the <span class="term">target(s)</span> by the indicated <span class="term">value</span> and will show the yellow text and play the sound effect that goes with it if <span class="term">showText</span> and <span class="term">useSound</span> respectively are set to true.
+                Changes the mercy percentage of the <span class="term">target(s)</span> by the indicated <span class="term">value</span> and will show the associated text and play the sound effect that goes with it if <span class="term">showText</span> and <span class="term">useSound</span> respectively are set to true.
                 <br><br>
                 <u>Usage:</u>
                 <ul>
@@ -399,9 +406,9 @@ it's w3c valid, at least
             </p><br>
 
             <p>
-                <span class="function"><span class="CYK2"></span> <span class="term">GetMercyPercent(<span class="entity"></span> target) returns <span class="number"></span></span></span>
-                Returns the percentage of mercy of the <span class="term">target</span>.<br>
-                If the Mercy counter of the <span class="term">target</span> is disabled, it'll return -1.
+                <span class="function"><span class="CYK2"></span> <span class="term">GetMercyPercent(<span class="entity"></span> target = self) returns <span class="number"></span></span></span>
+                Returns the mercy percentage of the <span class="term">target</span>.<br>
+                If the mercy counter of the <span class="term">target</span> is disabled, it'll return -1.
             </p>
 
 

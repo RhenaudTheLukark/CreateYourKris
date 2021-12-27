@@ -112,8 +112,8 @@ it's w3c valid, at least
 			</p>
 
             <p>
-                <br><span class="function"><span class="CYK2"></span><span class="boolean"></span> chapter2 [E/M/P]</span>
-                Activates all features from the Chapter 2 if it's true, only uses Chapter 1's otherwise.<br><br>
+                <br><span class="function"><span class="CYK"></span><span class="boolean"></span> chapter2 [E/M/P]</span>
+                If it's set to true, the encounter will be played as if it was made in Deltarune's Chapter 2 with its various features enabled. Otherwise, CYK will look and play like an encounter made in Deltarune's Chapter 1<br>
 
                 <div style="color:red;font-weight:bold;">Note: Changing this variable while the mod is running could lead to unwanted behavior!</div>
             </p>
@@ -668,18 +668,12 @@ animations = {
 				<br><span class="function"><span class="boolean"></span> <span class="term">canspare</span></span>
                 False by default. If you change this to true, your monster's name will turn yellow and it will be spareable.
                 <br><br>
-                <!--<span class="CYK2"></span> If <span class="term">chapter2</span> is set to true, <span class="term">canspare</span> will only act as a read-only variable returning true if the enemy can be spared and false otherwise.-->
-                <span class="CYK2"></span> If <span class="term">chapter2</span> is set to true, <span class="term">canspare</span> will indicates if the enemy will use the mercy counter and will be able to be spared through acts changing its percentage of mercy. If it's set to false, the counter will be deactivated and show a cross instead of a percentage.<br>Do note enemies can still be spared in that condition by calling <span class="term">Spare()</span>. True by default.
-			</p>
-
-            <!--<p>
-                <br><span class="function"><span class="CYK2"></span><span class="boolean"></span> <span class="term">useMercyCounter</span></span>
-                If this variable is set to true, the enemy will use the mercy counter and will be able to be spared through acts changing its percentage of mercy. If it's set to false, the counter will be deactivated and show a cross instead of a percentage.<br>Do note enemies can still be spared in that condition by calling <span class="term">Spare()</span>. True by default.
-            </span>-->
+                <span class="CYK2"></span> If <span class="term">useMercyCounter</span> is set to true, <span class="term">canspare</span> will automatically be change accordingly to the percentage when <span class="term">ChangeMercyPercent()</span> is called. It can however still be use freely.
+            </p>
 
             <p>
                 <br><span class="function"><span class="CYK2"></span><span class="boolean"></span> <span class="term">useMercyCounter</span></span>
-                An alternative to <span class="term">canspare</span> when <span class="term">chapter2</span> is set to true.
+                If this variable is set to true, the enemy will use the mercy counter and will be able to be spared through acts changing its percentage of mercy. If it's set to false, the counter will be deactivated and show a cross instead of a percentage.<br>Do note enemies can still be spared in that condition by calling <span class="term">Spare()</span>. True by default.
             </p>
 
             <p>
