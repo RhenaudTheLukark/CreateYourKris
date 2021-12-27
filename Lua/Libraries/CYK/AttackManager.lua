@@ -341,7 +341,7 @@ return function(CYK)
             color = { 1, 1, 1 }
         end
 
-        CYK.UI.CreateChangeText(textValue, target, color)
+        CYK.UI.CreateValueChangeText(textValue, target, color)
     end
 
     -- Updates the stars that appear when a Player executes a perfect attack
