@@ -332,7 +332,7 @@ return function(CYK)
         -- Computes the damage text's color, then spawns it
         if not color and value > 0 then
             color = { 0, 1, 0 }
-        elseif attacker.UI and not color then
+        elseif attacker and attacker.UI and not color then
             color = attacker.damageColor
             for i = 1, #color do
                 color[i] = color[i] == 0 and 0.5 or color[i]
