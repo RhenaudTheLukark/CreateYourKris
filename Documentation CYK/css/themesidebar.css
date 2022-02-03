@@ -114,6 +114,13 @@ span.CYK::before {
     content: " <CYK>";
 }
 
+span.CYK2 {
+	color: #ff4000;
+}
+span.CYK2::before {
+	content: " <CYK ch2>";
+}
+
 span.unitale {
     color: #ffffff;
     border-bottom: 1px solid #ffffff;

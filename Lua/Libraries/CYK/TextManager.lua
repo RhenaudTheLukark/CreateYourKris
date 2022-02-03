@@ -37,7 +37,7 @@ return function(CYK)
     self.textArrow.SetPivot(0, 0)
     self.textArrow.SetAnchor(0, 0)
     self.textArrow.SetParent(CYK.UI.hider)
-    self.textArrow.x = 450
+    self.textArrow.x = chapter2 and 390 or 450
     self.textArrow.y = 83
     self.textArrow.alpha = 0
 
@@ -46,7 +46,7 @@ return function(CYK)
     self.textArrowDown.SetAnchor(0, 0)
     self.textArrowDown.SetParent(CYK.UI.hider)
     self.textArrowDown.yscale = -1
-    self.textArrowDown.x = 450
+    self.textArrowDown.x = chapter2 and 390 or 450
     self.textArrowDown.y = 17
     self.textArrowDown.alpha = 0
     self.textArrows = { self.textArrow, self.textArrowDown }
@@ -280,12 +280,14 @@ return function(CYK)
 
             -- Lifebars needed!
             if bars then
+                local targetPool = CYK.players[CYK.turn].targetType == "Enemy" and CYK.enemies or CYK.players
+
                 local lifebar1 = CreateSprite("px", "LowerUI")
                 lifebar1.SetParent(CYK.UI.hider)
                 lifebar1.Scale(81, 16)
                 lifebar1.SetPivot(0, 0)
                 lifebar1.SetAnchor(0, 0)
-                lifebar1.x = 510
+                lifebar1.x = chapter2 and (CYK.players[CYK.turn].targetType == "Enemy" and 420 or 510) or 510
                 lifebar1.y = 84 - (30 * (i - start))
                 lifebar1.color = { 0.5, 0, 0 }
 
@@ -298,10 +300,101 @@ return function(CYK)
                 lifebar2.y = 0
                 lifebar2.color = { 0, 1, 0 }
 
-                local targetPool = CYK.players[CYK.turn].targetType == "Enemy" and CYK.enemies or CYK.players
-                lifebar2.xscale = 81 * targetPool[i].hp / targetPool[i].maxhp
+                --create those local values outside of the if condition
+                local lifebarText, lifebarHPText, mercybar1, mercybar2, mercybarText, mercybarMERCYText
+                if chapter2 then
 
-                table.insert(self.lifebars, { lifebar1, lifebar2 })
+                    --If it's an enemy, use the new UI, otherwise, use Chapter 1's
+                    if CYK.players[CYK.turn].targetType == "Enemy" then
+
+                        lifebarText = CreateText("0%", {0, 0}, 999, "LowerUI")
+                        lifebarText.SetAnchor(0.5, 0.5)
+                        lifebarText.SetParent(lifebar1)
+                        lifebarText.x=5
+                        lifebarText.y=3
+                        lifebarText.yscale=0.5
+                        lifebarText.SetFont("uidialog")
+                        lifebarText.HideBubble()
+                        lifebarText.progressmode="none"
+
+                        lifebarHPText= CreateText("HP", {0, 0}, 999, "LowerUI")
+                        lifebarHPText.SetParent(lifebar1)
+                        lifebarHPText.SetText("[instant]HP")
+                        lifebarHPText.x=6
+                        lifebarHPText.y=19
+                        lifebarHPText.yscale=0.5
+                        lifebarHPText.SetFont("uidialog")
+                        lifebarHPText.HideBubble()
+                        lifebarHPText.progressmode="none"
+                        if i%3==0 or i==2 then lifebarHPText.color={0,0,0} end
+
+                        mercybar1 = CreateSprite("px", "LowerUI")
+                        mercybar1.SetParent(CYK.UI.hider)
+                        mercybar1.Scale(81, 16)
+                        mercybar1.SetPivot(0, 0)
+                        mercybar1.SetAnchor(0, 0)
+                        mercybar1.x = 520
+                        mercybar1.y = 84 - (30 * (i - start))
+                        mercybar1.color = { 255/255, 80/255, 32/255 }
+
+                        if targetPool[i].useMercyCounter then
+                            mercybar2 = CreateSprite("px", "LowerUI")
+                            mercybar2.SetParent(mercybar1)
+                            mercybar2.Scale(81, 16)
+                            mercybar2.SetAnchor(0, 0)
+                            mercybar2.SetPivot(0, 0)
+                            mercybar2.x = 0
+                            mercybar2.y = 0
+                            mercybar2.color = { 1, 1, 0 }
+                        end
+
+                        if targetPool[i].useMercyCounter then
+                            mercybarText = CreateText("0%", {0, 0}, 999, "LowerUI")
+                            mercybarText.SetAnchor(0.5, 0.5)
+                            mercybarText.SetParent(mercybar1)
+                            mercybarText.x=5
+                            mercybarText.y=3
+                            mercybarText.yscale=0.5
+                            mercybarText.SetFont("uidialog")
+                            mercybarText.HideBubble()
+                            mercybarText.color={128/255, 0, 0}
+                            mercybarText.progressmode="none"
+                        else
+                            mercybarCross = CreateSprite("CreateYourKris/UI/MercyCross", "LowerUI")
+                            mercybarCross.SetParent(mercybar1)
+                            mercybarCross.x=0
+                            mercybarCross.y=0
+                        end
+
+                        mercybarMERCYText=CreateText("MERCY", {0, 0}, 999, "LowerUI")
+                        mercybarMERCYText.SetParent(mercybar1)
+                        mercybarMERCYText.SetText("[instant]MERCY")
+                        mercybarMERCYText.x=6
+                        mercybarMERCYText.y=19
+                        mercybarMERCYText.yscale=0.5
+                        mercybarMERCYText.SetFont("uidialog")
+                        mercybarMERCYText.HideBubble()
+                        mercybarMERCYText.progressmode="none"
+                        mercybarMERCYTextCreated=true
+                        if i%3==0 or i==2 then mercybarMERCYText.color={0,0,0} end
+                    end
+                end
+
+                lifebar2.xscale = 81 * targetPool[i].hp / targetPool[i].maxhp
+                if chapter2 then
+                    --if CYK.players[CYK.turn].targetType == "Enemy" then
+                    if mercybar2 then
+                        mercybar2.xscale = 81 * targetPool[i].mercyPercent / 100
+                    end
+                    if lifebarText then
+                        lifebarText.SetText("[instant]"..math.floor(((targetPool[i].hp*100)/targetPool[i].maxhp)+0.5).."%")
+                    end
+                    if mercybarText then
+                        mercybarText.SetText("[instant]"..targetPool[i].mercyPercent.."%")
+                    end
+                end
+
+                table.insert(self.lifebars, { lifebar1, lifebar2, lifebarText, lifebarHPText, mercybar1, mercybar2, mercybarText, mercybarMERCYText })
             end
         end
 
@@ -325,6 +418,21 @@ return function(CYK)
             local lifebar = self.lifebars[i]
             lifebar[1].Remove()
             lifebar[2].Remove()
+            --A lot of ugly ifs to see if we're not about to delete something that wasn't set due to Chapter 2's new stuff
+            if chapter2 and #lifebar>2 then
+                lifebar[3].DestroyText()
+                lifebar[4].DestroyText()
+                if #lifebar>4 then
+                    lifebar[5].Remove()
+                    if lifebar[6] then
+                        lifebar[6].Remove()
+                    end
+                    if lifebar[7] then
+                        lifebar[7].DestroyText()
+                    end
+                    lifebar[8].DestroyText()
+                end
+            end
             table.remove(self.lifebars, i)
         end
     end

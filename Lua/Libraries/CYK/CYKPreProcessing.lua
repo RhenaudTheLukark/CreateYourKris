@@ -143,6 +143,11 @@ function CYKDataChecker()
     elseif type(backgroundfade) ~= "boolean" then error("The encounter must have a variable named backgroundfade as a boolean, but it is a " .. type(backgroundfade) .. ".\nbackgroundfade tells the engine if it should fade the background out when the enemies talk and fade the background in when the wave ends.")
     end
 
+    if type(chapter2)~="nil" and type(chapter2)~="boolean" then
+        error("The encounter must have a variable named chapter2 as a boolean, but it is a "..type(chapter2)..". chapter2 tells the engine if it must use or not functionnalities from Deltarune Chapter 2 or not, such as the new Game Over or the new mercy system.")
+    end
+
+
     if HandleItem == nil then if debug then    DEBUG("[WARN] Encounter: HandleItem() missing.") end
     elseif type(HandleItem) ~= "function" then error("The encounter can have a variable named HandleItem as a function, but it is a " .. type(HandleItem) .. ".")
     end

@@ -244,6 +244,11 @@ it's w3c valid, at least
             </p><br>
 
             <p>
+                <br><span class="function"><span class="CYK2"></span> <span class="number"></span> <span class="term">hpAdd</span></span>
+                The amount of HP that will be added to the entity's current MaxHP if at least one enemy was "killed" during this encounter. 2 by default.
+            </p><br>
+
+            <p>
                 <span class="function"><span class="string"></span> <span class="term">action</span></span>
 				Name of the action this Player is doing for this turn.<br>
                 Here is a list of the different values it can have:
@@ -373,6 +378,39 @@ it's w3c valid, at least
                     <li><span class="number"></span> id - The ID of the player to attack. See <span class="term">ID</span>.</li>
                 </ul>
             </p><br>
+
+            <p>
+                <span class="function"><span class="number"></span> <span class="term">mercyPercent [M]</span></span>
+                The percentage of mercy of an entity, going from 0 to 100.<br><br>
+
+                * Shouldn't be modified, use <span class="term">ChangeMercyPercent()</span> and <span class="term">GetMercyPercent()</span> instead.
+            </p><br>
+
+            <p>
+                <span class="function"><span class="CYK2"></span> <span class="term">ChangeMercyPercent(<span class="number"></span> value, <span class="entity"></span> <span class="userdata">OR</span> <span class="string"></span> target(s) = self,
+                <span class="boolean"></span> showText = true, <span class="boolean"></span> playSound = true)</span></span>
+                Changes the mercy percentage of the <span class="term">target(s)</span> by the indicated <span class="term">value</span> and will show the associated text and play the sound effect that goes with it if <span class="term">showText</span> and <span class="term">useSound</span> respectively are set to true.
+                <br><br>
+                <u>Usage:</u>
+                <ul>
+                    <li><span class="term">value</span>: An integer. A negative number will make the text red and a number superior or equal to 100% will make it green.</li> 
+                    <li><span class="term">target</span>: The enemy concerned by the modification. it can takes two different values:
+                    <ul>
+                        <li><span class="entity"></span> <span class="term">Enemy</span> - A single enemy. Can use <span class="term">self</span> to target itself if the function is called from the enemy's script.</li>
+                        <li><span class="string"></span> <span class="term">"All"</span> - Targets all enemies.</li>
+                    </ul>
+                    </li>
+                    <li><span class="term">showText</span>: If set to true, the text showing the <span class="term">value</span> will appear.</li>
+                    <li><span class="term">playSound</span>: If set to true, it'll play the sound effect used when the percentage is changed.</li>
+                </ul>
+            </p><br>
+
+            <p>
+                <span class="function"><span class="CYK2"></span> <span class="term">GetMercyPercent(<span class="entity"></span> target = self) returns <span class="number"></span></span></span>
+                Returns the mercy percentage of the <span class="term">target</span>.<br>
+                If the mercy counter of the <span class="term">target</span> is disabled, it'll return -1.
+            </p>
+
 
             <!--
             <p>

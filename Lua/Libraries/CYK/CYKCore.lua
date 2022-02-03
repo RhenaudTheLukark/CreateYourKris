@@ -100,6 +100,8 @@ return function ()
 
     self.playerTargets = { } -- Players targeted by the enemies
 
+    self.stronger = false -- Define if the players are *becoming stronger* after a battle
+
     -- Triggered when the player presses the Confirm key
     function self.Confirm(force)
         -- State when the player chooses his Players' actions
@@ -278,8 +280,10 @@ return function ()
                             text = text .. (self.CrateYourKris and "\nBTU NO [color:ffff00]YEELO[color:ffffff]!?!" or "\nBut his name was not [color:ffff00]YELLOW[color:ffffff]...")
                         end
                         self.TxtMgr.SetText({ text })
+                        -- Use a temporary value unaffected by HandleSpare to prevent sparing despite the text saying "But his name was not YELLOW"
+                        local tempMercyPercent=enemy.mercyPercent
                         ProtectedCYKCall(HandleSpare, player, enemy)
-                        if enemy.canspare then
+                        if (chapter2 and tempMercyPercent>=100) or (not chapter2 and enemy.canspare) then
                             -- Actually spare the enemy
                             enemy.TrySpare()
                         end
@@ -387,7 +391,7 @@ return function ()
                 if player.targetType == "Enemy" then
                     pre = entity.canspare and "[color:ffff00]" or entity.tired and "[color:00b2ff]" or ""
                     post = "[color:ffffff]      " .. (entity.canspare and "è" or "ê") .. (entity.tired and "é[color:808080](Tired)[color:ffffff]" or "ê")
-                    if entity.canspare and entity.tired then
+                    if canspare and entity.tired then
                         gradientName = "[color:00b2ff]"
                         local chars = #name - 1
                         -- Gradient effect
@@ -949,9 +953,29 @@ return function ()
             -- Play the EndBattle animation of each Players and display the end text
             for i = 1, #self.players do
                 self.SetAnim(self.players[i], "EndBattle")
+                if chapter2 then
+                    if self.stronger then
+                        local p_hpAdd=self.players[i].hpAdd
+                        if p_hpAdd then
+                            if type(p_hpAdd)~="number" then
+                                if CYKDebugLevel>1 then DEBUG("entity.hpAdd must be a number but it was a "..type(p_hpAdd)..". The default value (2) will be used.") end
+                                p_hpAdd=2
+                            end
+                        else
+                            p_hpAdd=2
+                        end
+                        self.players[i].maxhp=self.players[i].maxhp+p_hpAdd
+                        self.players[i].hp=self.players[i].hp+p_hpAdd
+                        self.players[i].UpdateUI()
+                    end
+                end
             end
-            self.TxtMgr.SetText({ (self.CrateYourKris and "YOO WONN! WONN 0 PEX N " .. tostring(50 + math.floor((0.75 + math.random() / 4) * self.TP.trueValue)) .. " DEES."
-                                                      or "YOU WON! You earned 0 EXP\rand " .. tostring(50 + math.floor((0.75 + math.random() / 4) * self.TP.trueValue)) .. " D$.") })
+            if self.stronger and chapter2 then
+                PlaySoundOnceThisFrame("lvsound")
+                NewAudio.SetPitch("lvsound", 2)
+            end
+            self.TxtMgr.SetText({ (self.CrateYourKris and "YOO WONN!\nWONN 0 PEX N " .. tostring(50 + math.floor((0.75 + math.random() / 4) * self.TP.trueValue)) .. " DEES.".. ((chapter2 and self.stronger) and "\nYOO R STROONGE!" or "")
+                                                      or "You won!\nGot 0 EXP and " .. tostring(50 + math.floor((0.75 + math.random() / 4) * self.TP.trueValue)) .. " D$.".. ((chapter2 and self.stronger) and "\nYou became stronger." or "")) })
         elseif newState == "DONE" then
             OldState("DONE")
         else
