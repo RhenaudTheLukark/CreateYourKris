@@ -241,6 +241,9 @@ return function(self)
 
             entity.targetType = "Player"  -- Type of the target of this entity
         else
+            -- Set to nil to remove CYF's UI object
+            entity.UI = nil
+
             -- Bubble and animation related variables
             entity.bubbleOffsetX = 0
             entity.bubbleOffsetY = 0
