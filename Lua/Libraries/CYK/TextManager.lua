@@ -33,7 +33,7 @@ return function(CYK)
 
     -- Text arrows used when displaying a choice of items but there are some more items left
     self.textArrowAnimStart = 0
-    self.textArrow = CreateSprite("CreateYourKris/UI/Arrow", "LowerUI")
+    self.textArrow = CreateSprite("CreateYourKris/UI/arrow", "LowerUI")
     self.textArrow.SetPivot(0, 0)
     self.textArrow.SetAnchor(0, 0)
     self.textArrow.SetParent(CYK.UI.hider)
@@ -41,7 +41,7 @@ return function(CYK)
     self.textArrow.y = 83
     self.textArrow.alpha = 0
 
-    self.textArrowDown = CreateSprite("CreateYourKris/UI/Arrow", "LowerUI")
+    self.textArrowDown = CreateSprite("CreateYourKris/UI/arrow", "LowerUI")
     self.textArrowDown.SetPivot(0, 1)
     self.textArrowDown.SetAnchor(0, 0)
     self.textArrowDown.SetParent(CYK.UI.hider)
