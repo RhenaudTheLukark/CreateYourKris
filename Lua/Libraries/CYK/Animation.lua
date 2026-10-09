@@ -54,13 +54,13 @@ return function(self)
                 return
             end
         elseif animName == "Hurt" and sprite["currAnim"] ~= "Defend" and entity.UI ~= nil then
-            entity.UI.faceSprite.SetAnimation({ "CreateYourKris/Players/" .. sprite["anim"] .. "/UI/Hurt", "CreateYourKris/Players/" .. sprite["anim"] .. "/UI/Normal" }, 1/2)
+            -- Disabled: faceSprite is unavailable in this CYF version.
         end
 
         -- If the current animation doesn't exist, abort
         if not animObject then
             if CYKDebugLevel > 0 then
-                error("[WARN] The animation " .. animName .. " of the " .. (entity.UI and "player" or "enemy") .. " " .. tostring(entity.sprite["anim"]) .. " doesn't exist.", 2)
+                error("[WARN] The animation " .. animName .. " of the " .. (entity.UI and "player" or "enemy") .. " " .. tostring(entity.sprite["anim"]) .. " doesn't exist.")
             end
             return
         end
@@ -94,7 +94,6 @@ return function(self)
         sprite.SetAnimation(animObject[1], animObject[2])
         -- Don't forget the sprite's mask
         if sprite["mask"] then
-            sprite["mask"].loopmode = loopmode
             sprite["mask"].SetAnimation(animObject[1], animObject[2])
         end
     end
@@ -112,7 +111,7 @@ return function(self)
 
                 -- Update the Player UI's face sprite if the followUp is one of the player and it is supposed to go back to Idle
                 if followUp.entity.UI ~= nil and followUp.next == "Idle" then
-                    followUp.entity.UI.faceSprite.Set("CreateYourKris/Players/" .. followUp.entity.sprite["anim"] .. "/UI/Normal")
+                    -- Disabled: faceSprite is unavailable in this CYF version.
                 end
 
                 -- Remove the sprite if it has to be removed at the end of the anim, otherwise set its followUp animation
