@@ -2,7 +2,7 @@
 -- Returns a key of the table if this object is found
 function table.containsObj(tab, obj, valueOnly)
     if type(tab) ~= "table" then
-        error("Can't use table.containsObj with a " .. type(tab) .. "!", 2)
+        error("Can't use table.containsObj with a " .. type(tab) .. "!")
     end
     for k, v in pairs(tab) do
         if (not valueOnly and k == obj) or v == obj then
@@ -69,7 +69,7 @@ function NumberToHex(number)
             hex = (tempHex < 10 and tostring(tempHex) or tostring(string.char(string.byte('a') + tempHex - 10))) .. hex
         until number == 0
     else
-        error("NumberToHex() needs a number variable.", 2)
+        error("NumberToHex() needs a number variable.")
     end
 
     return hex
@@ -152,12 +152,23 @@ function GetModName()
 
     local _, output = xpcall(testError, debug.traceback)
 
-    -- Find the position of "Sprites/asdbfiosdjfaosdijcfiosdjsdo"
-    local SpritesFolderPos = output:find("asdbfiosdjfaosdijcfiosdjsdo") - 10
-    output = output:sub(1, SpritesFolderPos)
+    -- Resolve the mod directory from this file's traceback path.
+    local sourcePath = output:match("(/.-/Lua/Libraries/CYK/Util%.lua)")
+    if sourcePath then
+        return sourcePath:sub(1, #sourcePath - #"/Lua/Libraries/CYK/Util.lua")
+    end
 
-    local paths = string.split(output, "Attempted to load ", true)
-    return paths[#paths]
+    -- Compatibility fallback for older CYF error formats.
+    local marker = output:find("asdbfiosdjfaosdijcfiosdjsdo", 1, true)
+    if marker then
+        local prefix = output:sub(1, marker - 10)
+        local paths = string.split(prefix, "Attempted to load ", true)
+        if #paths > 1 then
+            return paths[#paths]
+        end
+    end
+
+    error("GetModName: unable to resolve mod path from CYF traceback:\n" .. output)
 end
 
 function PlaySoundOnceThisFrame(sound)
